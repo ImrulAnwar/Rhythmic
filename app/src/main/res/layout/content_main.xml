@@ -38,7 +38,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"
                 app:cardCornerRadius="14dp"
-                android:id="@+id/cardView"
+                android:id="@+id/cvBtmTbrAlbumArt"
                 app:layout_constraintVertical_bias="0.466" />
 
         <TextView
@@ -47,14 +47,14 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:id="@+id/textView2"
-                app:layout_constraintStart_toEndOf="@+id/cardView"
+                android:id="@+id/tvBtmTbrSongTitle"
+                app:layout_constraintStart_toEndOf="@+id/cvBtmTbrAlbumArt"
                 android:layout_marginStart="20dp"
                 app:layout_constraintVertical_bias="0.262"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:textSize="16sp"
-                app:layout_constraintEnd_toStartOf="@+id/button"
+                app:layout_constraintEnd_toStartOf="@+id/ibBtmTbrPlayPause"
                 android:layout_marginEnd="16dp" />
 
         <TextView
@@ -63,17 +63,17 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 android:layout_marginBottom="16dp"
-                android:id="@+id/textView3"
+                android:id="@+id/tvBtmTbrArtistName"
                 android:textColor="@color/text_color_2"
-                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintStart_toStartOf="@+id/tvBtmTbrSongTitle"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/textView2" />
+                app:layout_constraintEnd_toEndOf="@+id/tvBtmTbrSongTitle" />
 
         <ImageButton
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 app:layout_constraintTop_toTopOf="parent"
-                android:id="@+id/button"
+                android:id="@+id/ibBtmTbrPlayPause"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="parent"
