@@ -1,38 +1,37 @@
-package com.example.rhythmic.ui.home
+package com.example.rhythmic.ui.download
 
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.rhythmic.R
-import com.example.rhythmic.databinding.FragmentHomeBinding
+import com.example.rhythmic.databinding.FragmentDownloadBinding
+import com.example.rhythmic.ui.home.HomeViewModel
 
-class HomeFragment : Fragment() {
-
-        private var _binding: FragmentHomeBinding? = null
-        private lateinit var homeViewModel: HomeViewModel
+class DownloadFragment : Fragment() {
+        private var _binding: FragmentDownloadBinding? = null
+        private lateinit var downloadViewModel: DownloadViewModel
 
         // This property is only valid between onCreateView and
         // onDestroyView.
         private val binding get() = _binding!!
 
         override fun onCreateView(
-                inflater: LayoutInflater,
-                container: ViewGroup?,
+                inflater: LayoutInflater, container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
-                homeViewModel =
-                        ViewModelProvider(this)[HomeViewModel::class.java]
-
-                _binding = FragmentHomeBinding.inflate(inflater, container, false)
+                downloadViewModel =
+                        ViewModelProvider(this)[DownloadViewModel::class.java]
+                // Inflate the layout for this fragment
+                _binding = FragmentDownloadBinding.inflate(inflater, container, false)
                 val root: View = binding.root
 
-                val textView: TextView = binding.textHome
-                homeViewModel.text.observe(viewLifecycleOwner) {
+                val textView: TextView = binding.textDownload
+                downloadViewModel.text.observe(viewLifecycleOwner) {
                         textView.text = it
                 }
                 return root
