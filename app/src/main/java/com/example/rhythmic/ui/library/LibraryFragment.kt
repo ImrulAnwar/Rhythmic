@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.rhythmic.R
 import com.example.rhythmic.databinding.FragmentLibraryBinding
 
 class LibraryFragment : Fragment() {
@@ -38,5 +40,15 @@ class LibraryFragment : Fragment() {
         override fun onDestroyView() {
                 super.onDestroyView()
                 _binding = null
+        }
+
+        //needed to set the action bar
+        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+                super.onViewCreated(view, savedInstanceState)
+                (activity as AppCompatActivity).supportActionBar?.apply {
+                        setHomeButtonEnabled(true)
+                        setDisplayHomeAsUpEnabled(true)
+                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
+                }
         }
 }
