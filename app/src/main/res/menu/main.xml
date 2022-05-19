@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-            android:id="@+id/logo"
-            android:title="@string/logo"
-            android:icon="@drawable/ic_recent"
-            app:showAsAction="always" />
-    <item
-            android:id="@+id/recent"
+            android:id="@+id/liked"
             android:title="@string/recent"
             android:icon="@drawable/ic_liked"
             app:showAsAction="ifRoom" />
+    <item
+            android:id="@+id/recent"
+            android:title="@string/logo"
+            android:icon="@drawable/ic_recent"
+            app:showAsAction="always" />
 </menu>
