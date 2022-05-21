@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rhythmic.data.entities.Song
+import kotlinx.coroutines.flow.StateFlow
 
 class HomeViewModel : ViewModel() {
 
@@ -12,7 +13,7 @@ class HomeViewModel : ViewModel() {
                 value = "This is home Fragment"
         }
         val text: LiveData<String> = _text
-//        fun insertAllSongs(context: Context) : LiveData<List<Song>> {
-//
-//        }
+        fun insertAllSongs(context: Context){
+
+        }
 }

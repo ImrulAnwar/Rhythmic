@@ -21,15 +21,9 @@ class SearchFragment : Fragment() {
         // onDestroyView.
         private val binding get() = _binding!!
 
-        override fun onCreateView(
-                inflater: LayoutInflater,
-                container: ViewGroup?,
-                savedInstanceState: Bundle?
-        ): View {
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
                 UIFunctions().setActionBarLogo(activity = activity as AppCompatActivity)
-                searchViewModel =
-                        ViewModelProvider(this).get(SearchViewModel::class.java)
-
+                searchViewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
                 _binding = FragmentSearchBinding.inflate(inflater, container, false)
                 val root: View = binding.root
 
@@ -37,6 +31,7 @@ class SearchFragment : Fragment() {
                 searchViewModel.text.observe(viewLifecycleOwner) {
                         textView.text = it
                 }
+
                 return root
         }
 

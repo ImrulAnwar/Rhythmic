@@ -16,20 +16,11 @@ class HomeFragment : Fragment() {
 
         private var _binding: FragmentHomeBinding? = null
         private lateinit var homeViewModel: HomeViewModel
-
-        // This property is only valid between onCreateView and
-        // onDestroyView.
         private val binding get() = _binding!!
 
-        override fun onCreateView(
-                inflater: LayoutInflater,
-                container: ViewGroup?,
-                savedInstanceState: Bundle?
-        ): View {
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
                 UIFunctions().setActionBarLogo(activity = activity as AppCompatActivity)
-                homeViewModel =
-                        ViewModelProvider(this)[HomeViewModel::class.java]
-
+                homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
                 _binding = FragmentHomeBinding.inflate(inflater, container, false)
                 val root: View = binding.root
 
@@ -37,6 +28,7 @@ class HomeFragment : Fragment() {
                 homeViewModel.text.observe(viewLifecycleOwner) {
                         textView.text = it
                 }
+
                 return root
         }
 

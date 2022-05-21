@@ -21,16 +21,9 @@ class LibraryFragment : Fragment() {
         // onDestroyView.
         private val binding get() = _binding!!
 
-        override fun onCreateView(
-                inflater: LayoutInflater,
-                container: ViewGroup?,
-                savedInstanceState: Bundle?
-        ): View {
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
                 UIFunctions().setActionBarLogo(activity = activity as AppCompatActivity)
-
-                libraryViewModel =
-                        ViewModelProvider(this).get(LibraryViewModel::class.java)
-
+                libraryViewModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
                 _binding = FragmentLibraryBinding.inflate(inflater, container, false)
                 val root: View = binding.root
 
@@ -38,6 +31,7 @@ class LibraryFragment : Fragment() {
                 libraryViewModel.text.observe(viewLifecycleOwner) {
                         textView.text = it
                 }
+
                 return root
         }
 

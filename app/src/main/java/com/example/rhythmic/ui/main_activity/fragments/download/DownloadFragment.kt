@@ -15,20 +15,11 @@ import com.example.rhythmic.domain.util.UIFunctions
 class DownloadFragment : Fragment() {
         private var _binding: FragmentDownloadBinding? = null
         private lateinit var downloadViewModel: DownloadViewModel
-
-        // This property is only valid between onCreateView and
-        // onDestroyView.
         private val binding get() = _binding!!
 
-        override fun onCreateView(
-                inflater: LayoutInflater, container: ViewGroup?,
-                savedInstanceState: Bundle?
-        ): View {
+        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
                 UIFunctions().setActionBarLogo(activity = activity as AppCompatActivity)
-
-                downloadViewModel =
-                        ViewModelProvider(this)[DownloadViewModel::class.java]
-                // Inflate the layout for this fragment
+                downloadViewModel = ViewModelProvider(this)[DownloadViewModel::class.java]
                 _binding = FragmentDownloadBinding.inflate(inflater, container, false)
                 val root: View = binding.root
 
@@ -36,6 +27,7 @@ class DownloadFragment : Fragment() {
                 downloadViewModel.text.observe(viewLifecycleOwner) {
                         textView.text = it
                 }
+
                 return root
         }
 
