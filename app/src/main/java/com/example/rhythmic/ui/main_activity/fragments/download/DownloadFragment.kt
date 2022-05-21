@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.FragmentDownloadBinding
+import com.example.rhythmic.domain.util.UIFunctions
 
 class DownloadFragment : Fragment() {
         private var _binding: FragmentDownloadBinding? = null
@@ -23,11 +24,8 @@ class DownloadFragment : Fragment() {
                 inflater: LayoutInflater, container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
-                (activity as AppCompatActivity).supportActionBar?.apply {
-                        setHomeButtonEnabled(true)
-                        setDisplayHomeAsUpEnabled(true)
-                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
-                }
+                UIFunctions().setActionBarLogo(activity = activity as AppCompatActivity)
+
                 downloadViewModel =
                         ViewModelProvider(this)[DownloadViewModel::class.java]
                 // Inflate the layout for this fragment

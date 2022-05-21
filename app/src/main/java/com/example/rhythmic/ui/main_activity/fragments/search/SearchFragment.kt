@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.FragmentSearchBinding
+import com.example.rhythmic.domain.util.UIFunctions
 
 class SearchFragment : Fragment() {
 
@@ -25,11 +26,7 @@ class SearchFragment : Fragment() {
                 container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
-                (activity as AppCompatActivity).supportActionBar?.apply {
-                        setHomeButtonEnabled(true)
-                        setDisplayHomeAsUpEnabled(true)
-                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
-                }
+                UIFunctions().setActionBarLogo(activity = activity as AppCompatActivity)
                 searchViewModel =
                         ViewModelProvider(this).get(SearchViewModel::class.java)
 

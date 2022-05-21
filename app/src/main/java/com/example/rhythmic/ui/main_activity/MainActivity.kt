@@ -12,6 +12,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.ActivityMainBinding
+import com.example.rhythmic.domain.util.UIFunctions
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -21,17 +22,12 @@ class MainActivity : AppCompatActivity() {
 
         override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
-
                 binding = ActivityMainBinding.inflate(layoutInflater)
                 setContentView(binding.root)
-
                 setSupportActionBar(binding.appBarMain.toolbar)
-
                 val drawerLayout: DrawerLayout = binding.drawerLayout
                 val navView: NavigationView = binding.navView
                 val navController = findNavController(R.id.nav_host_fragment_content_main)
-                // Passing each menu ID as a set of Ids because each
-                // menu should be considered as top level destinations.
                 appBarConfiguration = AppBarConfiguration(
                         setOf(
                                 R.id.nav_home, R.id.nav_search, R.id.nav_library, R.id.nav_download
@@ -40,12 +36,9 @@ class MainActivity : AppCompatActivity() {
                 setupActionBarWithNavController(navController, appBarConfiguration)
                 bottomNavigationView.setupWithNavController(navController)
                 navView.setupWithNavController(navController)
-//                binding.appBarMain.toolbar.setNavigationIcon(R.drawable.ic_nav_icon)
-                supportActionBar?.apply {
-                        setHomeButtonEnabled(true)
-                        setDisplayHomeAsUpEnabled(true)
-                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
-                }
+                //will inject a dependency for this later
+                UIFunctions().setActionBarLogo(activity = this as AppCompatActivity)
+
 
         }
 

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.FragmentHomeBinding
+import com.example.rhythmic.domain.util.UIFunctions
 
 class HomeFragment : Fragment() {
 
@@ -25,11 +26,7 @@ class HomeFragment : Fragment() {
                 container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
-                (activity as AppCompatActivity).supportActionBar?.apply {
-                        setHomeButtonEnabled(true)
-                        setDisplayHomeAsUpEnabled(true)
-                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
-                }
+                UIFunctions().setActionBarLogo(activity = activity as AppCompatActivity)
                 homeViewModel =
                         ViewModelProvider(this)[HomeViewModel::class.java]
 
@@ -42,6 +39,7 @@ class HomeFragment : Fragment() {
                 }
                 return root
         }
+
 
         override fun onDestroyView() {
                 super.onDestroyView()
