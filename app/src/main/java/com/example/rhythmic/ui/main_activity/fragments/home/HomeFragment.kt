@@ -11,15 +11,20 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.FragmentHomeBinding
 import com.example.rhythmic.domain.util.UIFunctions
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
 
+        @Inject
+        lateinit var uiFunctions: UIFunctions
         private var _binding: FragmentHomeBinding? = null
         private lateinit var homeViewModel: HomeViewModel
         private val binding get() = _binding!!
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-                UIFunctions().setActionBarLogo(activity = activity as AppCompatActivity)
+                uiFunctions.setActionBarLogo(activity = activity as AppCompatActivity)
                 homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
                 _binding = FragmentHomeBinding.inflate(inflater, container, false)
                 val root: View = binding.root

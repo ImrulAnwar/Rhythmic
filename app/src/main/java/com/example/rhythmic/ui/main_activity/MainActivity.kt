@@ -13,10 +13,15 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.ActivityMainBinding
 import com.example.rhythmic.domain.util.UIFunctions
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.content_main.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+        @Inject
+        lateinit var uiFunctions: UIFunctions
         private lateinit var appBarConfiguration: AppBarConfiguration
         private lateinit var binding: ActivityMainBinding
 
@@ -37,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigationView.setupWithNavController(navController)
                 navView.setupWithNavController(navController)
                 //will inject a dependency for this later
-                UIFunctions().setActionBarLogo(activity = this as AppCompatActivity)
+                uiFunctions.setActionBarLogo(activity = this as AppCompatActivity)
 
 
         }

@@ -11,14 +11,19 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.FragmentDownloadBinding
 import com.example.rhythmic.domain.util.UIFunctions
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class DownloadFragment : Fragment() {
+        @Inject
+        lateinit var uiFunctions: UIFunctions
         private var _binding: FragmentDownloadBinding? = null
         private lateinit var downloadViewModel: DownloadViewModel
         private val binding get() = _binding!!
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-                UIFunctions().setActionBarLogo(activity = activity as AppCompatActivity)
+                uiFunctions.setActionBarLogo(activity = activity as AppCompatActivity)
                 downloadViewModel = ViewModelProvider(this)[DownloadViewModel::class.java]
                 _binding = FragmentDownloadBinding.inflate(inflater, container, false)
                 val root: View = binding.root
