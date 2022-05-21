@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.download
+package com.example.rhythmic.ui.main_activity.fragments.download
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.FragmentDownloadBinding
-import com.example.rhythmic.ui.home.HomeViewModel
 
 class DownloadFragment : Fragment() {
         private var _binding: FragmentDownloadBinding? = null
@@ -24,6 +23,11 @@ class DownloadFragment : Fragment() {
                 inflater: LayoutInflater, container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
+                (activity as AppCompatActivity).supportActionBar?.apply {
+                        setHomeButtonEnabled(true)
+                        setDisplayHomeAsUpEnabled(true)
+                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
+                }
                 downloadViewModel =
                         ViewModelProvider(this)[DownloadViewModel::class.java]
                 // Inflate the layout for this fragment
@@ -42,13 +46,4 @@ class DownloadFragment : Fragment() {
                 _binding = null
         }
 
-        //needed to set the action bar
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-                super.onViewCreated(view, savedInstanceState)
-                (activity as AppCompatActivity).supportActionBar?.apply {
-                        setHomeButtonEnabled(true)
-                        setDisplayHomeAsUpEnabled(true)
-                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
-                }
-        }
 }

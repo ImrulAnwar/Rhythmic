@@ -1,12 +1,13 @@
-package com.example.rhythmic.ui.download
+package com.example.rhythmic.ui.main_activity.fragments.library
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DownloadViewModel : ViewModel() {
+class LibraryViewModel : ViewModel() {
+
         private val _text = MutableLiveData<String>().apply {
-                value = "This is download Fragment"
+                value = "This is slideshow Fragment"
         }
         val text: LiveData<String> = _text
 }

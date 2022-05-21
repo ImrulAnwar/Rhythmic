@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.home
+package com.example.rhythmic.ui.main_activity.fragments.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -25,6 +25,11 @@ class HomeFragment : Fragment() {
                 container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
+                (activity as AppCompatActivity).supportActionBar?.apply {
+                        setHomeButtonEnabled(true)
+                        setDisplayHomeAsUpEnabled(true)
+                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
+                }
                 homeViewModel =
                         ViewModelProvider(this)[HomeViewModel::class.java]
 
@@ -41,15 +46,5 @@ class HomeFragment : Fragment() {
         override fun onDestroyView() {
                 super.onDestroyView()
                 _binding = null
-        }
-
-        //needed to set the action bar
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-                super.onViewCreated(view, savedInstanceState)
-                (activity as AppCompatActivity).supportActionBar?.apply {
-                        setHomeButtonEnabled(true)
-                        setDisplayHomeAsUpEnabled(true)
-                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
-                }
         }
 }

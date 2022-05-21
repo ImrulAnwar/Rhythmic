@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.search
+package com.example.rhythmic.ui.main_activity.fragments.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +14,7 @@ import com.example.rhythmic.databinding.FragmentSearchBinding
 class SearchFragment : Fragment() {
 
         private var _binding: FragmentSearchBinding? = null
+        private lateinit var searchViewModel: SearchViewModel
 
         // This property is only valid between onCreateView and
         // onDestroyView.
@@ -24,14 +25,19 @@ class SearchFragment : Fragment() {
                 container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
-                val galleryViewModel =
+                (activity as AppCompatActivity).supportActionBar?.apply {
+                        setHomeButtonEnabled(true)
+                        setDisplayHomeAsUpEnabled(true)
+                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
+                }
+                searchViewModel =
                         ViewModelProvider(this).get(SearchViewModel::class.java)
 
                 _binding = FragmentSearchBinding.inflate(inflater, container, false)
                 val root: View = binding.root
 
                 val textView: TextView = binding.textGallery
-                galleryViewModel.text.observe(viewLifecycleOwner) {
+                searchViewModel.text.observe(viewLifecycleOwner) {
                         textView.text = it
                 }
                 return root
@@ -42,13 +48,4 @@ class SearchFragment : Fragment() {
                 _binding = null
         }
 
-        //needed to set the action bar
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-                super.onViewCreated(view, savedInstanceState)
-                (activity as AppCompatActivity).supportActionBar?.apply {
-                        setHomeButtonEnabled(true)
-                        setDisplayHomeAsUpEnabled(true)
-                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
-                }
-        }
 }

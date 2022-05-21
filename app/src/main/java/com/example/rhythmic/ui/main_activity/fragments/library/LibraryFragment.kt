@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.library
+package com.example.rhythmic.ui.main_activity.fragments.library
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,6 +14,7 @@ import com.example.rhythmic.databinding.FragmentLibraryBinding
 class LibraryFragment : Fragment() {
 
         private var _binding: FragmentLibraryBinding? = null
+        private lateinit var libraryViewModel: LibraryViewModel
 
         // This property is only valid between onCreateView and
         // onDestroyView.
@@ -24,14 +25,19 @@ class LibraryFragment : Fragment() {
                 container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
-                val slideshowViewModel =
+                (activity as AppCompatActivity).supportActionBar?.apply {
+                        setHomeButtonEnabled(true)
+                        setDisplayHomeAsUpEnabled(true)
+                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
+                }
+                libraryViewModel =
                         ViewModelProvider(this).get(LibraryViewModel::class.java)
 
                 _binding = FragmentLibraryBinding.inflate(inflater, container, false)
                 val root: View = binding.root
 
                 val textView: TextView = binding.textSlideshow
-                slideshowViewModel.text.observe(viewLifecycleOwner) {
+                libraryViewModel.text.observe(viewLifecycleOwner) {
                         textView.text = it
                 }
                 return root
@@ -40,15 +46,5 @@ class LibraryFragment : Fragment() {
         override fun onDestroyView() {
                 super.onDestroyView()
                 _binding = null
-        }
-
-        //needed to set the action bar
-        override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-                super.onViewCreated(view, savedInstanceState)
-                (activity as AppCompatActivity).supportActionBar?.apply {
-                        setHomeButtonEnabled(true)
-                        setDisplayHomeAsUpEnabled(true)
-                        setHomeAsUpIndicator(R.drawable.ic_nav_icon)
-                }
         }
 }

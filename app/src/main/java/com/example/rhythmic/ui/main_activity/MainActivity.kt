@@ -1,4 +1,4 @@
-package com.example.rhythmic
+package com.example.rhythmic.ui.main_activity
 
 import android.os.Bundle
 import android.view.Menu
@@ -10,8 +10,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.rhythmic.R
 import com.example.rhythmic.databinding.ActivityMainBinding
-import kotlinx.android.synthetic.main.app_bar_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
                 // menu should be considered as top level destinations.
                 appBarConfiguration = AppBarConfiguration(
                         setOf(
-                                R.id.nav_home, R.id.nav_search, R.id.nav_library,R.id.nav_download
+                                R.id.nav_home, R.id.nav_search, R.id.nav_library, R.id.nav_download
                         ), drawerLayout
                 )
                 setupActionBarWithNavController(navController, appBarConfiguration)
