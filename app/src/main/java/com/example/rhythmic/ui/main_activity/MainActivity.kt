@@ -10,6 +10,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.ActivityMainBinding
 import com.example.rhythmic.domain.util.UIFunctions
@@ -23,7 +24,9 @@ class MainActivity : AppCompatActivity() {
         @Inject
         lateinit var uiFunctions: UIFunctions
         private lateinit var appBarConfiguration: AppBarConfiguration
+        private lateinit var mainActivityViewModel: MainActivityViewModel
         private lateinit var binding: ActivityMainBinding
+
 
         override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
@@ -43,8 +46,8 @@ class MainActivity : AppCompatActivity() {
                 navView.setupWithNavController(navController)
                 //will inject a dependency for this later
                 uiFunctions.setActionBarLogo(activity = this as AppCompatActivity)
-
-
+                mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
+                mainActivityViewModel.getRuntimePermission(this)
         }
 
         override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -56,5 +59,14 @@ class MainActivity : AppCompatActivity() {
         override fun onSupportNavigateUp(): Boolean {
                 val navController = findNavController(R.id.nav_host_fragment_content_main)
                 return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+        }
+
+        override fun onRequestPermissionsResult(
+                requestCode: Int,
+                permissions: Array<out String>,
+                grantResults: IntArray
+        ) {
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+                mainActivityViewModel.onRequestPermissionResult(requestCode = requestCode, grantResult = grantResults[0], this)
         }
 }
