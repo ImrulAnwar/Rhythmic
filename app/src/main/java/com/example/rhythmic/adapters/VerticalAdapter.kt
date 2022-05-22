@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.rhythmic.R
 import com.example.rhythmic.data.entities.Song
 
-class VerticalAdapter(var songList: List<Song>, viewModel: ViewModel) : RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder>(){
+class VerticalAdapter(var songList: List<Song>) : RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder>(){
         inner class VerticalViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
 
         override fun getItemCount(): Int = songList.size

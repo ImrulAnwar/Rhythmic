@@ -105,8 +105,8 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:layout_width="match_parent"
-                android:layout_height="60dp"
-                app:menu="@menu/activity_main_drawer"
+                android:layout_height="70dp"
+                app:menu="@menu/bottom_nav_bar_items"
                 android:background="@drawable/bottom_nav_bar_background"
                 android:id="@+id/bottomNavigationView"
                 app:elevation="0dp" />
