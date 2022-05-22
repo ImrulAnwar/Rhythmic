@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity() {
                 setupActionBarWithNavController(navController, appBarConfiguration)
                 bottomNavigationView.setupWithNavController(navController)
                 navView.setupWithNavController(navController)
-                //will inject a dependency for this later
                 uiFunctions.setActionBarLogo(activity = this as AppCompatActivity)
                 mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
                 mainActivityViewModel.getRuntimePermission(this)

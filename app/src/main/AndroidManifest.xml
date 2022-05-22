@@ -6,6 +6,7 @@
     <uses-permission
             android:name="android.permission.WRITE_EXTERNAL_STORAGE"
             tools:ignore="ScopedStorage" />
+
     <application
             android:name=".RhythmicApplication"
             android:allowBackup="true"
@@ -14,6 +15,12 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.Rhythmic">
+        <activity
+                android:name=".ui.now_playing_activity.NowPlayingActivity"
+                android:exported="false" />
+        <activity
+                android:name=".ui.song_list_activity.SongListActivity"
+                android:exported="false" />
         <activity
                 android:name=".ui.main_activity.MainActivity"
                 android:exported="true"
