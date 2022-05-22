@@ -1,6 +1,7 @@
 package com.example.rhythmic.ui.main_activity.fragments.home
 
 import android.content.Context
+import android.provider.MediaStore
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,11 +16,7 @@ class HomeViewModel @Inject constructor(
         private val repository: SongRepository
 )  : ViewModel() {
 
-        private val _text = MutableLiveData<String>().apply {
-                value = "This is home Fragment"
-        }
-        val text: LiveData<String> = _text
         fun insertAllSongs(context: Context){
-
+//                val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         }
 }

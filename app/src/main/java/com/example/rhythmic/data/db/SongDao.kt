@@ -16,7 +16,7 @@ interface SongDao {
         @Query("SELECT * FROM songs_table WHERE isLiked = :isLiked")
         fun getLikedSongs(isLiked: Boolean = true): LiveData<List<Song>>
 
-        @Insert(onConflict = OnConflictStrategy.IGNORE)
+        @Insert(onConflict = OnConflictStrategy.ABORT)
         suspend fun insertSong(song: Song)
 
         @Delete
