@@ -5,9 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.rhythmic.data.entities.Song
+import com.example.rhythmic.domain.repo.SongRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
+import javax.inject.Inject
 
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+        private val repository: SongRepository
+)  : ViewModel() {
 
         private val _text = MutableLiveData<String>().apply {
                 value = "This is home Fragment"
