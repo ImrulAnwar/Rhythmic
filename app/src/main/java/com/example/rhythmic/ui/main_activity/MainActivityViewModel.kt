@@ -51,11 +51,9 @@ class MainActivityViewModel @Inject constructor(
         fun onRequestPermissionResult(requestCode: Int, grantResult: Int, activity: Activity) {
                 if (requestCode == this.requestCode) {
                         if (grantResult == PackageManager.PERMISSION_GRANTED) {
-                                Toast.makeText(
-                                        getApplication(),
-                                        "Permission Granted",
-                                        Toast.LENGTH_SHORT
-                                ).show()
+                                viewModelScope.launch(Dispatchers.IO) {
+                                        insertAllSongs(activity)
+                                }
                         } else {
                                 ActivityCompat.requestPermissions(
                                         activity,

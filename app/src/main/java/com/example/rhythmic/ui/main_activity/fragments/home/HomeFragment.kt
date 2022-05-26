@@ -31,7 +31,11 @@ class HomeFragment : Fragment() {
         private lateinit var allSongs: LiveData<List<Song>>
         private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireContext()) }
 
-        override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        override fun onCreateView(
+                inflater: LayoutInflater,
+                container: ViewGroup?,
+                savedInstanceState: Bundle?
+        ): View {
                 uiFunctions.setActionBarLogo(activity = activity as AppCompatActivity)
                 homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
                 _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -42,10 +46,9 @@ class HomeFragment : Fragment() {
                 binding.rvHomeFragment.adapter = adapter
                 binding.rvHomeFragment.layoutManager = LinearLayoutManager(requireContext())
 
-                allSongs.observe(viewLifecycleOwner){
-                        allSongs.value?.let { songLIst -> adapter.setData(songLIst) }
+                allSongs.observe(viewLifecycleOwner) {
+                        allSongs.value?.let { adapter.setData(it) }
                 }
-
 
                 return root
         }
