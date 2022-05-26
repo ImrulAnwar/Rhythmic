@@ -1,26 +1,40 @@
 package com.example.rhythmic.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModel
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.rhythmic.R
 import com.example.rhythmic.data.entities.Song
+import com.example.rhythmic.databinding.VerticalItemBinding
+import com.example.rhythmic.domain.util.SongDiffUtil
 
-class VerticalAdapter(var songList: List<Song>) : RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder>(){
-        inner class VerticalViewHolder(itemView: View): RecyclerView.ViewHolder(itemView)
+class VerticalAdapter(var songList: List<Song>) :
+        RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder>() {
+        inner class VerticalViewHolder(val binding: VerticalItemBinding) :
+                RecyclerView.ViewHolder(binding.root)
 
         override fun getItemCount(): Int = songList.size
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VerticalViewHolder {
-                val view = LayoutInflater.from(parent.context)
-                        .inflate(R.layout.vertical_item, parent, false)
+                val view = VerticalItemBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                )
                 return VerticalViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: VerticalViewHolder, position: Int) {
                 val currentSong = songList[position]
+                holder.binding.tvSongTitle.text = currentSong.title
+                holder.binding.tvDuration.text = currentSong.duration
+        }
+
+        fun setData(newSongList: List<Song>) {
+                val diffUtil = SongDiffUtil(songList, newSongList)
+                val diffResults = DiffUtil.calculateDiff(diffUtil)
+                songList = newSongList
+                diffResults.dispatchUpdatesTo(this)
         }
 
 }
