@@ -21,4 +21,7 @@ interface SongDao {
 
         @Delete
         suspend fun deleteSong(song: Song)
+
+        @Query("SELECT EXISTS (SELECT * FROM songs_table WHERE path = :path)")
+        suspend fun doesRowExist(path: String): Boolean
 }

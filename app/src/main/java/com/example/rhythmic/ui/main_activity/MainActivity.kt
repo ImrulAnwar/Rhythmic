@@ -2,6 +2,7 @@ package com.example.rhythmic.ui.main_activity
 
 import android.os.Bundle
 import android.view.Menu
+import androidx.activity.viewModels
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -24,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         @Inject
         lateinit var uiFunctions: UIFunctions
         private lateinit var appBarConfiguration: AppBarConfiguration
-        private lateinit var mainActivityViewModel: MainActivityViewModel
+        private  val mainActivityViewModel: MainActivityViewModel by viewModels()
         private lateinit var binding: ActivityMainBinding
 
 
@@ -45,7 +46,7 @@ class MainActivity : AppCompatActivity() {
                 bottomNavigationView.setupWithNavController(navController)
                 navView.setupWithNavController(navController)
                 uiFunctions.setActionBarLogo(activity = this as AppCompatActivity)
-                mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
+//                mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
                 mainActivityViewModel.getRuntimePermission(this)
         }
 

@@ -3,8 +3,8 @@ package com.example.rhythmic.di
 import android.app.Application
 import androidx.room.Room
 import com.example.rhythmic.data.db.SongDatabase
-import com.example.rhythmic.data.repo.SongRepoImpl
-import com.example.rhythmic.domain.repo.SongRepository
+import com.example.rhythmic.data.repo.SongRepository
+import com.example.rhythmic.domain.repo.Repository
 import com.example.rhythmic.domain.util.UIFunctions
 import dagger.Module
 import dagger.Provides
@@ -29,5 +29,5 @@ object AppModule {
 
         @Singleton
         @Provides
-        fun provideSongRepository(db: SongDatabase): SongRepository = SongRepoImpl(db.songDao)
+        fun provideSongRepository(db: SongDatabase): Repository = SongRepository(db.songDao)
 }
