@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.now_playing_activity
+package com.example.rhythmic.ui.activities.now_playing_activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

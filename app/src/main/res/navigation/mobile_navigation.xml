@@ -7,24 +7,24 @@
 
     <fragment
             android:id="@+id/nav_home"
-            android:name="com.example.rhythmic.ui.main_activity.fragments.home.HomeFragment"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.home.HomeFragment"
             android:label="@string/home"
             tools:layout="@layout/fragment_home" />
 
     <fragment
             android:id="@+id/nav_search"
-            android:name="com.example.rhythmic.ui.main_activity.fragments.search.SearchFragment"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.search.SearchFragment"
             android:label="@string/search"
             tools:layout="@layout/fragment_search" />
 
     <fragment
             android:id="@+id/nav_library"
-            android:name="com.example.rhythmic.ui.main_activity.fragments.library.LibraryFragment"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.library.LibraryFragment"
             android:label="@string/library"
             tools:layout="@layout/fragment_library" />
     <fragment
             android:id="@+id/nav_download"
-            android:name="com.example.rhythmic.ui.main_activity.fragments.download.DownloadFragment"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.download.DownloadFragment"
             android:label="@string/download"
             tools:layout="@layout/fragment_download" />
 </navigation>

@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.main_activity.fragments.library
+package com.example.rhythmic.ui.activities.main_activity.fragments.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,28 +8,27 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.rhythmic.R
-import com.example.rhythmic.databinding.FragmentLibraryBinding
+import com.example.rhythmic.databinding.FragmentSearchBinding
 import com.example.rhythmic.domain.util.UIFunctions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LibraryFragment : Fragment() {
+class SearchFragment : Fragment() {
         @Inject
         lateinit var uiFunctions: UIFunctions
-        private var _binding: FragmentLibraryBinding? = null
-        private lateinit var libraryViewModel: LibraryViewModel
+        private var _binding: FragmentSearchBinding? = null
+        private lateinit var searchViewModel: SearchViewModel
         private val binding get() = _binding!!
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
                 uiFunctions.setActionBarLogo(activity = activity as AppCompatActivity)
-                libraryViewModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
-                _binding = FragmentLibraryBinding.inflate(inflater, container, false)
+                searchViewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
+                _binding = FragmentSearchBinding.inflate(inflater, container, false)
                 val root: View = binding.root
 
-                val textView: TextView = binding.textSlideshow
-                libraryViewModel.text.observe(viewLifecycleOwner) {
+                val textView: TextView = binding.textGallery
+                searchViewModel.text.observe(viewLifecycleOwner) {
                         textView.text = it
                 }
 
@@ -40,4 +39,5 @@ class LibraryFragment : Fragment() {
                 super.onDestroyView()
                 _binding = null
         }
+
 }

@@ -1,23 +1,19 @@
-package com.example.rhythmic.ui.main_activity.fragments.home
+package com.example.rhythmic.ui.activities.main_activity.fragments.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.rhythmic.R
 import com.example.rhythmic.adapters.VerticalAdapter
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.databinding.FragmentHomeBinding
 import com.example.rhythmic.domain.util.UIFunctions
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_home.*
 import javax.inject.Inject
 
 @AndroidEntryPoint

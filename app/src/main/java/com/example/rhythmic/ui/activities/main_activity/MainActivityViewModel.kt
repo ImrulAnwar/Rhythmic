@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.main_activity
+package com.example.rhythmic.ui.activities.main_activity
 
 import android.Manifest
 import android.app.Activity
@@ -9,7 +9,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel

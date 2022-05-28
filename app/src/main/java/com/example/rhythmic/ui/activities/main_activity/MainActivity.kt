@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.main_activity
+package com.example.rhythmic.ui.activities.main_activity
 
 import android.os.Bundle
 import android.view.Menu
@@ -11,7 +11,6 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.ActivityMainBinding
 import com.example.rhythmic.domain.util.UIFunctions
