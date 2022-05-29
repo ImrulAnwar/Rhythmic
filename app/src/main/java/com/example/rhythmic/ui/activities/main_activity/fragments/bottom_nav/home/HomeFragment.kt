@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -15,6 +16,8 @@ import com.example.rhythmic.adapters.VerticalAdapter
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.databinding.FragmentHomeBinding
 import com.example.rhythmic.domain.util.UIFunctions
+import com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home.top_nav.album.AlbumFragment
+import com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home.top_nav.artist.ArtistFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -28,6 +31,8 @@ class HomeFragment : Fragment() {
         private lateinit var homeViewModel: HomeViewModel
         private lateinit var allSongs: LiveData<List<Song>>
         private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireContext()) }
+        val artistFragment = ArtistFragment()
+        val albumFragment = AlbumFragment()
 
         override fun onCreateView(
                 inflater: LayoutInflater,
@@ -73,7 +78,6 @@ class HomeFragment : Fragment() {
                                 artistButtonClicked()
                                 isAlbumClicked = false
                                 isArtistClicked = true
-                                //code goes here
                         }
                 }
                 binding.ibAlbum.setOnClickListener {
@@ -81,7 +85,6 @@ class HomeFragment : Fragment() {
                                 albumButtonClicked()
                                 isAlbumClicked = true
                                 isArtistClicked = false
-                                //code goes here
                         }
                 }
         }
@@ -91,6 +94,8 @@ class HomeFragment : Fragment() {
                 binding.ibAlbum.setBackgroundResource(R.drawable.black_background)
                 binding.ibArtist.setColorFilter(resources.getColor(R.color.black))
                 binding.ibAlbum.setColorFilter(resources.getColor(R.color.text_color_2))
+                val fm: FragmentManager = requireActivity().supportFragmentManager
+                fm.beginTransaction().replace(R.id.fragmentContainerView, albumFragment).commit()
         }
 
         private fun artistButtonClicked() {
@@ -98,6 +103,8 @@ class HomeFragment : Fragment() {
                 binding.ibAlbum.setBackgroundResource(R.drawable.grey_background)
                 binding.ibArtist.setColorFilter(resources.getColor(R.color.text_color_2))
                 binding.ibAlbum.setColorFilter(resources.getColor(R.color.black))
+                val fm: FragmentManager = requireActivity().supportFragmentManager
+                fm.beginTransaction().replace(R.id.fragmentContainerView, artistFragment).commit()
         }
 
 }
