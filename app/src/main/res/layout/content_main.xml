@@ -18,7 +18,11 @@
             app:layout_constraintTop_toTopOf="parent"
             app:defaultNavHost="true"
             app:navGraph="@navigation/mobile_navigation"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout" />
+            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="0dp"
@@ -96,7 +100,7 @@
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -105,10 +109,19 @@
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="wrap_content"
                 app:menu="@menu/bottom_nav_bar_items"
                 android:background="@drawable/bottom_nav_bar_background"
                 android:id="@+id/bottomNavigationView"
                 app:elevation="0dp" />
     </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home.top_nav.album.AlbumFragment"
+            android:id="@+id/fragmentContainerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/nav_host_fragment_content_main" />
 </androidx.constraintlayout.widget.ConstraintLayout>

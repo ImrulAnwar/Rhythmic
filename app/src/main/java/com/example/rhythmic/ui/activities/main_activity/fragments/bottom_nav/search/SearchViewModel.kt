@@ -1,12 +1,13 @@
-package com.example.rhythmic.ui.activities.main_activity.fragments.download
+package com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.search
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
-class DownloadViewModel : ViewModel() {
+class SearchViewModel : ViewModel() {
+
         private val _text = MutableLiveData<String>().apply {
-                value = "This is download Fragment"
+                value = "This is search Fragment"
         }
         val text: LiveData<String> = _text
 }

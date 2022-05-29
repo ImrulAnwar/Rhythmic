@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.activities.main_activity.fragments.download
+package com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.download
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -4,13 +4,35 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.activities.main_activity.fragments.home.HomeFragment">
+        tools:context=".ui.activities.main_activity.fragments.bottom_nav.home.HomeFragment">
 
     <androidx.recyclerview.widget.RecyclerView
             android:layout_width="0dp"
-            android:layout_height="400dp"
+            android:layout_height="300dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/rvHomeFragment" />
+
+    <ImageButton
+            android:src="@drawable/ic_linked_in"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:id="@+id/ibAlbum"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ibArtist"
+            app:layout_constraintBottom_toTopOf="@+id/rvHomeFragment"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_margin="8dp" />
+
+    <ImageButton
+            android:src="@drawable/ic_git_hub"
+            android:layout_width="0dp"
+            android:layout_height="60dp"
+            android:id="@+id/ibArtist"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/rvHomeFragment"
+            app:layout_constraintStart_toEndOf="@+id/ibAlbum"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:layout_margin="8dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

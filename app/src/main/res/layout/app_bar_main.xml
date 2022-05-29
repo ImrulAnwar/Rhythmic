@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
-                android:background="@drawable/app_bar_background"
+                android:background="@drawable/black_background"
                 app:buttonGravity="center_vertical"
                 app:popupTheme="@style/Theme.Rhythmic.PopupOverlay" />
 

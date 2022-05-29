@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.activities.main_activity.fragments.search
+package com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.library
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,27 +8,27 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.rhythmic.databinding.FragmentSearchBinding
+import com.example.rhythmic.databinding.FragmentLibraryBinding
 import com.example.rhythmic.domain.util.UIFunctions
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class LibraryFragment : Fragment() {
         @Inject
         lateinit var uiFunctions: UIFunctions
-        private var _binding: FragmentSearchBinding? = null
-        private lateinit var searchViewModel: SearchViewModel
+        private var _binding: FragmentLibraryBinding? = null
+        private lateinit var libraryViewModel: LibraryViewModel
         private val binding get() = _binding!!
 
         override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
                 uiFunctions.setActionBarLogo(activity = activity as AppCompatActivity)
-                searchViewModel = ViewModelProvider(this).get(SearchViewModel::class.java)
-                _binding = FragmentSearchBinding.inflate(inflater, container, false)
+                libraryViewModel = ViewModelProvider(this).get(LibraryViewModel::class.java)
+                _binding = FragmentLibraryBinding.inflate(inflater, container, false)
                 val root: View = binding.root
 
-                val textView: TextView = binding.textGallery
-                searchViewModel.text.observe(viewLifecycleOwner) {
+                val textView: TextView = binding.textSlideshow
+                libraryViewModel.text.observe(viewLifecycleOwner) {
                         textView.text = it
                 }
 
@@ -39,5 +39,4 @@ class SearchFragment : Fragment() {
                 super.onDestroyView()
                 _binding = null
         }
-
 }

@@ -7,24 +7,42 @@
 
     <fragment
             android:id="@+id/nav_home"
-            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.home.HomeFragment"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home.HomeFragment"
             android:label="@string/home"
             tools:layout="@layout/fragment_home" />
 
     <fragment
             android:id="@+id/nav_search"
-            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.search.SearchFragment"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.search.SearchFragment"
             android:label="@string/search"
             tools:layout="@layout/fragment_search" />
 
     <fragment
             android:id="@+id/nav_library"
-            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.library.LibraryFragment"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.library.LibraryFragment"
             android:label="@string/library"
             tools:layout="@layout/fragment_library" />
     <fragment
             android:id="@+id/nav_download"
-            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.download.DownloadFragment"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.download.DownloadFragment"
             android:label="@string/download"
             tools:layout="@layout/fragment_download" />
+    <fragment
+            android:id="@+id/albumFragment"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home.top_nav.album.AlbumFragment"
+            android:label="fragment_album"
+            tools:layout="@layout/fragment_album" >
+        <action
+                android:id="@+id/action_albumFragment_to_artistFragment"
+                app:destination="@id/artistFragment" />
+    </fragment>
+    <fragment
+            android:id="@+id/artistFragment"
+            android:name="com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home.top_nav.artist.ArtistFragment"
+            android:label="fragment_artist"
+            tools:layout="@layout/fragment_artist" >
+        <action
+                android:id="@+id/action_artistFragment_to_albumFragment"
+                app:destination="@id/albumFragment" />
+    </fragment>
 </navigation>

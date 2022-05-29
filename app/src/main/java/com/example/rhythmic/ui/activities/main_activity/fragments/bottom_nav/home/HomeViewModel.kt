@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.activities.main_activity.fragments.home
+package com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
