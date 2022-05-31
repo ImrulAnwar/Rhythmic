@@ -6,6 +6,8 @@ import com.example.rhythmic.data.db.SongDatabase
 import com.example.rhythmic.data.repo.SongRepository
 import com.example.rhythmic.domain.repo.Repository
 import com.example.rhythmic.domain.util.UIFunctions
+import com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home.top_nav.album.AlbumFragment
+import com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home.top_nav.artist.ArtistFragment
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,4 +32,12 @@ object AppModule {
         @Singleton
         @Provides
         fun provideSongRepository(db: SongDatabase): Repository = SongRepository(db.songDao)
+
+        @Singleton
+        @Provides
+        fun provideAlbumFragment(): AlbumFragment = AlbumFragment()
+
+        @Singleton
+        @Provides
+        fun provideArtistFragment(): ArtistFragment = ArtistFragment()
 }

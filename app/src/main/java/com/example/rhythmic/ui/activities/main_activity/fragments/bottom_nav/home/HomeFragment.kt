@@ -31,14 +31,18 @@ class HomeFragment : Fragment() {
         private lateinit var homeViewModel: HomeViewModel
         private lateinit var allSongs: LiveData<List<Song>>
         private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireContext()) }
-        val artistFragment = ArtistFragment()
-        val albumFragment = AlbumFragment()
+        @Inject
+        lateinit var artistFragment: ArtistFragment
+        @Inject
+        lateinit var albumFragment: AlbumFragment
 
         override fun onCreateView(
                 inflater: LayoutInflater,
                 container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
+                artistFragment = ArtistFragment()
+                albumFragment = AlbumFragment()
                 uiFunctions.setActionBarLogo(activity = activity as AppCompatActivity)
                 homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
                 _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -95,7 +99,11 @@ class HomeFragment : Fragment() {
                 binding.ibArtist.setColorFilter(resources.getColor(R.color.black))
                 binding.ibAlbum.setColorFilter(resources.getColor(R.color.text_color_2))
                 val fm: FragmentManager = requireActivity().supportFragmentManager
-                fm.beginTransaction().replace(R.id.fragmentContainerView, albumFragment).commit()
+                albumFragment.let {
+                        fm.beginTransaction().replace(R.id.fragmentContainerView,
+                                it
+                        ).commit()
+                }
         }
 
         private fun artistButtonClicked() {
@@ -104,7 +112,11 @@ class HomeFragment : Fragment() {
                 binding.ibArtist.setColorFilter(resources.getColor(R.color.text_color_2))
                 binding.ibAlbum.setColorFilter(resources.getColor(R.color.black))
                 val fm: FragmentManager = requireActivity().supportFragmentManager
-                fm.beginTransaction().replace(R.id.fragmentContainerView, artistFragment).commit()
+                artistFragment.let {
+                        fm.beginTransaction().replace(R.id.fragmentContainerView,
+                                it
+                        ).commit()
+                }
         }
 
 }
