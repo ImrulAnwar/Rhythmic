@@ -33,11 +33,4 @@ object AppModule {
         @Provides
         fun provideSongRepository(db: SongDatabase): Repository = SongRepository(db.songDao)
 
-        @Singleton
-        @Provides
-        fun provideAlbumFragment(): AlbumFragment = AlbumFragment()
-
-        @Singleton
-        @Provides
-        fun provideArtistFragment(): ArtistFragment = ArtistFragment()
 }

@@ -54,6 +54,7 @@ dependencies {
 
     implementation 'com.google.dagger:dagger:2.38.1'
     kapt 'com.google.dagger:dagger-compiler:2.38.1'
+    implementation "com.github.skydoves:viewmodel-lifecycle:1.1.0"
 
 // hilt
     implementation 'com.google.dagger:hilt-android:2.38.1'

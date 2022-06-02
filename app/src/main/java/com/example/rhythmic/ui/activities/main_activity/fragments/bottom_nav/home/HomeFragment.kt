@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.rhythmic.R
 import com.example.rhythmic.adapters.VerticalAdapter
@@ -31,18 +30,18 @@ class HomeFragment : Fragment() {
         private lateinit var homeViewModel: HomeViewModel
         private lateinit var allSongs: LiveData<List<Song>>
         private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireContext()) }
-        @Inject
-        lateinit var artistFragment: ArtistFragment
-        @Inject
-        lateinit var albumFragment: AlbumFragment
+        var artistFragment: ArtistFragment? = null
+        var albumFragment: AlbumFragment? = null
+        private var fm: FragmentManager? = null
 
         override fun onCreateView(
                 inflater: LayoutInflater,
                 container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
-                artistFragment = ArtistFragment()
                 albumFragment = AlbumFragment()
+                artistFragment = ArtistFragment()
+                fm = requireActivity().supportFragmentManager
                 uiFunctions.setActionBarLogo(activity = activity as AppCompatActivity)
                 homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
                 _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -65,6 +64,9 @@ class HomeFragment : Fragment() {
         override fun onDestroyView() {
                 super.onDestroyView()
                 _binding = null
+//                fm = null
+                albumFragment = null
+                artistFragment = null
         }
 
         private fun handleAlbumAndArtistButtonClicks() {
@@ -98,9 +100,10 @@ class HomeFragment : Fragment() {
                 binding.ibAlbum.setBackgroundResource(R.drawable.black_background)
                 binding.ibArtist.setColorFilter(resources.getColor(R.color.black))
                 binding.ibAlbum.setColorFilter(resources.getColor(R.color.text_color_2))
-                val fm: FragmentManager = requireActivity().supportFragmentManager
-                albumFragment.let {
-                        fm.beginTransaction().replace(R.id.fragmentContainerView,
+
+                albumFragment?.let {
+                        fm!!.beginTransaction().replace(
+                                R.id.fragmentContainerView,
                                 it
                         ).commit()
                 }
@@ -111,9 +114,9 @@ class HomeFragment : Fragment() {
                 binding.ibAlbum.setBackgroundResource(R.drawable.grey_background)
                 binding.ibArtist.setColorFilter(resources.getColor(R.color.text_color_2))
                 binding.ibAlbum.setColorFilter(resources.getColor(R.color.black))
-                val fm: FragmentManager = requireActivity().supportFragmentManager
-                artistFragment.let {
-                        fm.beginTransaction().replace(R.id.fragmentContainerView,
+                artistFragment?.let {
+                        fm!!.beginTransaction().replace(
+                                R.id.fragmentContainerView,
                                 it
                         ).commit()
                 }

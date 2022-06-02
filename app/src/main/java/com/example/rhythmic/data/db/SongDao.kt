@@ -24,4 +24,10 @@ interface SongDao {
 
         @Query("SELECT EXISTS (SELECT * FROM songs_table WHERE path = :path)")
         suspend fun doesRowExist(path: String): Boolean
+
+        @Query("SELECT * FROM songs_table GROUP BY album")
+        fun getAllAlbums(): LiveData<List<Song>>
+
+        @Query("SELECT * FROM songs_table GROUP BY artist")
+        fun getAllArtists(): LiveData<List<Song>>
 }
