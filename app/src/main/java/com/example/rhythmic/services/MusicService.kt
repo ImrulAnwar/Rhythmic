@@ -1,4 +1,4 @@
-package com.example.rhythmic.ui.activities.services
+package com.example.rhythmic.services
 
 import android.app.Service
 import android.content.Intent

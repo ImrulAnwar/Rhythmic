@@ -32,7 +32,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ui.activities.services.MusicService" />
+        <service android:name=".services.MusicService" />
     </application>
 
 </manifest>
