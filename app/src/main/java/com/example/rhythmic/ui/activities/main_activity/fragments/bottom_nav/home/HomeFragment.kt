@@ -20,6 +20,7 @@ import com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.hom
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+private const val TAG = "HomeFragment"
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
@@ -29,7 +30,7 @@ class HomeFragment : Fragment() {
         private val binding get() = _binding!!
         private lateinit var homeViewModel: HomeViewModel
         private lateinit var allSongs: LiveData<List<Song>>
-        private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireActivity()) }
+        private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireActivity(),TAG) }
         var artistFragment: ArtistFragment? = null
         var albumFragment: AlbumFragment? = null
         private var fm: FragmentManager? = null

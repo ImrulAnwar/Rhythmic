@@ -2,7 +2,6 @@ package com.example.rhythmic.adapters
 
 import android.app.Activity
 import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -15,15 +14,10 @@ import com.example.rhythmic.databinding.VerticalItemBinding
 import com.example.rhythmic.domain.util.SongDiffUtil
 import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingActivity
 
-class VerticalAdapter(val context: Activity) :
+class VerticalAdapter(val context: Activity, val from : String) :
         RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder>() {
 
-        //might introduce a bug
-        companion object{
-                private var songList = emptyList<Song>()
-        }
-
-        lateinit var bundle: Bundle
+        private var songList = emptyList<Song>()
 
         inner class VerticalViewHolder(val binding: VerticalItemBinding) :
                 RecyclerView.ViewHolder(binding.root)
