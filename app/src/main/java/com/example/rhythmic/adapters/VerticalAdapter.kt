@@ -2,6 +2,7 @@ package com.example.rhythmic.adapters
 
 import android.app.Activity
 import android.content.Intent
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
@@ -18,6 +19,7 @@ class VerticalAdapter(val context: Activity) :
         RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder>() {
 
         private var songList = emptyList<Song>()
+        lateinit var bundle: Bundle
 
         inner class VerticalViewHolder(val binding: VerticalItemBinding) :
                 RecyclerView.ViewHolder(binding.root)
@@ -37,22 +39,27 @@ class VerticalAdapter(val context: Activity) :
                 val currentSong = songList[position]
                 holder.binding.tvSongTitle.text = currentSong.title
                 holder.binding.tvDuration.text = currentSong.artist
+
                 AnimationUtils.loadAnimation(
                         holder.itemView.context,
                         android.R.anim.fade_in
                 ).also {
                         holder.itemView.startAnimation(it)
                 }
+
                 Glide.with(context).load(currentSong.imagePath)
                         .placeholder(R.mipmap.ic_launcher).centerCrop()
                         .into(holder.binding.ivAlbumArt)
+
                 holder.itemView.setOnClickListener {
                         Intent(context, NowPlayingActivity::class.java).also {
+                                it.putExtra("currentSong", currentSong)
                                 context.startActivity(
                                         it
                                 )
                         }
                 }
+
         }
 
         fun setData(newSongList: List<Song>) {

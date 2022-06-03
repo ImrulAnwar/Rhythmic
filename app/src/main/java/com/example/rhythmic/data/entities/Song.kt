@@ -2,6 +2,7 @@ package com.example.rhythmic.data.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "songs_table")
 data class Song(
@@ -15,4 +16,4 @@ data class Song(
         val imagePath: String? = null,
         val isRecent: Boolean = false,
         val isLiked: Boolean = false
-)
+):Serializable
