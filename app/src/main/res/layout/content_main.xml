@@ -113,7 +113,10 @@
                 app:menu="@menu/bottom_nav_bar_items"
                 android:background="@drawable/bottom_nav_bar_background"
                 android:id="@+id/bottomNavigationView"
-                app:elevation="0dp" />
+                app:elevation="0dp"
+                android:padding="8dp"
+                android:paddingBottom="0dp"
+                android:layout_margin="0dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

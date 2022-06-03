@@ -20,7 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-private val tag= "MainActivityViewModel"
+private const val TAG= "MainActivityViewModel"
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
         private val repository: Repository,
@@ -106,7 +106,7 @@ class MainActivityViewModel @Inject constructor(
                                                         imagePath = albumArtUri
                                                 )
                                         )
-                                        Log.d(tag, "insertAllSongs: successFul")
+                                        Log.d(TAG, "insertAllSongs: successFul")
                                 }
                         }
                 }

@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
                 super.onCreate(savedInstanceState)
                 binding = ActivityMainBinding.inflate(layoutInflater)
                 setContentView(binding.root)
+
                 setSupportActionBar(binding.appBarMain.toolbar)
                 val drawerLayout: DrawerLayout = binding.drawerLayout
                 val navView: NavigationView = binding.navView
@@ -42,10 +43,11 @@ class MainActivity : AppCompatActivity() {
                         ), drawerLayout
                 )
                 setupActionBarWithNavController(navController, appBarConfiguration)
+
                 bottomNavigationView.setupWithNavController(navController)
                 navView.setupWithNavController(navController)
+
                 uiFunctions.setActionBarLogo(activity = this as AppCompatActivity)
-//                mainActivityViewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
                 mainActivityViewModel.getRuntimePermission(this)
         }
 
