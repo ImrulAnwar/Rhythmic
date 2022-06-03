@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -36,6 +37,12 @@ class VerticalAdapter(val context: Activity) :
                 val currentSong = songList[position]
                 holder.binding.tvSongTitle.text = currentSong.title
                 holder.binding.tvDuration.text = currentSong.artist
+                AnimationUtils.loadAnimation(
+                        holder.itemView.context,
+                        android.R.anim.fade_in
+                ).also {
+                        holder.itemView.startAnimation(it)
+                }
                 Glide.with(context).load(currentSong.imagePath)
                         .placeholder(R.mipmap.ic_launcher).centerCrop()
                         .into(holder.binding.ivAlbumArt)

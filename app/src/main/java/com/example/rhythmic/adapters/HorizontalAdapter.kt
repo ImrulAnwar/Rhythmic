@@ -3,6 +3,7 @@ package com.example.rhythmic.adapters
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -33,6 +34,14 @@ class HorizontalAdapter(val context: Context, val from: String) :
                         holder.binding.tvAlbumName.text = currentSong.album
                 else
                         holder.binding.tvAlbumName.text = currentSong.artist
+                //scroll animation
+                AnimationUtils.loadAnimation(
+                        holder.itemView.context,
+                        android.R.anim.fade_in
+                ).also {
+                        holder.itemView.startAnimation(it)
+                }
+
                 Glide.with(context).load(currentSong.imagePath)
                         .placeholder(R.mipmap.ic_launcher).centerCrop()
                         .into(holder.binding.ivArtistArt)

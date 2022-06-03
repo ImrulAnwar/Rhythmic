@@ -14,10 +14,10 @@
             android:background="#00FFFFFF"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="28dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:minWidth="48dp"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:layout_marginEnd="16dp" />
 
     <ImageButton
             android:layout_width="wrap_content"
@@ -28,8 +28,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="32dp"
-            android:layout_marginStart="40dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageButton7" />
+            app:layout_constraintBottom_toBottomOf="@+id/imageButton7"
+            android:layout_marginStart="32dp" />
 
     <SeekBar
             android:layout_width="0dp"
@@ -41,7 +41,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginBottom="31dp"
-            app:layout_constraintBottom_toTopOf="@+id/imageButton" />
+            app:layout_constraintBottom_toTopOf="@+id/imageButton"
+            android:progressTint="@color/black" />
 
     <ImageButton
             android:layout_width="70dp"
@@ -63,9 +64,9 @@
             android:id="@+id/imageButton2"
             android:background="#00FFFFFF"
             app:layout_constraintBottom_toBottomOf="@+id/imageButton"
-            android:layout_marginStart="40dp"
             app:layout_constraintStart_toEndOf="@+id/imageButton"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginBottom="20dp"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton6" />
 
     <ImageButton
             android:layout_width="wrap_content"
@@ -75,8 +76,8 @@
             android:background="#00FFFFFF"
             app:layout_constraintBottom_toBottomOf="@+id/imageButton"
             app:layout_constraintEnd_toStartOf="@+id/imageButton"
-            android:layout_marginEnd="40dp"
-            android:layout_marginBottom="20dp" />
+            android:layout_marginBottom="20dp"
+            app:layout_constraintStart_toEndOf="@+id/imageButton5" />
 
     <ImageButton
             android:layout_width="wrap_content"
@@ -88,7 +89,7 @@
             android:tint="@color/text_color_2"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="70dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton3" />
+            android:layout_marginStart="32dp" />
 
     <ImageButton
             android:layout_width="wrap_content"
@@ -97,10 +98,10 @@
             android:id="@+id/imageButton6"
             android:background="#00FFFFFF"
             android:tint="@color/text_color_2"
-            app:layout_constraintStart_toEndOf="@+id/imageButton2"
             android:layout_marginBottom="70dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="32dp" />
 
     <ImageButton
             android:layout_width="wrap_content"
@@ -111,8 +112,25 @@
             android:background="#00FFFFFF"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="36dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.469" />
+            app:layout_constraintVertical_bias="0.469"
+            app:layout_constraintEnd_toStartOf="@+id/cardView2" />
+
+    <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageButton7"
+            app:layout_constraintBottom_toTopOf="@+id/imageButton4"
+            android:id="@+id/cardView2"
+            app:cardCornerRadius="40dp">
+
+        <ImageView
+                android:layout_width="260dp"
+                android:layout_height="260dp"
+                app:srcCompat="@mipmap/ic_launcher"
+                android:id="@+id/imageView2" />
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
