@@ -20,8 +20,8 @@ class NowPlayingActivity : AppCompatActivity() {
                 binding = ActivityNowPlayingBinding.inflate(layoutInflater)
                 setContentView(binding.root)
                 supportActionBar?.hide()
-                currentSong = intent.getSerializableExtra("currentSong") as Song
-                nowPlayingViewModel.currentSong.value = currentSong
+
+                nowPlayingViewModel.currentSong.value = intent.getSerializableExtra("currentSong") as Song
 
                 nowPlayingViewModel.currentSong.observe(this){
                         Glide.with(this).load(it.imagePath)

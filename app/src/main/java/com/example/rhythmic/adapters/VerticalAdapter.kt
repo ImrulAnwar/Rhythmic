@@ -18,7 +18,11 @@ import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingActivit
 class VerticalAdapter(val context: Activity) :
         RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder>() {
 
-        private var songList = emptyList<Song>()
+        //might introduce a bug
+        companion object{
+                private var songList = emptyList<Song>()
+        }
+
         lateinit var bundle: Bundle
 
         inner class VerticalViewHolder(val binding: VerticalItemBinding) :
@@ -53,6 +57,7 @@ class VerticalAdapter(val context: Activity) :
 
                 holder.itemView.setOnClickListener {
                         Intent(context, NowPlayingActivity::class.java).also {
+                                for (i in songList.indices)
                                 it.putExtra("currentSong", currentSong)
                                 context.startActivity(
                                         it
