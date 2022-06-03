@@ -29,7 +29,7 @@ class HomeFragment : Fragment() {
         private val binding get() = _binding!!
         private lateinit var homeViewModel: HomeViewModel
         private lateinit var allSongs: LiveData<List<Song>>
-        private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireContext()) }
+        private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireActivity()) }
         var artistFragment: ArtistFragment? = null
         var albumFragment: AlbumFragment? = null
         private var fm: FragmentManager? = null
@@ -50,7 +50,7 @@ class HomeFragment : Fragment() {
                 allSongs = homeViewModel.getAllSongs()
 
                 binding.rvHomeFragment.adapter = adapter
-                binding.rvHomeFragment.layoutManager = LinearLayoutManager(requireContext())
+                binding.rvHomeFragment.layoutManager = LinearLayoutManager(requireActivity())
 
                 allSongs.observe(viewLifecycleOwner) {
                         allSongs.value?.let { adapter.setData(it) }

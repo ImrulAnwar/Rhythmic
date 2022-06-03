@@ -1,6 +1,7 @@
 package com.example.rhythmic.adapters
 
-import android.content.Context
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
@@ -10,11 +11,13 @@ import com.example.rhythmic.R
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.databinding.VerticalItemBinding
 import com.example.rhythmic.domain.util.SongDiffUtil
+import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingActivity
 
-class VerticalAdapter(val context: Context) :
+class VerticalAdapter(val context: Activity) :
         RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder>() {
 
         private var songList = emptyList<Song>()
+
         inner class VerticalViewHolder(val binding: VerticalItemBinding) :
                 RecyclerView.ViewHolder(binding.root)
 
@@ -36,6 +39,13 @@ class VerticalAdapter(val context: Context) :
                 Glide.with(context).load(currentSong.imagePath)
                         .placeholder(R.mipmap.ic_launcher).centerCrop()
                         .into(holder.binding.ivAlbumArt)
+                holder.itemView.setOnClickListener {
+                        Intent(context, NowPlayingActivity::class.java).also {
+                                context.startActivity(
+                                        it
+                                )
+                        }
+                }
         }
 
         fun setData(newSongList: List<Song>) {
