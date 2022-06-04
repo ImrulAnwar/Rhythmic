@@ -9,6 +9,7 @@ import android.os.IBinder
 import android.util.Log
 import com.example.rhythmic.data.entities.Song
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Exception
 import javax.inject.Inject
 
 private const val TAG = "MusicService"
@@ -16,7 +17,7 @@ private const val TAG = "MusicService"
 @AndroidEntryPoint
 class MusicService : Service() {
         companion object {
-                lateinit var currentSongPath: String
+                var currentSongPath: String = ""
         }
         @Inject
         lateinit var mediaPlayer: MediaPlayer
@@ -54,12 +55,11 @@ class MusicService : Service() {
         fun pause() { mediaPlayer.pause() }
         fun resume() { mediaPlayer.start() }
 
-
+        fun reset(){mediaPlayer.reset()}
         fun isPlaying(): Boolean = mediaPlayer.isPlaying
         fun isNotPlaying(): Boolean = !mediaPlayer.isPlaying
-        fun isNotAlreadyPlaying(path: String?): Boolean {
-                return path != currentSongPath
-        }
+        fun isNotAlreadyPlaying(path: String?): Boolean = path != currentSongPath
+        fun isNotPaused(): Boolean = !(!mediaPlayer.isPlaying && mediaPlayer.currentPosition > 1)
 
 
 }

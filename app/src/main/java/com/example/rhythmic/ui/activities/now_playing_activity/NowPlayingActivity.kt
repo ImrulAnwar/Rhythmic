@@ -18,23 +18,26 @@ import com.example.rhythmic.services.MusicService
 
 private const val TAG = "NowPlayingActivity"
 
-class NowPlayingActivity : AppCompatActivity() , ServiceConnection{
+class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
         private lateinit var binding: ActivityNowPlayingBinding
         private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private var musicService: MusicService? = null
         lateinit var currentSong: Song
+        private var isPlaying: Boolean = true
 
         override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
                 binding = ActivityNowPlayingBinding.inflate(layoutInflater)
                 setContentView(binding.root)
                 supportActionBar?.hide()
+                setButtonActions()
                 currentSong = intent.getSerializableExtra("currentSong") as Song
                 nowPlayingViewModel.currentSong.value = currentSong
+                isPlaying = true
 
 
-                nowPlayingViewModel.currentSong.observe(this){
+                nowPlayingViewModel.currentSong.observe(this) {
                         Glide.with(this).load(it.imagePath)
                                 .placeholder(R.mipmap.ic_launcher).centerCrop()
                                 .into(binding.ivAlbumArtNP)
@@ -43,6 +46,24 @@ class NowPlayingActivity : AppCompatActivity() , ServiceConnection{
                         binding.tvTotalDurationNP.text = duration
                         binding.tvSongTitleNP.text = it.title
                         binding.tvArtistNameNP.text = it.artist
+                }
+        }
+
+        private fun setButtonActions() {
+                binding.ibPlayOrPause.setOnClickListener {
+                        binding.ibPlayOrPause.apply {
+                                isPlaying = if (isPlaying) {
+                                        musicService?.pause()
+                                        setColorFilter(resources.getColor(R.color.white))
+                                        setImageResource(R.drawable.ic_play)
+                                        false
+                                } else {
+                                        musicService?.resume()
+                                        setColorFilter(resources.getColor(R.color.white))
+                                        setImageResource(R.drawable.ic_pause)
+                                        true
+                                }
+                        }
                 }
         }
 
@@ -60,12 +81,24 @@ class NowPlayingActivity : AppCompatActivity() , ServiceConnection{
         }
 
         override fun onServiceConnected(componentName: ComponentName?, iBinder: IBinder?) {
-                val binder : MusicService.MusicBinder = iBinder as MusicService.MusicBinder
+                val binder: MusicService.MusicBinder = iBinder as MusicService.MusicBinder
                 musicService = binder.getService()
                 musicService?.let {
+                        //if song is not playing it could be paused
+                        // if it is paused & it was already playing will just resume it
+                        // else reset the player and start music
                         if (it.isNotPlaying()) {
-                                it.startMedia(currentSong.path)
-                        } else if (it.isNotAlreadyPlaying(currentSong.path)){
+                                if (it.isNotPaused()) {
+                                        it.startMedia(currentSong.path)
+                                } else {
+                                        if (!it.isNotAlreadyPlaying(currentSong.path)) {
+                                                it.resume()
+                                        } else {
+                                                it.reset()
+                                                it.startMedia(currentSong.path)
+                                        }
+                                }
+                        } else if (it.isNotAlreadyPlaying(currentSong.path)) {
                                 it.changeDataSource(currentSong.path)
                         }
                 }
