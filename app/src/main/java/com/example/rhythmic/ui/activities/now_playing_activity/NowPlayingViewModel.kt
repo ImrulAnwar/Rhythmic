@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.domain.MediaPlayerFunctions
 import com.example.rhythmic.domain.repo.Repository
+import com.example.rhythmic.services.MusicService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -18,8 +19,9 @@ private const val TAG = "NowPlayingActivityViewModel"
 class NowPlayingViewModel @Inject constructor(
         private val repository: Repository,
         application: Application
-) : AndroidViewModel(application), ServiceConnection {
+) : AndroidViewModel(application) {
         var currentSong = MutableLiveData<Song>()
+
         var seekPosition: Int = 0
 
 
@@ -49,11 +51,6 @@ class NowPlayingViewModel @Inject constructor(
                 return time.toString()
         }
 
-        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
-                TODO("Not yet implemented")
-        }
+        fun getSong(position: Int): Song = repository.getCurrentSongLIst()[position]
 
-        override fun onServiceDisconnected(p0: ComponentName?) {
-                TODO("Not yet implemented")
-        }
 }

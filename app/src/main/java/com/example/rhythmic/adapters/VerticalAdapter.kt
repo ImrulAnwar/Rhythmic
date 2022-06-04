@@ -72,7 +72,7 @@ class VerticalAdapter @Inject constructor(
                 holder.itemView.setOnClickListener {
                         Intent(context, NowPlayingActivity::class.java).also {
                                 for (i in songList.indices)
-                                        it.putExtra("currentSong", currentSong)
+                                        it.putExtra("position", position)
                                 context.startActivity(
                                         it
                                 )

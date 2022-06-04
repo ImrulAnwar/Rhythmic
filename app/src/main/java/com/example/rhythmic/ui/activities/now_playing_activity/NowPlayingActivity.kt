@@ -28,6 +28,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private var musicService: MusicService? = null
         lateinit var currentSong: Song
+        var postion : Int = 0
         private var isPlaying: Boolean = true
 
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +37,8 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 setContentView(binding.root)
                 supportActionBar?.hide()
                 setButtonActions()
-                currentSong = intent.getSerializableExtra("currentSong") as Song
+                postion = intent.getIntExtra("position", 0)
+                currentSong = nowPlayingViewModel.getSong(postion)
                 nowPlayingViewModel.currentSong.value = currentSong
                 isPlaying = true
 
