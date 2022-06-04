@@ -4,7 +4,19 @@ import androidx.lifecycle.LiveData
 import com.example.rhythmic.data.db.SongDao
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.domain.repo.Repository
+
 class SongRepository(private val dao: SongDao) : Repository {
+
+        companion object {
+                var currentSongList: List<Song> = emptyList()
+        }
+
+        override fun setCurrentSongList(songList: List<Song>) {
+                currentSongList = songList
+        }
+
+        override fun getCurrentSongLIst(): List<Song> = currentSongList
+
         override fun getAllSongs(): LiveData<List<Song>> = dao.getAllSongs()
 
         override fun getRecentSongs(): LiveData<List<Song>> = dao.getRecentSongs()
@@ -19,6 +31,6 @@ class SongRepository(private val dao: SongDao) : Repository {
 
         override suspend fun deleteSong(song: Song) = dao.deleteSong(song)
 
-        override suspend fun doesRowExist(path: String): Boolean  = dao.doesRowExist(path)
+        override suspend fun doesRowExist(path: String): Boolean = dao.doesRowExist(path)
 }
 

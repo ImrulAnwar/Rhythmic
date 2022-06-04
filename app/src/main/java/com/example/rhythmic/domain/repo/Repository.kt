@@ -12,4 +12,6 @@ interface Repository {
         suspend fun insertSong(song: Song)
         suspend fun deleteSong(song: Song)
        suspend fun doesRowExist(path : String): Boolean
+        fun setCurrentSongList(songList: List<Song>)
+        fun getCurrentSongLIst(): List<Song>
 }

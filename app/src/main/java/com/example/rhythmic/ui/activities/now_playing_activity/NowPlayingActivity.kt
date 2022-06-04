@@ -9,15 +9,19 @@ import android.os.IBinder
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.rhythmic.R
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.databinding.ActivityNowPlayingBinding
 import com.example.rhythmic.domain.MediaPlayerFunctions
 import com.example.rhythmic.services.MusicService
+import com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home.top_nav.album.ArtistViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
 private const val TAG = "NowPlayingActivity"
 
+@AndroidEntryPoint
 class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
         private lateinit var binding: ActivityNowPlayingBinding
@@ -71,7 +75,6 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 Intent(this, MusicService::class.java).also {
                         bindService(it, this, BIND_AUTO_CREATE)
                 }
-
                 super.onResume()
         }
 

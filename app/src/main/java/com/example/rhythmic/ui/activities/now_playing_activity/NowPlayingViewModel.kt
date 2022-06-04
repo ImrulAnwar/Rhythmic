@@ -1,20 +1,30 @@
 package com.example.rhythmic.ui.activities.now_playing_activity
 
 import android.app.Application
+import android.content.ComponentName
+import android.content.ServiceConnection
+import android.os.IBinder
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.domain.MediaPlayerFunctions
+import com.example.rhythmic.domain.repo.Repository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-private const val TAG= "NowPlayingActivityViewModel"
+private const val TAG = "NowPlayingActivityViewModel"
 
-
-class NowPlayingViewModel(application: Application) : AndroidViewModel(application) ,MediaPlayerFunctions{
-        var currentSong =  MutableLiveData<Song>()
+@HiltViewModel
+class NowPlayingViewModel @Inject constructor(
+        private val repository: Repository,
+        application: Application
+) : AndroidViewModel(application), ServiceConnection {
+        var currentSong = MutableLiveData<Song>()
         var seekPosition: Int = 0
 
-        fun convertTime(timeInt: Long): String{
-                var timeInt = timeInt/1000
+
+        fun convertTime(timeInt: Long): String {
+                var timeInt = timeInt / 1000
                 val totalTime = timeInt
                 val time = StringBuilder()
                 if (timeInt >= 3600) {
@@ -39,19 +49,11 @@ class NowPlayingViewModel(application: Application) : AndroidViewModel(applicati
                 return time.toString()
         }
 
-        override fun playNextSong() {
+        override fun onServiceConnected(p0: ComponentName?, p1: IBinder?) {
                 TODO("Not yet implemented")
         }
 
-        override fun playPrevSong() {
-                TODO("Not yet implemented")
-        }
-
-        override fun playOrPause() {
-                TODO("Not yet implemented")
-        }
-
-        override fun addToLiked() {
+        override fun onServiceDisconnected(p0: ComponentName?) {
                 TODO("Not yet implemented")
         }
 }
