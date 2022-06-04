@@ -4,11 +4,12 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.rhythmic.data.entities.Song
+import com.example.rhythmic.domain.MediaPlayerFunctions
 
 private const val TAG= "NowPlayingActivityViewModel"
 
 
-class NowPlayingViewModel(application: Application) : AndroidViewModel(application) {
+class NowPlayingViewModel(application: Application) : AndroidViewModel(application) ,MediaPlayerFunctions{
         var currentSong =  MutableLiveData<Song>()
         var seekPosition: Int = 0
 
@@ -36,5 +37,21 @@ class NowPlayingViewModel(application: Application) : AndroidViewModel(applicati
                                 .append(timeInt) else time.append(timeInt)
                 }
                 return time.toString()
+        }
+
+        override fun playNextSong() {
+                TODO("Not yet implemented")
+        }
+
+        override fun playPrevSong() {
+                TODO("Not yet implemented")
+        }
+
+        override fun playOrPause() {
+                TODO("Not yet implemented")
+        }
+
+        override fun addToLiked() {
+                TODO("Not yet implemented")
         }
 }

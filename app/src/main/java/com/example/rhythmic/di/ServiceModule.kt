@@ -6,19 +6,12 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ServiceComponent
+import javax.inject.Singleton
 
 
 @Module
 @InstallIn(ServiceComponent::class)
 object ServiceModule {
 
-        @Provides
-        fun provideMediaPlayer() = MediaPlayer().apply {
-                setAudioAttributes(
-                        AudioAttributes.Builder()
-                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                                .setUsage(AudioAttributes.USAGE_MEDIA)
-                                .build()
-                )
-        }
+
 }

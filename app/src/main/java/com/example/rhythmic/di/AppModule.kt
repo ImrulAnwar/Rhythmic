@@ -1,6 +1,8 @@
 package com.example.rhythmic.di
 
 import android.app.Application
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import androidx.room.Room
 import com.example.rhythmic.data.db.SongDatabase
 import com.example.rhythmic.data.repo.SongRepository
@@ -33,4 +35,14 @@ object AppModule {
         @Provides
         fun provideSongRepository(db: SongDatabase): Repository = SongRepository(db.songDao)
 
+        @Singleton
+        @Provides
+        fun provideMediaPlayer() = MediaPlayer().apply {
+                setAudioAttributes(
+                        AudioAttributes.Builder()
+                                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                                .setUsage(AudioAttributes.USAGE_MEDIA)
+                                .build()
+                )
+        }
 }
