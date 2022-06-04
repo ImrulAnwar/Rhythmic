@@ -16,7 +16,7 @@
             app:layout_constraintTop_toBottomOf="@+id/ibAlbum" />
 
     <ImageButton
-            android:src="@drawable/ic_linked_in"
+            android:src="@drawable/ic_album"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:id="@+id/ibAlbum"
@@ -25,10 +25,11 @@
             app:layout_constraintHorizontal_bias="0.5"
             android:layout_margin="8dp"
             app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView"
-            app:layout_constraintBottom_toTopOf="@+id/rvHomeFragment" />
+            app:layout_constraintBottom_toTopOf="@+id/rvHomeFragment"
+            android:cropToPadding="true" />
 
     <ImageButton
-            android:src="@drawable/ic_git_hub"
+            android:src="@drawable/ic_artist"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:id="@+id/ibArtist"
@@ -38,7 +39,9 @@
             android:layout_margin="8dp"
             app:layout_constraintTop_toBottomOf="@+id/fragmentContainerView"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toTopOf="@+id/rvHomeFragment" />
+            app:layout_constraintBottom_toTopOf="@+id/rvHomeFragment"
+            android:cropToPadding="true"
+            android:padding="2dp" />
 
     <LinearLayout
             android:orientation="horizontal"
