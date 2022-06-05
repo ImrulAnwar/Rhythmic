@@ -53,8 +53,7 @@ class VerticalAdapter @Inject constructor(
         }
 
         override fun onBindViewHolder(holder: VerticalViewHolder, position: Int) {
-                repository.setCurrentSongList(songList)
-                val currentSong = repository.getCurrentSongLIst()[position]
+                val currentSong =songList[position]
                 holder.binding.tvSongTitle.text = currentSong.title
                 holder.binding.tvDuration.text = currentSong.artist
 
@@ -70,6 +69,7 @@ class VerticalAdapter @Inject constructor(
                         .into(holder.binding.ivAlbumArt)
 
                 holder.itemView.setOnClickListener {
+                        repository.setCurrentSongList(songList)
                         Intent(context, NowPlayingActivity::class.java).also {
                                 for (i in songList.indices)
                                         it.putExtra("position", position)

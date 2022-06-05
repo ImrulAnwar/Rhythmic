@@ -28,7 +28,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private var musicService: MusicService? = null
         lateinit var currentSong: Song
-        var postion : Int = 0
+        private var postion : Int = 0
         private var isPlaying: Boolean = true
 
         override fun onCreate(savedInstanceState: Bundle?) {
