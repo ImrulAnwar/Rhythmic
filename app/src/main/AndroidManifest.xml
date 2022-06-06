@@ -19,9 +19,6 @@
                 android:name=".ui.activities.now_playing_activity.NowPlayingActivity"
                 android:exported="false" />
         <activity
-                android:name=".ui.song_list_activity.SongListActivity"
-                android:exported="false" />
-        <activity
                 android:name="com.example.rhythmic.ui.activities.main_activity.MainActivity"
                 android:exported="true"
                 android:theme="@style/Theme.Rhythmic.NoActionBar">

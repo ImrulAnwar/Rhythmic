@@ -1,23 +1,29 @@
 package com.example.rhythmic.ui.activities.now_playing_activity
 
+import android.app.Notification
+import android.app.PendingIntent
+import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.IBinder
-import android.util.Log
+import android.support.v4.media.session.MediaSessionCompat
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.ViewModelProvider
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
-import com.example.rhythmic.R
+import com.example.rhythmic.*
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.databinding.ActivityNowPlayingBinding
-import com.example.rhythmic.domain.MediaPlayerFunctions
+import com.example.rhythmic.recievers.NotificationReceiver
 import com.example.rhythmic.services.MusicService
-import com.example.rhythmic.ui.activities.main_activity.fragments.bottom_nav.home.top_nav.album.ArtistViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
 
 private const val TAG = "NowPlayingActivity"
 
@@ -28,8 +34,9 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private var musicService: MusicService? = null
         lateinit var currentSong: Song
-        private var postion : Int = 0
+        private var postion: Int = 0
         private var isPlaying: Boolean = true
+
 
         override fun onCreate(savedInstanceState: Bundle?) {
                 super.onCreate(savedInstanceState)
@@ -43,6 +50,8 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 isPlaying = true
 
 
+
+
                 nowPlayingViewModel.currentSong.observe(this) {
                         Glide.with(this).load(it.imagePath)
                                 .placeholder(R.mipmap.ic_launcher).centerCrop()
@@ -52,7 +61,9 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         binding.tvTotalDurationNP.text = duration
                         binding.tvSongTitleNP.text = it.title
                         binding.tvArtistNameNP.text = it.artist
+                        nowPlayingViewModel.getBitmapAndShowNotification(it, this)
                 }
+
         }
 
         private fun setButtonActions() {
@@ -71,6 +82,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 }
                         }
                 }
+
         }
 
         override fun onResume() {
@@ -112,4 +124,9 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
                 musicService = null
         }
+
+
+
+
+
 }
