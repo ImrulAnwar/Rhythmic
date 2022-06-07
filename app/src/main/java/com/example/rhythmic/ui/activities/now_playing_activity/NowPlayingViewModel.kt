@@ -5,11 +5,8 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.*
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import android.os.IBinder
 import android.support.v4.media.session.MediaSessionCompat
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.AndroidViewModel
@@ -19,13 +16,11 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.example.rhythmic.*
 import com.example.rhythmic.data.entities.Song
-import com.example.rhythmic.domain.MediaPlayerFunctions
 import com.example.rhythmic.domain.repo.Repository
 import com.example.rhythmic.recievers.NotificationReceiver
 import com.example.rhythmic.services.MusicService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.io.File
-import java.net.URI
+import java.util.*
 import javax.inject.Inject
 
 private const val TAG = "NowPlayingActivityViewModel"
@@ -40,14 +35,14 @@ class NowPlayingViewModel @Inject constructor(
         val currentSongListSize by lazy { repository.getCurrentSongLIst().size }
         private lateinit var mediaSessionCompat: MediaSessionCompat
         var seekPosition: Int = 0
-        private var isRepeat: Boolean = true
-        private var isShuffle: Boolean = true
         private val sharedPreferences: SharedPreferences by lazy {
                 application.applicationContext.getSharedPreferences(
                         "sharedPref",
                         Context.MODE_PRIVATE
                 )
         }
+        private var isRepeat: Boolean? = null
+        private var isShuffle: Boolean? = null
 
         fun convertTime(timeInt: Long): String {
                 var timeInt = timeInt / 1000
@@ -183,9 +178,15 @@ class NowPlayingViewModel @Inject constructor(
                         }
         }
 
-        fun playNextSong(musicService: MusicService, currentPosition: Int) {
-                this.currentPosition = currentPosition
-                currentSong.value = repository.getCurrentSongLIst()[currentPosition]
+        fun playNextOrPrevSong(musicService: MusicService, currentPosition: Int) {
+                isRepeat = sharedPreferences.getBoolean("isRepeat", false)
+                isShuffle = sharedPreferences.getBoolean("isShuffle", false)
+                if (isRepeat == false)
+                        if (isShuffle == true)
+                                this.currentPosition = Random().nextInt(currentSongListSize)
+                        else
+                                this.currentPosition = currentPosition
+                currentSong.value = repository.getCurrentSongLIst()[this.currentPosition]
                 musicService.changeDataSource(currentSong.value?.path)
         }
 }

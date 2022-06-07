@@ -22,7 +22,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private var musicService: MusicService? = null
         private var currentSong: Song? = null
-        private var position: Int = 0
+        private var currentPosition: Int = 0
         private var isPlaying: Boolean = true
         private var isRepeat: Boolean? = null
         private var isShuffle: Boolean? = null
@@ -40,9 +40,9 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 setContentView(binding.root)
                 supportActionBar?.hide()
                 setButtonActions()
-                position = intent.getIntExtra("position", 0)
-                nowPlayingViewModel.currentPosition = position
-                currentSong = nowPlayingViewModel.getSong(position)
+                currentPosition = intent.getIntExtra("position", 0)
+                nowPlayingViewModel.currentPosition = currentPosition
+                currentSong = nowPlayingViewModel.getSong(currentPosition)
                 nowPlayingViewModel.currentSong.value = currentSong
                 isPlaying = true
                 isShuffle = sharedPreferences.getBoolean("isShuffle", false)
@@ -123,6 +123,11 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 playNextSong(it)
                         }
                 }
+                binding.ibPrev.setOnClickListener {
+                        musicService?.let {
+                                playPrevSong(it)
+                        }
+                }
         }
 
         override fun onResume() {
@@ -150,15 +155,27 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 musicService = null
         }
 
-        fun playNextSong(musicService: MusicService) {
-                position++
-                if (position >= nowPlayingViewModel.currentSongListSize) {
-                        position = 0
-                }else if (position < 0) {
-                        position = nowPlayingViewModel.currentSongListSize-1
+        private fun playNextSong(musicService: MusicService) {
+
+                currentPosition++
+                setPosition()
+                currentSong = nowPlayingViewModel.getSong(currentPosition)
+                nowPlayingViewModel.playNextOrPrevSong(musicService,currentPosition)
+        }
+
+       private  fun playPrevSong(musicService: MusicService) {
+                currentPosition--
+                setPosition()
+                currentSong = nowPlayingViewModel.getSong(currentPosition)
+                nowPlayingViewModel.playNextOrPrevSong(musicService,currentPosition)
+        }
+
+        private fun setPosition() {
+                if (currentPosition >= nowPlayingViewModel.currentSongListSize) {
+                        currentPosition = 0
+                } else if (currentPosition < 0) {
+                        currentPosition = nowPlayingViewModel.currentSongListSize - 1
                 }
-                currentSong = nowPlayingViewModel.getSong(position)
-                nowPlayingViewModel.playNextSong(musicService,position)
         }
 
         private fun addToSharedPref(key: String, value: Boolean) {
