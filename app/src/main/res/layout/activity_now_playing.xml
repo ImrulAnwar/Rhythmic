@@ -100,7 +100,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/ibPlayOrPause"
             app:layout_constraintStart_toEndOf="@+id/ibPlayOrPause"
             android:layout_marginBottom="20dp"
-            app:layout_constraintEnd_toStartOf="@+id/imageButton6" />
+            app:layout_constraintEnd_toStartOf="@+id/ibRepeat" />
 
     <ImageButton
             android:layout_width="wrap_content"
@@ -111,29 +111,29 @@
             app:layout_constraintBottom_toBottomOf="@+id/ibPlayOrPause"
             app:layout_constraintEnd_toStartOf="@+id/ibPlayOrPause"
             android:layout_marginBottom="20dp"
-            app:layout_constraintStart_toEndOf="@+id/imageButton5" />
+            app:layout_constraintStart_toEndOf="@+id/ibShuffle" />
 
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_shuffle"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/imageButton5"
+            android:id="@+id/ibShuffle"
             android:background="#00FFFFFF"
-            app:layout_constraintBottom_toBottomOf="@+id/ibPlayOrPause"
             android:layout_marginStart="32dp"
-            app:tint="@color/text_color_2" />
+            app:tint="@color/text_color_2"
+            app:layout_constraintTop_toBottomOf="@+id/ibPlayOrPause" />
 
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_loop"
-            android:id="@+id/imageButton6"
+            android:id="@+id/ibRepeat"
             android:background="#00FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="32dp"
-            app:tint="@color/text_color_2"
-            app:layout_constraintBottom_toBottomOf="@+id/ibPlayOrPause" />
+            app:tint="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/ibPlayOrPause" />
 
     <ImageButton
             android:layout_width="wrap_content"

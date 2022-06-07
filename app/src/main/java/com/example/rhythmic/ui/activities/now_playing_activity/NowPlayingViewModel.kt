@@ -41,6 +41,8 @@ class NowPlayingViewModel @Inject constructor(
         var currentSong = MutableLiveData<Song>()
         private lateinit var mediaSessionCompat: MediaSessionCompat
         var seekPosition: Int = 0
+        private var isRepeat: Boolean = true
+        private var isShuffle: Boolean = true
 
 
         fun convertTime(timeInt: Long): String {
@@ -147,6 +149,28 @@ class NowPlayingViewModel @Inject constructor(
                 val notificationManagerCompat = NotificationManagerCompat.from(context.applicationContext)
                 notificationManagerCompat.notify(1, notification)
 
+        }
+
+        fun playOrPause(musicService: MusicService) {
+                musicService.let {
+                        //if song is not playing it could be paused
+                        // if it is paused & it was already playing will just resume it
+                        // else reset the player and start music
+                        if (it.isNotPlaying()) {
+                                if (it.isNotPaused()) {
+                                        it.startMedia(currentSong.value?.path)
+                                } else {
+                                        if (!it.isNotAlreadyPlaying(currentSong.value?.path)) {
+                                                it.resume()
+                                        } else {
+                                                it.reset()
+                                                it.startMedia(currentSong.value?.path)
+                                        }
+                                }
+                        } else if (it.isNotAlreadyPlaying(currentSong.value?.path)) {
+                                it.changeDataSource(currentSong.value?.path)
+                        }
+                }
         }
 
 }

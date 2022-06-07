@@ -1,26 +1,14 @@
 package com.example.rhythmic.ui.activities.now_playing_activity
 
-import android.app.Notification
-import android.app.PendingIntent
-import android.app.PendingIntent.FLAG_UPDATE_CURRENT
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
-import android.graphics.Bitmap
+import android.content.*
 import android.os.Bundle
 import android.os.IBinder
-import android.support.v4.media.session.MediaSessionCompat
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
 import com.example.rhythmic.*
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.databinding.ActivityNowPlayingBinding
-import com.example.rhythmic.recievers.NotificationReceiver
 import com.example.rhythmic.services.MusicService
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -34,8 +22,16 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private var musicService: MusicService? = null
         lateinit var currentSong: Song
-        private var postion: Int = 0
+        private var position: Int = 0
         private var isPlaying: Boolean = true
+        private var isRepeat: Boolean? = null
+        private var isShuffle: Boolean? = null
+        private val sharedPreferences: SharedPreferences by lazy {
+                getSharedPreferences(
+                        "sharedPref",
+                        Context.MODE_PRIVATE
+                )
+        }
 
 
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,10 +40,14 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 setContentView(binding.root)
                 supportActionBar?.hide()
                 setButtonActions()
-                postion = intent.getIntExtra("position", 0)
-                currentSong = nowPlayingViewModel.getSong(postion)
+                position = intent.getIntExtra("position", 0)
+                currentSong = nowPlayingViewModel.getSong(position)
                 nowPlayingViewModel.currentSong.value = currentSong
                 isPlaying = true
+                isShuffle = sharedPreferences.getBoolean("isShuffle", false)
+                isRepeat = sharedPreferences.getBoolean("isRepeat", false)
+                setImageResource()
+
 
 
 
@@ -66,6 +66,19 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
         }
 
+        private fun setImageResource() {
+                if (isPlaying)
+                        binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
+                if (isShuffle == true)
+                        binding.ibShuffle.setColorFilter(resources.getColor(R.color.black))
+                else
+                        binding.ibShuffle.setColorFilter(resources.getColor(R.color.text_color_2))
+                if (isRepeat == true)
+                        binding.ibRepeat.setImageResource(R.drawable.ic_repeat)
+                else
+                        binding.ibRepeat.setImageResource(R.drawable.ic_loop)
+        }
+
         private fun setButtonActions() {
                 binding.ibPlayOrPause.setOnClickListener {
                         binding.ibPlayOrPause.apply {
@@ -82,7 +95,17 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 }
                         }
                 }
-
+                binding.ibShuffle.setOnClickListener { button ->
+                        if (isShuffle == true) {
+                                binding.ibShuffle.setColorFilter(resources.getColor(R.color.text_color_2))
+                                isShuffle = false
+                                addToSharedPref("isShuffle", isShuffle == true)
+                        } else {
+                                binding.ibShuffle.setColorFilter(resources.getColor(R.color.black))
+                                isShuffle = true
+                                addToSharedPref("isShuffle", isShuffle == true)
+                        }
+                }
         }
 
         override fun onResume() {
@@ -101,32 +124,28 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 val binder: MusicService.MusicBinder = iBinder as MusicService.MusicBinder
                 musicService = binder.getService()
                 musicService?.let {
-                        //if song is not playing it could be paused
-                        // if it is paused & it was already playing will just resume it
-                        // else reset the player and start music
-                        if (it.isNotPlaying()) {
-                                if (it.isNotPaused()) {
-                                        it.startMedia(currentSong.path)
-                                } else {
-                                        if (!it.isNotAlreadyPlaying(currentSong.path)) {
-                                                it.resume()
-                                        } else {
-                                                it.reset()
-                                                it.startMedia(currentSong.path)
-                                        }
-                                }
-                        } else if (it.isNotAlreadyPlaying(currentSong.path)) {
-                                it.changeDataSource(currentSong.path)
-                        }
+                        nowPlayingViewModel.playOrPause(it)
                 }
         }
+
 
         override fun onServiceDisconnected(name: ComponentName?) {
                 musicService = null
         }
 
+        fun playNextSong() {
+                position++
+                currentSong = nowPlayingViewModel.getSong(position)
+                nowPlayingViewModel.currentSong.value = currentSong
+        }
 
-
+        fun addToSharedPref(key: String, value: Boolean) {
+                val editor = sharedPreferences.edit()
+                editor.apply {
+                        putBoolean(key, value)
+                        apply()
+                }
+        }
 
 
 }
