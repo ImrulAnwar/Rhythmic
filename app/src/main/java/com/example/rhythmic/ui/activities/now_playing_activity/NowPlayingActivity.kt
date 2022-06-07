@@ -3,6 +3,7 @@ package com.example.rhythmic.ui.activities.now_playing_activity
 import android.content.*
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -121,12 +122,20 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 binding.ibNext.setOnClickListener {
                         musicService?.let {
                                 playNextSong(it)
+                                isPlaying = true
+                                binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         }
+                        if (isRepeat==true)
+                                Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT).show()
                 }
                 binding.ibPrev.setOnClickListener {
                         musicService?.let {
                                 playPrevSong(it)
+                                isPlaying = true
+                                binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         }
+                        if (isRepeat==true)
+                                Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT).show()
                 }
         }
 
