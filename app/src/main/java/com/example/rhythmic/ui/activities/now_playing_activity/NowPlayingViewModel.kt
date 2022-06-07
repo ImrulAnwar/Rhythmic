@@ -3,10 +3,7 @@ package com.example.rhythmic.ui.activities.now_playing_activity
 import android.app.Application
 import android.app.Notification
 import android.app.PendingIntent
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
@@ -39,11 +36,18 @@ class NowPlayingViewModel @Inject constructor(
         application: Application
 ) : AndroidViewModel(application) {
         var currentSong = MutableLiveData<Song>()
+        var currentPosition: Int = 0
+        val currentSongListSize by lazy { repository.getCurrentSongLIst().size }
         private lateinit var mediaSessionCompat: MediaSessionCompat
         var seekPosition: Int = 0
         private var isRepeat: Boolean = true
         private var isShuffle: Boolean = true
-
+        private val sharedPreferences: SharedPreferences by lazy {
+                application.applicationContext.getSharedPreferences(
+                        "sharedPref",
+                        Context.MODE_PRIVATE
+                )
+        }
 
         fun convertTime(timeInt: Long): String {
                 var timeInt = timeInt / 1000
@@ -73,7 +77,7 @@ class NowPlayingViewModel @Inject constructor(
 
         fun getSong(position: Int): Song = repository.getCurrentSongLIst()[position]
 
-        fun getBitmapAndShowNotification(currentSong: Song,context: Context) {
+        fun getBitmapAndShowNotification(currentSong: Song, context: Context) {
                 Glide.with(context)
                         .asBitmap()
                         .load(currentSong.imagePath)
@@ -92,35 +96,39 @@ class NowPlayingViewModel @Inject constructor(
                         })
         }
 
-        private fun showNotification(currentSong: Song,bitmap: Bitmap, context: Context) {
+        private fun showNotification(currentSong: Song, bitmap: Bitmap, context: Context) {
                 val intent = Intent(context, NowPlayingActivity::class.java)
                 val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
 
                 val prevIntent = Intent(context, NotificationReceiver::class.java)
                         .setAction(ACTION_PREV)
                 val prevPendingIntent: PendingIntent =
-                        PendingIntent.getBroadcast(context, 0, prevIntent,
+                        PendingIntent.getBroadcast(
+                                context, 0, prevIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT
                         )
 
                 val nextIntent = Intent(context, NotificationReceiver::class.java)
                         .setAction(ACTION_NEXT)
                 val nextPendingIntent: PendingIntent =
-                        PendingIntent.getBroadcast(context, 0, nextIntent,
+                        PendingIntent.getBroadcast(
+                                context, 0, nextIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT
                         )
 
                 val pauseIntent = Intent(context, NotificationReceiver::class.java)
                         .setAction(ACTION_PLAY)
                 val pausePendingIntent: PendingIntent =
-                        PendingIntent.getBroadcast(context, 0, pauseIntent,
+                        PendingIntent.getBroadcast(
+                                context, 0, pauseIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT
                         )
 
                 val likeIntent = Intent(context, NotificationReceiver::class.java)
                         .setAction(ACTION_LIKE)
                 val likePendingIntent: PendingIntent =
-                        PendingIntent.getBroadcast(context, 0, likeIntent,
+                        PendingIntent.getBroadcast(
+                                context, 0, likeIntent,
                                 PendingIntent.FLAG_UPDATE_CURRENT
                         )
 
@@ -146,31 +154,38 @@ class NowPlayingViewModel @Inject constructor(
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .build()
 
-                val notificationManagerCompat = NotificationManagerCompat.from(context.applicationContext)
+                val notificationManagerCompat =
+                        NotificationManagerCompat.from(context.applicationContext)
                 notificationManagerCompat.notify(1, notification)
 
         }
 
-        fun playOrPause(musicService: MusicService) {
-                musicService.let {
-                        //if song is not playing it could be paused
-                        // if it is paused & it was already playing will just resume it
-                        // else reset the player and start music
-                        if (it.isNotPlaying()) {
-                                if (it.isNotPaused()) {
-                                        it.startMedia(currentSong.value?.path)
-                                } else {
-                                        if (!it.isNotAlreadyPlaying(currentSong.value?.path)) {
-                                                it.resume()
-                                        } else {
-                                                it.reset()
+        fun startMedia(musicService: MusicService) {
+                if (repository.getCurrentSongLIst().isNotEmpty())
+                        musicService.let {
+                                //if song is not playing it could be paused
+                                // if it is paused & it was already playing will just resume it
+                                // else reset the player and start music
+                                if (it.isNotPlaying()) {
+                                        if (it.isNotPaused()) {
                                                 it.startMedia(currentSong.value?.path)
+                                        } else {
+                                                if (!it.isNotAlreadyPlaying(currentSong.value?.path)) {
+                                                        it.resume()
+                                                } else {
+                                                        it.reset()
+                                                        it.startMedia(currentSong.value?.path)
+                                                }
                                         }
+                                } else if (it.isNotAlreadyPlaying(currentSong.value?.path)) {
+                                        it.changeDataSource(currentSong.value?.path)
                                 }
-                        } else if (it.isNotAlreadyPlaying(currentSong.value?.path)) {
-                                it.changeDataSource(currentSong.value?.path)
                         }
-                }
         }
 
+        fun playNextSong(musicService: MusicService, currentPosition: Int) {
+                this.currentPosition = currentPosition
+                currentSong.value = repository.getCurrentSongLIst()[currentPosition]
+                musicService.changeDataSource(currentSong.value?.path)
+        }
 }
