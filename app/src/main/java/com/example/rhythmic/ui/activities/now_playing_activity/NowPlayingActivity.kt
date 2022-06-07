@@ -22,7 +22,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private lateinit var binding: ActivityNowPlayingBinding
         private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private var musicService: MusicService? = null
-        private var currentPosition: Int = 0
+//        private var currentPosition: Int = 0
         private var isPlaying: Boolean = true
         private val sharedPreferences: SharedPreferences by lazy {
                 getSharedPreferences(
@@ -38,6 +38,11 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 setContentView(binding.root)
                 supportActionBar?.hide()
                 setButtonActions()
+                nowPlayingViewModel.currentPosition = intent.getIntExtra("position", 0)
+                nowPlayingViewModel.currentSong.value = nowPlayingViewModel.getSong(nowPlayingViewModel.currentPosition)
+                isPlaying = true
+                nowPlayingViewModel.isShuffle = sharedPreferences.getBoolean("isShuffle", false)
+                nowPlayingViewModel.isRepeat = sharedPreferences.getBoolean("isRepeat", false)
 
 
                 nowPlayingViewModel.currentSong.observe(this) {
@@ -107,7 +112,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 }
                 binding.ibNext.setOnClickListener {
                         musicService?.let {
-                                playNextSong(it)
+                                nowPlayingViewModel.playNextSong(it)
                                 isPlaying = true
                                 binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         }
@@ -116,7 +121,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 }
                 binding.ibPrev.setOnClickListener {
                         musicService?.let {
-                                playPrevSong(it)
+                                nowPlayingViewModel.playPrevSong(it)
                                 isPlaying = true
                                 binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         }
@@ -129,12 +134,6 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 Intent(this, MusicService::class.java).also {
                         bindService(it, this, BIND_AUTO_CREATE)
                 }
-                currentPosition = intent.getIntExtra("position", 0)
-                nowPlayingViewModel.currentPosition = currentPosition
-                nowPlayingViewModel.currentSong.value = nowPlayingViewModel.getSong(currentPosition)
-                isPlaying = true
-                nowPlayingViewModel.isShuffle = sharedPreferences.getBoolean("isShuffle", false)
-                nowPlayingViewModel.isRepeat = sharedPreferences.getBoolean("isRepeat", false)
                 setImageResource()
                 super.onResume()
         }
@@ -157,26 +156,8 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 musicService = null
         }
 
-        private fun playNextSong(musicService: MusicService) {
 
-                currentPosition++
-                setPosition()
-                nowPlayingViewModel.playNextOrPrevSong(musicService,currentPosition)
-        }
 
-       private  fun playPrevSong(musicService: MusicService) {
-                currentPosition--
-                setPosition()
-                nowPlayingViewModel.playNextOrPrevSong(musicService,currentPosition)
-        }
-
-        private fun setPosition() {
-                if (currentPosition >= nowPlayingViewModel.currentSongListSize) {
-                        currentPosition = 0
-                } else if (currentPosition < 0) {
-                        currentPosition = nowPlayingViewModel.currentSongListSize - 1
-                }
-        }
 
         private fun addToSharedPref(key: String, value: Boolean) {
                 val editor = sharedPreferences.edit()

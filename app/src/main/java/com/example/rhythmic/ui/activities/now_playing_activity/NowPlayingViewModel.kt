@@ -8,6 +8,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.support.v4.media.session.MediaSessionCompat
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.AndroidViewModel
@@ -24,7 +25,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
 import javax.inject.Inject
 
-private const val TAG = "NowPlayingActivityViewModel"
+private const val TAG = "NowPlayingActivityVM"
 
 @HiltViewModel
 class NowPlayingViewModel @Inject constructor(
@@ -74,6 +75,9 @@ class NowPlayingViewModel @Inject constructor(
         fun getSong(position: Int): Song = repository.getCurrentSongLIst()[position]
 
         fun getBitmapAndShowNotification(currentSong: Song, context: Context, intent: Intent) {
+
+                //there is a bug, image path could be null
+                Log.d(TAG, "showNotification: problem")
                 Glide.with(context)
                         .asBitmap()
                         .load(currentSong.imagePath)
@@ -92,12 +96,36 @@ class NowPlayingViewModel @Inject constructor(
                         })
         }
 
+        private fun setPosition() {
+                if (currentPosition >= currentSongListSize) {
+                        currentPosition = 0
+                } else if (currentPosition < 0) {
+                        currentPosition = currentSongListSize - 1
+                }
+        }
+
+        fun playNextSong(musicService: MusicService) {
+                if (isRepeat == false)
+                        currentPosition++
+                setPosition()
+                playNextOrPrevSong(musicService, currentPosition)
+        }
+
+        fun playPrevSong(musicService: MusicService) {
+                if (isRepeat == false)
+                        currentPosition--
+                setPosition()
+                playNextOrPrevSong(musicService, currentPosition)
+        }
+
+
         private fun showNotification(
                 currentSong: Song,
                 bitmap: Bitmap,
                 context: Context,
                 intent: Intent
         ) {
+
                 val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
                 val prevIntent = Intent(context, NotificationReceiver::class.java)
                         .setAction(ACTION_PREV)
@@ -161,6 +189,7 @@ class NowPlayingViewModel @Inject constructor(
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .build()
 
+
                 val notificationManagerCompat =
                         NotificationManagerCompat.from(context.applicationContext)
                 notificationManagerCompat.notify(1, notification)
@@ -190,7 +219,7 @@ class NowPlayingViewModel @Inject constructor(
                         }
         }
 
-        fun playNextOrPrevSong(musicService: MusicService, currentPosition: Int) {
+        private fun playNextOrPrevSong(musicService: MusicService, currentPosition: Int) {
                 isRepeat = sharedPreferences.getBoolean("isRepeat", false)
                 isShuffle = sharedPreferences.getBoolean("isShuffle", false)
                 if (isRepeat == false)
