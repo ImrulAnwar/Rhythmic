@@ -22,11 +22,8 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private lateinit var binding: ActivityNowPlayingBinding
         private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private var musicService: MusicService? = null
-        private var currentSong: Song? = null
         private var currentPosition: Int = 0
         private var isPlaying: Boolean = true
-        private var isRepeat: Boolean? = null
-        private var isShuffle: Boolean? = null
         private val sharedPreferences: SharedPreferences by lazy {
                 getSharedPreferences(
                         "sharedPref",
@@ -41,17 +38,6 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 setContentView(binding.root)
                 supportActionBar?.hide()
                 setButtonActions()
-                currentPosition = intent.getIntExtra("position", 0)
-                nowPlayingViewModel.currentPosition = currentPosition
-                currentSong = nowPlayingViewModel.getSong(currentPosition)
-                nowPlayingViewModel.currentSong.value = currentSong
-                isPlaying = true
-                isShuffle = sharedPreferences.getBoolean("isShuffle", false)
-                isRepeat = sharedPreferences.getBoolean("isRepeat", false)
-                setImageResource()
-
-
-
 
 
                 nowPlayingViewModel.currentSong.observe(this) {
@@ -63,7 +49,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         binding.tvTotalDurationNP.text = duration
                         binding.tvSongTitleNP.text = it.title
                         binding.tvArtistNameNP.text = it.artist
-                        nowPlayingViewModel.getBitmapAndShowNotification(it, this)
+                        nowPlayingViewModel.getBitmapAndShowNotification(it, this, intent)
                 }
 
         }
@@ -71,11 +57,11 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private fun setImageResource() {
                 if (isPlaying)
                         binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
-                if (isShuffle == true)
+                if (nowPlayingViewModel.isShuffle == true)
                         binding.ibShuffle.setColorFilter(resources.getColor(R.color.black))
                 else
                         binding.ibShuffle.setColorFilter(resources.getColor(R.color.text_color_2))
-                if (isRepeat == true)
+                if (nowPlayingViewModel.isRepeat == true)
                         binding.ibRepeat.setImageResource(R.drawable.ic_repeat)
                 else
                         binding.ibRepeat.setImageResource(R.drawable.ic_loop)
@@ -98,25 +84,25 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         }
                 }
                 binding.ibShuffle.setOnClickListener {
-                        if (isShuffle == true) {
+                        if (nowPlayingViewModel.isShuffle == true) {
                                 binding.ibShuffle.setColorFilter(resources.getColor(R.color.text_color_2))
-                                isShuffle = false
-                                addToSharedPref("isShuffle", isShuffle == true)
+                                nowPlayingViewModel.isShuffle = false
+                                addToSharedPref("isShuffle", nowPlayingViewModel.isShuffle == true)
                         } else {
                                 binding.ibShuffle.setColorFilter(resources.getColor(R.color.black))
-                                isShuffle = true
-                                addToSharedPref("isShuffle", isShuffle == true)
+                                nowPlayingViewModel.isShuffle = true
+                                addToSharedPref("isShuffle", nowPlayingViewModel.isShuffle == true)
                         }
                 }
                 binding.ibRepeat.setOnClickListener {
-                        if (isRepeat == true) {
+                        if (nowPlayingViewModel.isRepeat == true) {
                                 binding.ibRepeat.setImageResource(R.drawable.ic_loop)
-                                isRepeat = false
-                                addToSharedPref("isRepeat", isRepeat == true)
+                                nowPlayingViewModel.isRepeat = false
+                                addToSharedPref("isRepeat", nowPlayingViewModel.isRepeat == true)
                         } else {
                                 binding.ibRepeat.setImageResource(R.drawable.ic_repeat)
-                                isRepeat = true
-                                addToSharedPref("isRepeat", isRepeat == true)
+                                nowPlayingViewModel.isRepeat = true
+                                addToSharedPref("isRepeat", nowPlayingViewModel.isRepeat == true)
                         }
                 }
                 binding.ibNext.setOnClickListener {
@@ -125,7 +111,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 isPlaying = true
                                 binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         }
-                        if (isRepeat==true)
+                        if (nowPlayingViewModel.isRepeat==true)
                                 Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT).show()
                 }
                 binding.ibPrev.setOnClickListener {
@@ -134,7 +120,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 isPlaying = true
                                 binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         }
-                        if (isRepeat==true)
+                        if (nowPlayingViewModel.isRepeat==true)
                                 Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT).show()
                 }
         }
@@ -143,6 +129,13 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 Intent(this, MusicService::class.java).also {
                         bindService(it, this, BIND_AUTO_CREATE)
                 }
+                currentPosition = intent.getIntExtra("position", 0)
+                nowPlayingViewModel.currentPosition = currentPosition
+                nowPlayingViewModel.currentSong.value = nowPlayingViewModel.getSong(currentPosition)
+                isPlaying = true
+                nowPlayingViewModel.isShuffle = sharedPreferences.getBoolean("isShuffle", false)
+                nowPlayingViewModel.isRepeat = sharedPreferences.getBoolean("isRepeat", false)
+                setImageResource()
                 super.onResume()
         }
 
@@ -168,14 +161,12 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
                 currentPosition++
                 setPosition()
-                currentSong = nowPlayingViewModel.getSong(currentPosition)
                 nowPlayingViewModel.playNextOrPrevSong(musicService,currentPosition)
         }
 
        private  fun playPrevSong(musicService: MusicService) {
                 currentPosition--
                 setPosition()
-                currentSong = nowPlayingViewModel.getSong(currentPosition)
                 nowPlayingViewModel.playNextOrPrevSong(musicService,currentPosition)
         }
 
@@ -194,6 +185,5 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         apply()
                 }
         }
-
 
 }

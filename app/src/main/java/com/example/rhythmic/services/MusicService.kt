@@ -52,12 +52,6 @@ class MusicService : Service() {
                 }
         }
 
-        fun playNextSong() {
-
-        }
-
-
-
         fun pause() { mediaPlayer.pause() }
         fun resume() { mediaPlayer.start() }
 

@@ -5,6 +5,7 @@ import android.app.Notification
 import android.app.PendingIntent
 import android.content.*
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
@@ -41,8 +42,8 @@ class NowPlayingViewModel @Inject constructor(
                         Context.MODE_PRIVATE
                 )
         }
-        private var isRepeat: Boolean? = null
-        private var isShuffle: Boolean? = null
+        var isRepeat: Boolean? = null
+        var isShuffle: Boolean? = null
 
         fun convertTime(timeInt: Long): String {
                 var timeInt = timeInt / 1000
@@ -72,7 +73,7 @@ class NowPlayingViewModel @Inject constructor(
 
         fun getSong(position: Int): Song = repository.getCurrentSongLIst()[position]
 
-        fun getBitmapAndShowNotification(currentSong: Song, context: Context) {
+        fun getBitmapAndShowNotification(currentSong: Song, context: Context, intent: Intent) {
                 Glide.with(context)
                         .asBitmap()
                         .load(currentSong.imagePath)
@@ -82,7 +83,7 @@ class NowPlayingViewModel @Inject constructor(
                                         resource: Bitmap,
                                         transition: Transition<in Bitmap>?
                                 ) {
-                                        showNotification(currentSong, resource, context)
+                                        showNotification(currentSong, resource, context, intent)
                                 }
 
                                 override fun onLoadCleared(placeholder: Drawable?) {
@@ -91,10 +92,13 @@ class NowPlayingViewModel @Inject constructor(
                         })
         }
 
-        private fun showNotification(currentSong: Song, bitmap: Bitmap, context: Context) {
-                val intent = Intent(context, NowPlayingActivity::class.java)
+        private fun showNotification(
+                currentSong: Song,
+                bitmap: Bitmap,
+                context: Context,
+                intent: Intent
+        ) {
                 val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
-
                 val prevIntent = Intent(context, NotificationReceiver::class.java)
                         .setAction(ACTION_PREV)
                 val prevPendingIntent: PendingIntent =
@@ -130,6 +134,14 @@ class NowPlayingViewModel @Inject constructor(
 
 
                 mediaSessionCompat = MediaSessionCompat(context, "Currently Playing")
+
+//                var resource: Bitmap = bitmap
+//                if (bitmap == null) {
+//                        resource = BitmapFactory.decodeResource(
+//                                context.getResources(),
+//                                R.drawable.ic_repeat
+//                        );
+//                }
 
                 val notification: Notification = NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_pause)
