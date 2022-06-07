@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.rhythmic.*
-import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.databinding.ActivityNowPlayingBinding
 import com.example.rhythmic.services.MusicService
 import dagger.hilt.android.AndroidEntryPoint
@@ -22,7 +21,6 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private lateinit var binding: ActivityNowPlayingBinding
         private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private var musicService: MusicService? = null
-//        private var currentPosition: Int = 0
         private var isPlaying: Boolean = true
         private val sharedPreferences: SharedPreferences by lazy {
                 getSharedPreferences(
@@ -147,6 +145,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 val binder: MusicService.MusicBinder = iBinder as MusicService.MusicBinder
                 musicService = binder.getService()
                 musicService?.let {
+                        it.setViewModel(nowPlayingViewModel)
                         nowPlayingViewModel.startMedia(it)
                 }
         }
@@ -155,9 +154,6 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
                 musicService = null
         }
-
-
-
 
         private fun addToSharedPref(key: String, value: Boolean) {
                 val editor = sharedPreferences.edit()

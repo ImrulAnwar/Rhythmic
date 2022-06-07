@@ -6,23 +6,26 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
-import com.example.rhythmic.data.entities.Song
+import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
 import javax.inject.Inject
 
 private const val TAG = "MusicService"
 
 @AndroidEntryPoint
-class MusicService : Service() {
+class MusicService : Service(), MediaPlayer.OnCompletionListener {
         companion object {
                 var currentSongPath: String = ""
         }
         @Inject
         lateinit var mediaPlayer: MediaPlayer
-
+        private lateinit var nowPlayingViewModel: NowPlayingViewModel
         private val binder: IBinder by lazy { MusicBinder() }
+
+        fun setViewModel(nowPlayingViewModel: NowPlayingViewModel) {
+                this.nowPlayingViewModel = nowPlayingViewModel
+        }
+
         override fun onBind(intent: Intent?): IBinder {
                 return binder
         }
@@ -42,6 +45,7 @@ class MusicService : Service() {
                         mediaPlayer.prepare()
                         mediaPlayer.start()
                         currentSongPath = it
+                        mediaPlayer.setOnCompletionListener (this)
                 }
         }
 
@@ -60,6 +64,9 @@ class MusicService : Service() {
         fun isNotPlaying(): Boolean = !mediaPlayer.isPlaying
         fun isNotAlreadyPlaying(path: String?): Boolean = path != currentSongPath
         fun isNotPaused(): Boolean = !(!mediaPlayer.isPlaying && mediaPlayer.currentPosition > 1)
+        override fun onCompletion(p0: MediaPlayer?) {
+                nowPlayingViewModel.playNextSong(this@MusicService)
+        }
 
 
 }
