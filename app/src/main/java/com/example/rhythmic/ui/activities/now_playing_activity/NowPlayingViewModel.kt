@@ -1,10 +1,8 @@
 package com.example.rhythmic.ui.activities.now_playing_activity
 
-import android.app.Application
-import android.app.MediaRouteButton
-import android.app.Notification
-import android.app.PendingIntent
+import android.app.*
 import android.content.*
+import android.content.Context.NOTIFICATION_SERVICE
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
@@ -195,6 +193,7 @@ class NowPlayingViewModel @Inject constructor(
                         .addAction(R.drawable.ic_next, "Next", nextPendingIntent)
                         .addAction(likeButton, "Like", likePendingIntent)
                         .setOnlyAlertOnce(true)
+                        .setOngoing(true)
                         .setStyle(
                                 androidx.media.app.NotificationCompat.MediaStyle()
                                         .setMediaSession(mediaSessionCompat.sessionToken)
@@ -203,9 +202,9 @@ class NowPlayingViewModel @Inject constructor(
                         .build()
 
 
-                val notificationManagerCompat =
-                        NotificationManagerCompat.from(context.applicationContext)
-                notificationManagerCompat.notify(1, notification)
+                val notificationManager= context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+//                        NotificationManagerCompat.from(context.applicationContext)
+                notificationManager.notify(1, notification)
 
         }
 

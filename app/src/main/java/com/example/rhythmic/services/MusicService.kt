@@ -50,7 +50,7 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                                 else -> {}
                         }
                 }
-                return START_STICKY
+                return START_NOT_STICKY
         }
 
         inner class MusicBinder : Binder() {
