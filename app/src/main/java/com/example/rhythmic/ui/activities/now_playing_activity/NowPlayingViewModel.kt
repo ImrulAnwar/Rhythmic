@@ -1,6 +1,7 @@
 package com.example.rhythmic.ui.activities.now_playing_activity
 
 import android.app.Application
+import android.app.MediaRouteButton
 import android.app.Notification
 import android.app.PendingIntent
 import android.content.*
@@ -81,7 +82,10 @@ class NowPlayingViewModel @Inject constructor(
 
         fun getSong(position: Int): Song = repository.getCurrentSongLIst()[position]
 
-        fun getBitmapAndShowNotification(currentSong: Song, context: Context, intent: Intent) {
+        fun getBitmapAndShowNotification(
+                currentSong: Song, context: Context, intent: Intent, playPauseButton: Int,
+                likeButton: Int
+        ) {
 
                 //there is a bug, image path could be null
                 Log.d(TAG, "showNotification: problem")
@@ -94,7 +98,7 @@ class NowPlayingViewModel @Inject constructor(
                                         resource: Bitmap,
                                         transition: Transition<in Bitmap>?
                                 ) {
-                                        showNotification(currentSong, resource, context, intent)
+                                        showNotification(currentSong, resource, context, intent, playPauseButton=playPauseButton, likeButton= likeButton)
                                 }
 
                                 override fun onLoadCleared(placeholder: Drawable?) {
@@ -130,7 +134,9 @@ class NowPlayingViewModel @Inject constructor(
                 currentSong: Song,
                 bitmap: Bitmap,
                 context: Context,
-                intent: Intent
+                intent: Intent,
+                playPauseButton: Int,
+                likeButton: Int
         ) {
 
                 val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
@@ -179,15 +185,15 @@ class NowPlayingViewModel @Inject constructor(
 //                }
 
                 val notification: Notification = NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.ic_pause)
+                        .setSmallIcon(R.mipmap.ic_launcher)
                         .setLargeIcon(bitmap)
                         .setContentTitle(currentSong.title)
                         .setContentText(currentSong.artist)
                         .setContentIntent(pendingIntent)
                         .addAction(R.drawable.ic_prev, "Previous", prevPendingIntent)
-                        .addAction(R.drawable.ic_pause, "Pause", pausePendingIntent)
+                        .addAction(playPauseButton, "Pause", pausePendingIntent)
                         .addAction(R.drawable.ic_next, "Next", nextPendingIntent)
-                        .addAction(R.drawable.ic_love, "Like", likePendingIntent)
+                        .addAction(likeButton, "Like", likePendingIntent)
                         .setOnlyAlertOnce(true)
                         .setStyle(
                                 androidx.media.app.NotificationCompat.MediaStyle()
