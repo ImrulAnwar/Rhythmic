@@ -45,4 +45,12 @@ object AppModule {
                                 .build()
                 )
         }
+
+        @Singleton
+        @Provides
+        fun provideArtistFragment() = ArtistFragment()
+
+        @Singleton
+        @Provides
+        fun provideAlbumFragment() = AlbumFragment()
 }

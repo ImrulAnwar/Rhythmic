@@ -6,6 +6,11 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
+import android.widget.Toast
+import com.example.rhythmic.ACTION_LIKE
+import com.example.rhythmic.ACTION_NEXT
+import com.example.rhythmic.ACTION_PLAY
+import com.example.rhythmic.ACTION_PREV
 import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -17,6 +22,7 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
         companion object {
                 var currentSongPath: String = ""
         }
+
         @Inject
         lateinit var mediaPlayer: MediaPlayer
         private lateinit var nowPlayingViewModel: NowPlayingViewModel
@@ -31,8 +37,17 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
         }
 
         override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-
-                return super.onStartCommand(intent, flags, startId)
+                val actionName: String = intent?.getStringExtra("actionName")!!
+                actionName?.let {
+                        when (it) {
+                                ACTION_PLAY -> Toast.makeText(this, "playPause", Toast.LENGTH_SHORT).show()
+                                ACTION_NEXT -> Toast.makeText(this, "next", Toast.LENGTH_SHORT).show()
+                                ACTION_PREV -> Toast.makeText(this, "prev", Toast.LENGTH_SHORT).show()
+                                ACTION_LIKE -> Toast.makeText(this, "like", Toast.LENGTH_SHORT).show()
+                                else -> {}
+                        }
+                }
+                return START_STICKY
         }
 
         inner class MusicBinder : Binder() {
@@ -45,7 +60,7 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                         mediaPlayer.prepare()
                         mediaPlayer.start()
                         currentSongPath = it
-                        mediaPlayer.setOnCompletionListener (this)
+                        mediaPlayer.setOnCompletionListener(this)
                 }
         }
 
@@ -56,10 +71,18 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                 }
         }
 
-        fun pause() { mediaPlayer.pause() }
-        fun resume() { mediaPlayer.start() }
+        fun pause() {
+                mediaPlayer.pause()
+        }
 
-        fun reset(){mediaPlayer.reset()}
+        fun resume() {
+                mediaPlayer.start()
+        }
+
+        fun reset() {
+                mediaPlayer.reset()
+        }
+
         fun isPlaying(): Boolean = mediaPlayer.isPlaying
         fun isNotPlaying(): Boolean = !mediaPlayer.isPlaying
         fun isNotAlreadyPlaying(path: String?): Boolean = path != currentSongPath

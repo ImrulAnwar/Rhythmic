@@ -24,25 +24,21 @@ private const val TAG = "HomeFragment"
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
 
-        @Inject
-        lateinit var uiFunctions: UIFunctions
+        @Inject lateinit var uiFunctions: UIFunctions
         private var _binding: FragmentHomeBinding? = null
         private val binding get() = _binding!!
         private lateinit var homeViewModel: HomeViewModel
         private lateinit var allSongs: LiveData<List<Song>>
-        private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireActivity(),TAG) }
-        var artistFragment: ArtistFragment? = null
-        var albumFragment: AlbumFragment? = null
-        private var fm: FragmentManager? = null
+        private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireActivity(), TAG) }
+        @Inject lateinit var artistFragment: ArtistFragment
+        @Inject lateinit var albumFragment: AlbumFragment
+        private val fm: FragmentManager by  lazy { requireActivity().supportFragmentManager }
 
         override fun onCreateView(
                 inflater: LayoutInflater,
                 container: ViewGroup?,
                 savedInstanceState: Bundle?
         ): View {
-                albumFragment = AlbumFragment()
-                artistFragment = ArtistFragment()
-                fm = requireActivity().supportFragmentManager
                 uiFunctions.setActionBarLogo(activity = activity as AppCompatActivity)
                 homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
                 _binding = FragmentHomeBinding.inflate(inflater, container, false)
@@ -66,8 +62,6 @@ class HomeFragment : Fragment() {
                 super.onDestroyView()
                 _binding = null
 //                fm = null
-                albumFragment = null
-                artistFragment = null
         }
 
         private fun handleAlbumAndArtistButtonClicks() {
