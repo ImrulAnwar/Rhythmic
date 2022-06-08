@@ -38,11 +38,14 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
 
         override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
                 val actionName: String = intent?.getStringExtra("actionName")!!
-                actionName?.let {
+                actionName.let {
                         when (it) {
-                                ACTION_PLAY -> Toast.makeText(this, "playPause", Toast.LENGTH_SHORT).show()
-                                ACTION_NEXT -> Toast.makeText(this, "next", Toast.LENGTH_SHORT).show()
-                                ACTION_PREV -> Toast.makeText(this, "prev", Toast.LENGTH_SHORT).show()
+                                ACTION_PLAY -> {
+                                        if (isPlaying()) pause()
+                                        else resume()
+                                }
+                                ACTION_NEXT ->nowPlayingViewModel.playNextSong(this)
+                                ACTION_PREV -> nowPlayingViewModel.playPrevSong(this)
                                 ACTION_LIKE -> Toast.makeText(this, "like", Toast.LENGTH_SHORT).show()
                                 else -> {}
                         }
@@ -55,6 +58,7 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
         }
 
         fun startMedia(path: String?) {
+                nowPlayingViewModel.setIsPlaying(true)
                 path?.let {
                         mediaPlayer.setDataSource(this, Uri.parse(it))
                         mediaPlayer.prepare()
@@ -72,10 +76,12 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
         }
 
         fun pause() {
+                nowPlayingViewModel.setIsPlaying(false)
                 mediaPlayer.pause()
         }
 
         fun resume() {
+                nowPlayingViewModel.setIsPlaying(true)
                 mediaPlayer.start()
         }
 

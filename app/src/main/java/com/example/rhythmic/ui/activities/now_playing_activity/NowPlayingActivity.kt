@@ -21,7 +21,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private lateinit var binding: ActivityNowPlayingBinding
         private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private var musicService: MusicService? = null
-        private var isPlaying: Boolean = true
+//        private var isPlaying: Boolean = true
         private val sharedPreferences: SharedPreferences by lazy {
                 getSharedPreferences(
                         "sharedPref",
@@ -38,7 +38,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 setButtonActions()
                 nowPlayingViewModel.currentPosition = intent.getIntExtra("position", 0)
                 nowPlayingViewModel.currentSong.value = nowPlayingViewModel.getSong(nowPlayingViewModel.currentPosition)
-                isPlaying = true
+                nowPlayingViewModel.setIsPlaying(true)
                 nowPlayingViewModel.isShuffle = sharedPreferences.getBoolean("isShuffle", false)
                 nowPlayingViewModel.isRepeat = sharedPreferences.getBoolean("isRepeat", false)
 
@@ -55,11 +55,16 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         nowPlayingViewModel.getBitmapAndShowNotification(it, this, intent)
                 }
 
+                nowPlayingViewModel.isPlaying.observe(this){
+                        if (it)binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
+                        else binding.ibPlayOrPause.setImageResource(R.drawable.ic_play)
+                }
+
         }
 
         private fun setImageResource() {
-                if (isPlaying)
-                        binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
+//                if (nowPlayingViewModel.isPlaying.value==true)
+//                        binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                 if (nowPlayingViewModel.isShuffle == true)
                         binding.ibShuffle.setColorFilter(resources.getColor(R.color.black))
                 else
@@ -72,19 +77,21 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
         private fun setButtonActions() {
                 binding.ibPlayOrPause.setOnClickListener {
+                        var isPlaying: Boolean
                         binding.ibPlayOrPause.apply {
-                                isPlaying = if (isPlaying) {
+                                isPlaying = if (nowPlayingViewModel.isPlaying.value==true) {
                                         musicService?.pause()
-                                        setColorFilter(resources.getColor(R.color.white))
-                                        setImageResource(R.drawable.ic_play)
+//                                        setColorFilter(resources.getColor(R.color.white))
+//                                        setImageResource(R.drawable.ic_play)
                                         false
                                 } else {
                                         musicService?.resume()
-                                        setColorFilter(resources.getColor(R.color.white))
-                                        setImageResource(R.drawable.ic_pause)
+//                                        setColorFilter(resources.getColor(R.color.white))
+//                                        setImageResource(R.drawable.ic_pause)
                                         true
                                 }
                         }
+                        nowPlayingViewModel.setIsPlaying(isPlaying)
                 }
                 binding.ibShuffle.setOnClickListener {
                         if (nowPlayingViewModel.isShuffle == true) {
@@ -111,7 +118,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 binding.ibNext.setOnClickListener {
                         musicService?.let {
                                 nowPlayingViewModel.playNextSong(it)
-                                isPlaying = true
+                                nowPlayingViewModel.setIsPlaying(true)
                                 binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         }
                         if (nowPlayingViewModel.isRepeat==true)
@@ -120,7 +127,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 binding.ibPrev.setOnClickListener {
                         musicService?.let {
                                 nowPlayingViewModel.playPrevSong(it)
-                                isPlaying = true
+                                nowPlayingViewModel.setIsPlaying(true)
                                 binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         }
                         if (nowPlayingViewModel.isRepeat==true)

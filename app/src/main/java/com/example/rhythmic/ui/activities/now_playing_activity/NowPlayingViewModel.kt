@@ -12,6 +12,7 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -36,6 +37,8 @@ class NowPlayingViewModel @Inject constructor(
         var currentPosition: Int = 0
         val currentSongListSize by lazy { repository.getCurrentSongLIst().size }
         private lateinit var mediaSessionCompat: MediaSessionCompat
+        val _isPlaying = MutableLiveData(true)
+        val isPlaying: LiveData<Boolean> = _isPlaying
         var seekPosition: Int = 0
         private val sharedPreferences: SharedPreferences by lazy {
                 application.applicationContext.getSharedPreferences(
@@ -45,6 +48,10 @@ class NowPlayingViewModel @Inject constructor(
         }
         var isRepeat: Boolean? = null
         var isShuffle: Boolean? = null
+
+        fun setIsPlaying(boolean: Boolean) {
+                _isPlaying.value = boolean
+        }
 
         fun convertTime(timeInt: Long): String {
                 var timeInt = timeInt / 1000
