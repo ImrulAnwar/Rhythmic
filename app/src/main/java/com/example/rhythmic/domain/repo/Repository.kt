@@ -11,6 +11,8 @@ interface Repository {
         fun getAllArtists(): LiveData<List<Song>>
         fun getCurrentSong(): LiveData<Song>
         fun setCurrentSong(song: Song)
+        fun setIsPlaying(boolean: Boolean)
+        fun isPlaying(): LiveData<Boolean>
         suspend fun insertSong(song: Song)
         suspend fun deleteSong(song: Song)
        suspend fun doesRowExist(path : String): Boolean

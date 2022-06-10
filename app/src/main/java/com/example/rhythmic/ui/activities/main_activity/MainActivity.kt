@@ -26,16 +26,16 @@ import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingViewMod
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.vertical_item.*
+import java.lang.Exception
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), ServiceConnection {
+class MainActivity : AppCompatActivity() {
 
         @Inject
         lateinit var uiFunctions: UIFunctions
         private lateinit var appBarConfiguration: AppBarConfiguration
         private val mainActivityViewModel: MainActivityViewModel by viewModels()
-        private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private lateinit var binding: ActivityMainBinding
 
 
@@ -68,6 +68,13 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                                 .placeholder(R.mipmap.ic_launcher).centerCrop()
                                 .into(ivBtmTbrAlbumArt)
                 }
+
+                mainActivityViewModel.getCurrentSong().observe(this) {
+
+                        val playPauseButton: Int = if (mainActivityViewModel.isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
+                        val likeButton: Int = if (it.isLiked) R.drawable.ic_love else R.drawable.ic_loved
+                        mainActivityViewModel.getBitmapAndShowNotification(it, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                }
         }
 
         override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -94,19 +101,4 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                 )
         }
 
-
-        //        fun startMusicService(intent: Intent, ) {
-//                startService(intent)
-//                musicService?.let {
-//                        it.setViewModel(nowPlayingViewModel)
-//                        nowPlayingViewModel.startMedia(it)
-//                }
-//        }
-        override fun onServiceConnected(p0: ComponentName?, iBinder: IBinder?) {
-//                val binder: MusicService.MusicBinder = iBinder as MusicService.MusicBinder
-//                binder.getService().setViewModel(this)
-        }
-
-        override fun onServiceDisconnected(p0: ComponentName?) {
-        }
 }

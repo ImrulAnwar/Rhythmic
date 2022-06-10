@@ -42,6 +42,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 nowPlayingViewModel.isRepeat = sharedPreferences.getBoolean("isRepeat", false)
 
 
+
                 nowPlayingViewModel.getCurrentSong().observe(this) {
                         Toast.makeText(this, "songChanged", Toast.LENGTH_SHORT).show()
 
@@ -53,18 +54,23 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         binding.tvTotalDurationNP.text = duration
                         binding.tvSongTitleNP.text = it.title
                         binding.tvArtistNameNP.text = it.artist
-                        val playPauseButton: Int = if (nowPlayingViewModel.isPlaying.value ==true) R.drawable.ic_pause else R.drawable.ic_play
-                        val likeButton: Int = if (it.isLiked) R.drawable.ic_love else R.drawable.ic_loved
-                        nowPlayingViewModel.getBitmapAndShowNotification(it, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
                 }
 
-                nowPlayingViewModel.isPlaying.observe(this){
-                        if (it)binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
+                nowPlayingViewModel.isPlaying().observe(this) {
+                        if (it) binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         else binding.ibPlayOrPause.setImageResource(R.drawable.ic_play)
                         //could be more organized
-                        val playPauseButton: Int = if (nowPlayingViewModel.isPlaying.value ==true) R.drawable.ic_pause else R.drawable.ic_play
-                        val likeButton: Int = if (nowPlayingViewModel.getCurrentSong().value!!.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-                        nowPlayingViewModel.getBitmapAndShowNotification(nowPlayingViewModel.getCurrentSong().value!!, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                        val playPauseButton: Int =
+                                if (nowPlayingViewModel.isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
+                        val likeButton: Int =
+                                if (nowPlayingViewModel.getCurrentSong().value!!.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                        nowPlayingViewModel.getBitmapAndShowNotification(
+                                nowPlayingViewModel.getCurrentSong().value!!,
+                                this,
+                                intent,
+                                playPauseButton = playPauseButton,
+                                likeButton = likeButton
+                        )
                 }
 
         }
@@ -84,7 +90,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 binding.ibPlayOrPause.setOnClickListener {
                         var isPlaying: Boolean
                         binding.ibPlayOrPause.apply {
-                                isPlaying = if (nowPlayingViewModel.isPlaying.value==true) {
+                                isPlaying = if (nowPlayingViewModel.isPlaying().value == true) {
                                         musicService?.pause()
                                         false
                                 } else {
@@ -122,8 +128,9 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 nowPlayingViewModel.setIsPlaying(true)
                                 binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         }
-                        if (nowPlayingViewModel.isRepeat==true)
-                                Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT).show()
+                        if (nowPlayingViewModel.isRepeat == true)
+                                Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT)
+                                        .show()
                 }
                 binding.ibPrev.setOnClickListener {
                         musicService?.let {
@@ -131,8 +138,9 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 nowPlayingViewModel.setIsPlaying(true)
                                 binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         }
-                        if (nowPlayingViewModel.isRepeat==true)
-                                Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT).show()
+                        if (nowPlayingViewModel.isRepeat == true)
+                                Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT)
+                                        .show()
                 }
         }
 
@@ -148,7 +156,6 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 unbindService(this)
                 super.onPause()
         }
-
 
 
         override fun onServiceConnected(componentName: ComponentName?, iBinder: IBinder?) {

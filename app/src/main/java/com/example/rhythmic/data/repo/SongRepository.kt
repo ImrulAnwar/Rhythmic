@@ -11,10 +11,17 @@ class SongRepository(private val dao: SongDao) : Repository {
         companion object {
                 var currentSongList: List<Song> = emptyList()
                 var currentSong: MutableLiveData<Song> = MutableLiveData()
+                val isPlaying = MutableLiveData(true)
         }
 
         override fun setCurrentSongList(songList: List<Song>) {
                 currentSongList = songList
+        }
+
+        override fun isPlaying() = isPlaying
+
+        override fun setIsPlaying(boolean: Boolean) {
+                isPlaying.value = boolean
         }
 
         override fun getCurrentSong(): LiveData<Song> = currentSong

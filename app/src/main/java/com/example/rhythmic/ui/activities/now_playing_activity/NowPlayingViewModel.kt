@@ -34,8 +34,7 @@ class NowPlayingViewModel @Inject constructor(
         var currentPosition: Int = 0
         val currentSongListSize by lazy { repository.getCurrentSongLIst().size }
         private lateinit var mediaSessionCompat: MediaSessionCompat
-        val _isPlaying = MutableLiveData(true)
-        val isPlaying: LiveData<Boolean> = _isPlaying
+
         var _seekPosition = MutableLiveData(0)
         val seekPosition: LiveData<Int> = _seekPosition
         fun getCurrentSong() = repository.getCurrentSong()
@@ -47,6 +46,8 @@ class NowPlayingViewModel @Inject constructor(
                 _seekPosition.value = int
         }
 
+        fun isPlaying(): LiveData<Boolean> = repository.isPlaying()
+
         private val sharedPreferences: SharedPreferences by lazy {
                 application.applicationContext.getSharedPreferences(
                         "sharedPref",
@@ -57,7 +58,7 @@ class NowPlayingViewModel @Inject constructor(
         var isShuffle: Boolean? = null
 
         fun setIsPlaying(boolean: Boolean) {
-                _isPlaying.value = boolean
+                repository.setIsPlaying(boolean)
         }
 
         fun convertTime(timeInt: Long): String {
