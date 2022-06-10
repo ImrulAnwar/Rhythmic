@@ -54,6 +54,8 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         binding.tvTotalDurationNP.text = duration
                         binding.tvSongTitleNP.text = it.title
                         binding.tvArtistNameNP.text = it.artist
+                        if(it.isLiked) binding.ivIsLikedNP.setImageResource(R.drawable.ic_loved)
+                        else binding.ivIsLikedNP.setImageResource(R.drawable.ic_love)
                 }
 
                 nowPlayingViewModel.isPlaying().observe(this) {
