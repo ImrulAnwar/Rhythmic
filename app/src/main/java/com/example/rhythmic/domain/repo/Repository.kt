@@ -9,6 +9,8 @@ interface Repository {
         fun getLikedSongs(): LiveData<List<Song>>
         fun getAllAlbums(): LiveData<List<Song>>
         fun getAllArtists(): LiveData<List<Song>>
+        fun getCurrentSong(): LiveData<Song>
+        fun setCurrentSong(song: Song)
         suspend fun insertSong(song: Song)
         suspend fun deleteSong(song: Song)
        suspend fun doesRowExist(path : String): Boolean

@@ -1,12 +1,15 @@
 package com.example.rhythmic.services
 
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
 import com.example.rhythmic.ACTION_LIKE
 import com.example.rhythmic.ACTION_NEXT
 import com.example.rhythmic.ACTION_PLAY
@@ -27,6 +30,7 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
         lateinit var mediaPlayer: MediaPlayer
         private lateinit var nowPlayingViewModel: NowPlayingViewModel
         private val binder: IBinder by lazy { MusicBinder() }
+
 
         fun setViewModel(nowPlayingViewModel: NowPlayingViewModel) {
                 this.nowPlayingViewModel = nowPlayingViewModel

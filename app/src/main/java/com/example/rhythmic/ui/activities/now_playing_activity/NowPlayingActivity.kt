@@ -36,13 +36,15 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 supportActionBar?.hide()
                 setButtonActions()
                 nowPlayingViewModel.currentPosition = intent.getIntExtra("position", 0)
-                nowPlayingViewModel.currentSong.value = nowPlayingViewModel.getSong(nowPlayingViewModel.currentPosition)
+                nowPlayingViewModel.setCurrentSong(nowPlayingViewModel.getSong(nowPlayingViewModel.currentPosition))
                 nowPlayingViewModel.setIsPlaying(true)
                 nowPlayingViewModel.isShuffle = sharedPreferences.getBoolean("isShuffle", false)
                 nowPlayingViewModel.isRepeat = sharedPreferences.getBoolean("isRepeat", false)
 
 
-                nowPlayingViewModel.currentSong.observe(this) {
+                nowPlayingViewModel.getCurrentSong().observe(this) {
+                        Toast.makeText(this, "songChanged", Toast.LENGTH_SHORT).show()
+
                         Glide.with(this).load(it.imagePath)
                                 .placeholder(R.mipmap.ic_launcher).centerCrop()
                                 .into(binding.ivAlbumArtNP)
@@ -59,9 +61,10 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 nowPlayingViewModel.isPlaying.observe(this){
                         if (it)binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         else binding.ibPlayOrPause.setImageResource(R.drawable.ic_play)
+                        //could be more organized
                         val playPauseButton: Int = if (nowPlayingViewModel.isPlaying.value ==true) R.drawable.ic_pause else R.drawable.ic_play
-                        val likeButton: Int = if (nowPlayingViewModel.currentSong.value!!.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-                        nowPlayingViewModel.getBitmapAndShowNotification(nowPlayingViewModel.currentSong.value!!, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                        val likeButton: Int = if (nowPlayingViewModel.getCurrentSong().value!!.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                        nowPlayingViewModel.getBitmapAndShowNotification(nowPlayingViewModel.getCurrentSong().value!!, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
                 }
 
         }

@@ -30,8 +30,8 @@ class HomeFragment : Fragment() {
         private lateinit var homeViewModel: HomeViewModel
         private lateinit var allSongs: LiveData<List<Song>>
         private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireActivity(), TAG) }
-        @Inject lateinit var artistFragment: ArtistFragment
-        @Inject lateinit var albumFragment: AlbumFragment
+//        @Inject lateinit var artistFragment: ArtistFragment
+//        @Inject lateinit var albumFragment: AlbumFragment
         private val fm: FragmentManager by  lazy { requireActivity().supportFragmentManager }
 
         override fun onCreateView(
@@ -96,8 +96,8 @@ class HomeFragment : Fragment() {
                 binding.ibArtist.setColorFilter(resources.getColor(R.color.black))
                 binding.ibAlbum.setColorFilter(resources.getColor(R.color.text_color_2))
 
-                albumFragment?.let {
-                        fm!!.beginTransaction().replace(
+                AlbumFragment().let {
+                        fm.beginTransaction().replace(
                                 R.id.fragmentContainerView,
                                 it
                         ).commit()
@@ -109,8 +109,8 @@ class HomeFragment : Fragment() {
                 binding.ibAlbum.setBackgroundResource(R.drawable.grey_background)
                 binding.ibArtist.setColorFilter(resources.getColor(R.color.text_color_2))
                 binding.ibAlbum.setColorFilter(resources.getColor(R.color.black))
-                artistFragment?.let {
-                        fm!!.beginTransaction().replace(
+                ArtistFragment().let {
+                        fm.beginTransaction().replace(
                                 R.id.fragmentContainerView,
                                 it
                         ).commit()

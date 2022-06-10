@@ -1,6 +1,7 @@
 package com.example.rhythmic.data.repo
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.rhythmic.data.db.SongDao
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.domain.repo.Repository
@@ -9,10 +10,16 @@ class SongRepository(private val dao: SongDao) : Repository {
 
         companion object {
                 var currentSongList: List<Song> = emptyList()
+                var currentSong: MutableLiveData<Song> = MutableLiveData()
         }
 
         override fun setCurrentSongList(songList: List<Song>) {
                 currentSongList = songList
+        }
+
+        override fun getCurrentSong(): LiveData<Song> = currentSong
+        override fun setCurrentSong(song: Song) {
+                currentSong.value = song
         }
 
         override fun getCurrentSongLIst(): List<Song> = currentSongList

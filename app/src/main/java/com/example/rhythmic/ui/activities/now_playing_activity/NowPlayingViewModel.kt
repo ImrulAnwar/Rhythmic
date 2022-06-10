@@ -32,13 +32,23 @@ class NowPlayingViewModel @Inject constructor(
         private val repository: Repository,
         application: Application
 ) : AndroidViewModel(application) {
-        var currentSong = MutableLiveData<Song>()
+        //        var currentSong = MutableLiveData<Song>()
         var currentPosition: Int = 0
         val currentSongListSize by lazy { repository.getCurrentSongLIst().size }
         private lateinit var mediaSessionCompat: MediaSessionCompat
         val _isPlaying = MutableLiveData(true)
         val isPlaying: LiveData<Boolean> = _isPlaying
-        var seekPosition: Int = 0
+        var _seekPosition = MutableLiveData(0)
+        val seekPosition: LiveData<Int> = _seekPosition
+        fun getCurrentSong() = repository.getCurrentSong()
+        fun setCurrentSong(song: Song){
+                repository.setCurrentSong(song)
+        }
+
+        fun setProgress(int: Int) {
+                _seekPosition.value = int
+        }
+
         private val sharedPreferences: SharedPreferences by lazy {
                 application.applicationContext.getSharedPreferences(
                         "sharedPref",
@@ -96,7 +106,14 @@ class NowPlayingViewModel @Inject constructor(
                                         resource: Bitmap,
                                         transition: Transition<in Bitmap>?
                                 ) {
-                                        showNotification(currentSong, resource, context, intent, playPauseButton=playPauseButton, likeButton= likeButton)
+                                        showNotification(
+                                                currentSong,
+                                                resource,
+                                                context,
+                                                intent,
+                                                playPauseButton = playPauseButton,
+                                                likeButton = likeButton
+                                        )
                                 }
 
                                 override fun onLoadCleared(placeholder: Drawable?) {
@@ -202,7 +219,8 @@ class NowPlayingViewModel @Inject constructor(
                         .build()
 
 
-                val notificationManager= context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                val notificationManager =
+                        context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 //                        NotificationManagerCompat.from(context.applicationContext)
                 notificationManager.notify(1, notification)
 
@@ -216,17 +234,17 @@ class NowPlayingViewModel @Inject constructor(
                                 // else reset the player and start music
                                 if (it.isNotPlaying()) {
                                         if (it.isNotPaused()) {
-                                                it.startMedia(currentSong.value?.path)
+                                                it.startMedia(repository.getCurrentSong().value?.path)
                                         } else {
-                                                if (!it.isNotAlreadyPlaying(currentSong.value?.path)) {
+                                                if (!it.isNotAlreadyPlaying(repository.getCurrentSong().value?.path)) {
                                                         it.resume()
                                                 } else {
                                                         it.reset()
-                                                        it.startMedia(currentSong.value?.path)
+                                                        it.startMedia(repository.getCurrentSong().value?.path)
                                                 }
                                         }
-                                } else if (it.isNotAlreadyPlaying(currentSong.value?.path)) {
-                                        it.changeDataSource(currentSong.value?.path)
+                                } else if (it.isNotAlreadyPlaying(repository.getCurrentSong().value?.path)) {
+                                        it.changeDataSource(repository.getCurrentSong().value?.path)
                                 }
                         }
         }
@@ -239,7 +257,7 @@ class NowPlayingViewModel @Inject constructor(
                                 this.currentPosition = Random().nextInt(currentSongListSize)
                         else
                                 this.currentPosition = currentPosition
-                currentSong.value = repository.getCurrentSongLIst()[this.currentPosition]
-                musicService.changeDataSource(currentSong.value?.path)
+                repository.setCurrentSong(repository.getCurrentSongLIst()[this.currentPosition])
+                musicService.changeDataSource(repository.getCurrentSong().value?.path)
         }
 }

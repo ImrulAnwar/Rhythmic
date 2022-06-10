@@ -43,7 +43,14 @@
                 android:layout_marginStart="16dp"
                 app:cardCornerRadius="14dp"
                 android:id="@+id/cvBtmTbrAlbumArt"
-                app:layout_constraintVertical_bias="0.466" />
+                app:layout_constraintVertical_bias="0.466" >
+
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@mipmap/ic_launcher"
+                    android:id="@+id/ivBtmTbrAlbumArt" />
+        </androidx.cardview.widget.CardView>
 
         <TextView
                 android:text="TextView"
@@ -59,7 +66,8 @@
                 android:textStyle="bold"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/ibBtmTbrLike"
-                android:layout_marginEnd="16dp" />
+                android:layout_marginEnd="16dp"
+                android:singleLine="true" />
 
         <TextView
                 android:text="TextView"
@@ -71,7 +79,8 @@
                 android:textColor="@color/text_color_2"
                 app:layout_constraintStart_toStartOf="@+id/tvBtmTbrSongTitle"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="@+id/tvBtmTbrSongTitle" />
+                app:layout_constraintEnd_toEndOf="@+id/tvBtmTbrSongTitle"
+                android:singleLine="true" />
 
         <ImageButton
                 android:layout_width="50dp"

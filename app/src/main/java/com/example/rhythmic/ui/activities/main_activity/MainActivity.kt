@@ -2,6 +2,7 @@ package com.example.rhythmic.ui.activities.main_activity
 
 import android.os.Bundle
 import android.view.Menu
+import android.widget.Toast
 import androidx.activity.viewModels
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -11,11 +12,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
+import com.bumptech.glide.Glide
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.ActivityMainBinding
 import com.example.rhythmic.domain.util.UIFunctions
+import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.vertical_item.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -25,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         lateinit var uiFunctions: UIFunctions
         private lateinit var appBarConfiguration: AppBarConfiguration
         private  val mainActivityViewModel: MainActivityViewModel by viewModels()
+//        private lateinit var nowPlayingViewModel: NowPlayingViewModel
         private lateinit var binding: ActivityMainBinding
 
 
@@ -46,9 +52,17 @@ class MainActivity : AppCompatActivity() {
 
                 bottomNavigationView.setupWithNavController(navController)
                 navView.setupWithNavController(navController)
-
+//                nowPlayingViewModel = ViewModelProvider(this)[NowPlayingViewModel::class.java]
                 uiFunctions.setActionBarLogo(activity = this as AppCompatActivity)
                 mainActivityViewModel.getRuntimePermission(this)
+                mainActivityViewModel.getCurrentSong().observe(this){
+                        Toast.makeText(this, "songChange", Toast.LENGTH_SHORT).show()
+                        tvBtmTbrSongTitle.text = it.title
+                        tvBtmTbrArtistName.text = it.artist
+                        Glide.with(this).load(it.imagePath)
+                                .placeholder(R.mipmap.ic_launcher).centerCrop()
+                                .into(ivBtmTbrAlbumArt)
+                }
         }
 
         override fun onCreateOptionsMenu(menu: Menu): Boolean {

@@ -41,6 +41,7 @@ class MainActivityViewModel @Inject constructor(
                         }
                 }
         }
+        fun getCurrentSong() = repository.getCurrentSong()
 
         private fun isPermissionDenied() = ContextCompat.checkSelfPermission(
                 getApplication<Application>().applicationContext,
@@ -64,6 +65,7 @@ class MainActivityViewModel @Inject constructor(
                         }
                 }
         }
+
 
         private suspend fun insertAllSongs(context: Context) {
                 val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
