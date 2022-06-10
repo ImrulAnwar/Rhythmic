@@ -149,11 +149,13 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 super.onPause()
         }
 
+
+
         override fun onServiceConnected(componentName: ComponentName?, iBinder: IBinder?) {
                 val binder: MusicService.MusicBinder = iBinder as MusicService.MusicBinder
                 musicService = binder.getService()
                 musicService?.let {
-                        it.setViewModel(nowPlayingViewModel)
+                        it.setViewModel(this)
                         nowPlayingViewModel.startMedia(it)
                 }
         }

@@ -4,12 +4,10 @@ import android.app.*
 import android.content.*
 import android.content.Context.NOTIFICATION_SERVICE
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,7 +17,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.example.rhythmic.*
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.domain.repo.Repository
-import com.example.rhythmic.recievers.NotificationReceiver
+import com.example.rhythmic.receivers.NotificationReceiver
 import com.example.rhythmic.services.MusicService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*

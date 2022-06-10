@@ -1,6 +1,10 @@
 package com.example.rhythmic.ui.activities.main_activity
 
+import android.content.ComponentName
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import android.view.Menu
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -17,6 +21,7 @@ import com.bumptech.glide.Glide
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.ActivityMainBinding
 import com.example.rhythmic.domain.util.UIFunctions
+import com.example.rhythmic.services.MusicService
 import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.content_main.*
@@ -24,13 +29,13 @@ import kotlinx.android.synthetic.main.vertical_item.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ServiceConnection {
 
         @Inject
         lateinit var uiFunctions: UIFunctions
         private lateinit var appBarConfiguration: AppBarConfiguration
-        private  val mainActivityViewModel: MainActivityViewModel by viewModels()
-//        private lateinit var nowPlayingViewModel: NowPlayingViewModel
+        private val mainActivityViewModel: MainActivityViewModel by viewModels()
+        private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private lateinit var binding: ActivityMainBinding
 
 
@@ -55,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 //                nowPlayingViewModel = ViewModelProvider(this)[NowPlayingViewModel::class.java]
                 uiFunctions.setActionBarLogo(activity = this as AppCompatActivity)
                 mainActivityViewModel.getRuntimePermission(this)
-                mainActivityViewModel.getCurrentSong().observe(this){
+                mainActivityViewModel.getCurrentSong().observe(this) {
                         Toast.makeText(this, "songChange", Toast.LENGTH_SHORT).show()
                         tvBtmTbrSongTitle.text = it.title
                         tvBtmTbrArtistName.text = it.artist
@@ -82,6 +87,26 @@ class MainActivity : AppCompatActivity() {
                 grantResults: IntArray
         ) {
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-                mainActivityViewModel.onRequestPermissionResult(requestCode = requestCode, grantResult = grantResults[0], this)
+                mainActivityViewModel.onRequestPermissionResult(
+                        requestCode = requestCode,
+                        grantResult = grantResults[0],
+                        this
+                )
+        }
+
+
+        //        fun startMusicService(intent: Intent, ) {
+//                startService(intent)
+//                musicService?.let {
+//                        it.setViewModel(nowPlayingViewModel)
+//                        nowPlayingViewModel.startMedia(it)
+//                }
+//        }
+        override fun onServiceConnected(p0: ComponentName?, iBinder: IBinder?) {
+//                val binder: MusicService.MusicBinder = iBinder as MusicService.MusicBinder
+//                binder.getService().setViewModel(this)
+        }
+
+        override fun onServiceDisconnected(p0: ComponentName?) {
         }
 }

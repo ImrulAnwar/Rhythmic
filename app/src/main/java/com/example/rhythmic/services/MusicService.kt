@@ -26,14 +26,13 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                 var currentSongPath: String = ""
         }
 
-        @Inject
-        lateinit var mediaPlayer: MediaPlayer
+        @Inject lateinit var mediaPlayer: MediaPlayer
         private lateinit var nowPlayingViewModel: NowPlayingViewModel
         private val binder: IBinder by lazy { MusicBinder() }
 
 
-        fun setViewModel(nowPlayingViewModel: NowPlayingViewModel) {
-                this.nowPlayingViewModel = nowPlayingViewModel
+        fun setViewModel( context: ViewModelStoreOwner) {
+                this.nowPlayingViewModel = ViewModelProvider(context)[NowPlayingViewModel::class.java]
         }
 
         override fun onBind(intent: Intent?): IBinder {
@@ -48,9 +47,14 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                                         if (isPlaying()) pause()
                                         else resume()
                                 }
-                                ACTION_NEXT ->nowPlayingViewModel.playNextSong(this)
-                                ACTION_PREV -> nowPlayingViewModel.playPrevSong(this)
-                                ACTION_LIKE -> Toast.makeText(this, "like", Toast.LENGTH_SHORT).show()
+                                ACTION_NEXT -> {
+                                        nowPlayingViewModel.playNextSong(this)
+                                }
+                                ACTION_PREV -> {
+                                        nowPlayingViewModel.playPrevSong(this)
+                                }
+                                ACTION_LIKE -> Toast.makeText(this, "like", Toast.LENGTH_SHORT)
+                                        .show()
                                 else -> {}
                         }
                 }
