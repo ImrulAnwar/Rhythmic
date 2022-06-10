@@ -72,8 +72,18 @@ class MainActivity : AppCompatActivity() {
                 mainActivityViewModel.getCurrentSong().observe(this) {
 
                         val playPauseButton: Int = if (mainActivityViewModel.isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
-                        val likeButton: Int = if (it.isLiked) R.drawable.ic_love else R.drawable.ic_loved
+                        val likeButton: Int = if (it.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+
                         mainActivityViewModel.getBitmapAndShowNotification(it, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                }
+
+                mainActivityViewModel.isPlaying().observe(this){
+                        val playPauseButton: Int = if (mainActivityViewModel.isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
+                        ibBtmTbrPlayPause.setImageResource(playPauseButton)
+                        mainActivityViewModel.getCurrentSong().value?.let {
+                                val likeButton: Int = if (it.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                                mainActivityViewModel.getBitmapAndShowNotification(it, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                        }
                 }
         }
 

@@ -62,17 +62,11 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         if (it) binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         else binding.ibPlayOrPause.setImageResource(R.drawable.ic_play)
                         //could be more organized
-                        val playPauseButton: Int =
-                                if (nowPlayingViewModel.isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
-                        val likeButton: Int =
-                                if (nowPlayingViewModel.getCurrentSong().value!!.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-                        nowPlayingViewModel.getBitmapAndShowNotification(
-                                nowPlayingViewModel.getCurrentSong().value!!,
-                                this,
-                                intent,
-                                playPauseButton = playPauseButton,
-                                likeButton = likeButton
-                        )
+                        val playPauseButton: Int = if (nowPlayingViewModel.isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
+                        nowPlayingViewModel.getCurrentSong().value?.let {song->
+                                val likeButton: Int = if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                                nowPlayingViewModel.getBitmapAndShowNotification(song, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                        }
                 }
 
         }
