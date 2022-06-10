@@ -175,5 +175,4 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         apply()
                 }
         }
-
 }

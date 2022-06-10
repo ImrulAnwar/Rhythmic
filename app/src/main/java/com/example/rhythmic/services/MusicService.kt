@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
@@ -24,15 +25,16 @@ private const val TAG = "MusicService"
 class MusicService : Service(), MediaPlayer.OnCompletionListener {
         companion object {
                 var currentSongPath: String = ""
+                private lateinit var nowPlayingViewModel: NowPlayingViewModel
         }
 
         @Inject lateinit var mediaPlayer: MediaPlayer
-        private lateinit var nowPlayingViewModel: NowPlayingViewModel
+
         private val binder: IBinder by lazy { MusicBinder() }
 
 
         fun setViewModel( context: ViewModelStoreOwner) {
-                this.nowPlayingViewModel = ViewModelProvider(context)[NowPlayingViewModel::class.java]
+                nowPlayingViewModel = ViewModelProvider(context)[NowPlayingViewModel::class.java]
         }
 
         override fun onBind(intent: Intent?): IBinder {
@@ -62,7 +64,10 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
         }
 
         inner class MusicBinder : Binder() {
-                fun getService(): MusicService = this@MusicService
+                fun getService(): MusicService {
+                        return this@MusicService
+                }
+
         }
 
         fun startMedia(path: String?) {
