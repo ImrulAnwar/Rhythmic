@@ -61,7 +61,6 @@ class MainActivity : AppCompatActivity() {
                 uiFunctions.setActionBarLogo(activity = this as AppCompatActivity)
                 mainActivityViewModel.getRuntimePermission(this)
                 mainActivityViewModel.getCurrentSong().observe(this) {
-                        Toast.makeText(this, "songChange", Toast.LENGTH_SHORT).show()
                         tvBtmTbrSongTitle.text = it.title
                         tvBtmTbrArtistName.text = it.artist
                         Glide.with(this).load(it.imagePath)

@@ -44,7 +44,6 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
 
                 nowPlayingViewModel.getCurrentSong().observe(this) {
-                        Toast.makeText(this, "songChanged", Toast.LENGTH_SHORT).show()
 
                         Glide.with(this).load(it.imagePath)
                                 .placeholder(R.mipmap.ic_launcher).centerCrop()
