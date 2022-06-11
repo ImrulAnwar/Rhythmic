@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity() {
         lateinit var uiFunctions: UIFunctions
         private lateinit var appBarConfiguration: AppBarConfiguration
         private val mainActivityViewModel: MainActivityViewModel by viewModels()
+        private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private lateinit var binding: ActivityMainBinding
 
 
@@ -103,9 +104,9 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 ibBtmTbrLike.setOnClickListener {
-                        lifecycleScope.launch(Dispatchers.IO){
+//                        lifecycleScope.launch(Dispatchers.IO){
                                 mainActivityViewModel.addToLiked()
-                        }
+//                        }
                 }
 
                 clBtmTbr.setOnClickListener{

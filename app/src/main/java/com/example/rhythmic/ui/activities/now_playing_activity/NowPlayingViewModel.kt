@@ -22,9 +22,7 @@ import com.example.rhythmic.domain.repo.Repository
 import com.example.rhythmic.receivers.NotificationReceiver
 import com.example.rhythmic.services.MusicService
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
@@ -289,13 +287,37 @@ class NowPlayingViewModel @Inject constructor(
                 repository.postCurrentSong(song)
         }
 
-        suspend fun addToLiked() {
-                getCurrentSong().value?.let {
-                        it.isLiked = !(it.isLiked)
-                        repository.updateSong(it)
-                        postCurrentSong(it)
+        @OptIn(DelicateCoroutinesApi::class)
+        fun addToLiked() {
+                GlobalScope.launch(Dispatchers.IO){
+                        getCurrentSong().value?.let {
+                                it.isLiked = !(it.isLiked)
+                                repository.updateSong(it)
+                                postCurrentSong(it)
+                        }
                 }
         }
+
+        @DelicateCoroutinesApi
+        fun addToLikedAndChangeNotificationIcon(context: Context, intent: Intent) {
+                GlobalScope.launch(Dispatchers.IO){
+                        getCurrentSong().value?.let {
+                                it.isLiked = !(it.isLiked)
+                                repository.updateSong(it)
+                                postCurrentSong(it)
+                        }
+                        changeNotificationIcons(context,intent)
+                }
+        }
+
+        fun changeNotificationIcons(context: Context, intent: Intent) {
+                val playPauseButton: Int = if (isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
+                getCurrentSong().value?.let { song->
+                        val likeButton: Int = if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                        getBitmapAndShowNotification(song, context, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                }
+        }
+
 
         fun getCurrentSongPosition(): Int = repository.getCurrentSongPosition()
         fun setCurrentSongPosition(int : Int) {

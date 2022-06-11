@@ -113,9 +113,9 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         private fun setButtonActions() {
 
                 binding.ivIsLikedNP.setOnClickListener {
-                        lifecycleScope.launch(Dispatchers.IO) {
+//                        lifecycleScope.launch(Dispatchers.IO) {
                                 nowPlayingViewModel.addToLiked()
-                        }
+//                        }
                 }
                 binding.ibPlayOrPause.setOnClickListener {
                         var isPlaying: Boolean

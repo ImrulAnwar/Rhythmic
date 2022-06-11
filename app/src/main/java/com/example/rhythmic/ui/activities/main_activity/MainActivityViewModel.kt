@@ -81,14 +81,15 @@ class MainActivityViewModel @Inject constructor(
                 }
         }
 
-        suspend fun addToLiked() {
-                getCurrentSong().value?.let {
-                        it.isLiked  = !(it.isLiked)
-                        repository.updateSong(it)
-                        postCurrentSong(it)
+        fun addToLiked() {
+                viewModelScope.launch (Dispatchers.IO){
+                        getCurrentSong().value?.let {
+                                it.isLiked = !(it.isLiked)
+                                repository.updateSong(it)
+                                postCurrentSong(it)
+                        }
                 }
         }
-
         fun setCurrentSong(song: Song) {
                 repository.setCurrentSong(song)
         }

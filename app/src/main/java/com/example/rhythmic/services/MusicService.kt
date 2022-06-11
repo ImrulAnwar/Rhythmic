@@ -6,7 +6,6 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.example.rhythmic.*
@@ -43,20 +42,21 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                                 ACTION_PLAY -> {
                                         if (isPlaying()) pause()
                                         else resume()
-                                        showNotification(intent)
+                                        nowPlayingViewModel.changeNotificationIcons(this,intent)
                                 }
                                 ACTION_NEXT -> {
                                         nowPlayingViewModel.playNextSong(this)
-                                        showNotification(intent)
+                                        nowPlayingViewModel.changeNotificationIcons(this,intent)
                                 }
                                 ACTION_PREV -> {
                                         nowPlayingViewModel.playPrevSong(this)
-                                        showNotification(intent)
+                                        nowPlayingViewModel.changeNotificationIcons(this,intent)
                                 }
                                 ACTION_LIKE -> {
-                                        Toast.makeText(this, "like", Toast.LENGTH_SHORT)
-                                                .show()
-                                        showNotification(intent)
+                                        nowPlayingViewModel.addToLiked()
+                                        if (isPlaying()) pause()
+                                        else resume()
+                                        nowPlayingViewModel.changeNotificationIcons(this,intent)
                                 }
                                 else -> {}
                         }
@@ -64,13 +64,6 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                 return START_NOT_STICKY
         }
 
-        private fun showNotification(intent: Intent) {
-                val playPauseButton: Int = if (nowPlayingViewModel.isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
-                nowPlayingViewModel.getCurrentSong().value?.let {song->
-                        val likeButton: Int = if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-                        nowPlayingViewModel.getBitmapAndShowNotification(song, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
-                }
-        }
 
         fun seekTo(progress: Int) {
                 mediaPlayer.seekTo(progress)
