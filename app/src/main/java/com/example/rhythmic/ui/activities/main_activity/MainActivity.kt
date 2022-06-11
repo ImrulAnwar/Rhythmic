@@ -40,7 +40,6 @@ class MainActivity : AppCompatActivity() {
         lateinit var uiFunctions: UIFunctions
         private lateinit var appBarConfiguration: AppBarConfiguration
         private val mainActivityViewModel: MainActivityViewModel by viewModels()
-        private val nowPlayingViewModel: NowPlayingViewModel by viewModels()
         private lateinit var binding: ActivityMainBinding
 
 

@@ -58,11 +58,9 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         binding.tvArtistNameNP.text = it.artist
                         if (it.isLiked) {
                                 binding.ivIsLikedNP.setImageResource(R.drawable.ic_loved)
-                                binding.ivIsLikedNP.setColorFilter(resources.getColor(R.color.black))
                         }
                         else {
                                 binding.ivIsLikedNP.setImageResource(R.drawable.ic_love)
-                                binding.ivIsLikedNP.setColorFilter(resources.getColor(R.color.text_color_2))
                         }
                         binding.sbProgressNP.max = it.duration?.toInt() ?: 0
                         showNotification()
@@ -117,6 +115,11 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 nowPlayingViewModel.addToLiked()
 //                        }
                 }
+
+                binding.ibBackNP.setOnClickListener {
+                        onBackPressed()
+                }
+
                 binding.ibPlayOrPause.setOnClickListener {
                         var isPlaying: Boolean
                         binding.ibPlayOrPause.apply {
