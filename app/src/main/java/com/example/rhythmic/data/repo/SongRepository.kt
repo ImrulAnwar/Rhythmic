@@ -11,6 +11,7 @@ class SongRepository(private val dao: SongDao) : Repository {
         companion object {
                 var currentSongList: List<Song> = emptyList()
                 var currentSong: MutableLiveData<Song> = MutableLiveData()
+                var currentSongPosition: Int = 0
                 val isPlaying = MutableLiveData(true)
         }
 
@@ -31,6 +32,12 @@ class SongRepository(private val dao: SongDao) : Repository {
 
         override fun postCurrentSong(song: Song) {
                 currentSong.postValue(song)
+        }
+
+        override fun getCurrentSongPosition(): Int = currentSongPosition
+
+        override fun setCurrentSongPosition(int: Int) {
+                currentSongPosition = int
         }
 
         override fun getCurrentSongLIst(): List<Song> = currentSongList

@@ -17,15 +17,19 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.rhythmic.R
 import com.example.rhythmic.databinding.ActivityMainBinding
 import com.example.rhythmic.domain.util.UIFunctions
 import com.example.rhythmic.services.MusicService
+import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingActivity
 import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.vertical_item.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -98,8 +102,16 @@ class MainActivity : AppCompatActivity() {
                         }
                 }
 
-                ibBtmTbrPlayPause.setOnClickListener {
+                ibBtmTbrLike.setOnClickListener {
+                        lifecycleScope.launch(Dispatchers.IO){
+                                mainActivityViewModel.addToLiked()
+                        }
+                }
 
+                clBtmTbr.setOnClickListener{
+                        Intent(this, NowPlayingActivity::class.java).also {
+                                startActivity(it)
+                        }
                 }
         }
 

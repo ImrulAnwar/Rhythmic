@@ -38,7 +38,7 @@ class NowPlayingViewModel @Inject constructor(
         application: Application
 ) : AndroidViewModel(application) {
         //        var currentSong = MutableLiveData<Song>()
-        var currentPosition: Int = 0
+//        var currentPosition: Int = 0
         val currentSongListSize by lazy { repository.getCurrentSongLIst().size }
         private lateinit var mediaSessionCompat: MediaSessionCompat
 
@@ -159,25 +159,25 @@ class NowPlayingViewModel @Inject constructor(
         }
 
         private fun setPosition() {
-                if (currentPosition >= currentSongListSize) {
-                        currentPosition = 0
-                } else if (currentPosition < 0) {
-                        currentPosition = currentSongListSize - 1
+                if (getCurrentSongPosition() >= currentSongListSize) {
+                        setCurrentSongPosition(0)
+                } else if (getCurrentSongPosition() < 0) {
+                        setCurrentSongPosition(currentSongListSize - 1)
                 }
         }
 
         fun playNextSong(musicService: MusicService) {
                 if (isRepeat == false)
-                        currentPosition++
+                        setCurrentSongPosition(getCurrentSongPosition() + 1)
                 setPosition()
-                playNextOrPrevSong(musicService, currentPosition)
+                playNextOrPrevSong(musicService, getCurrentSongPosition())
         }
 
         fun playPrevSong(musicService: MusicService) {
                 if (isRepeat == false)
-                        currentPosition--
+                        setCurrentSongPosition(getCurrentSongPosition() - 1)
                 setPosition()
-                playNextOrPrevSong(musicService, currentPosition)
+                playNextOrPrevSong(musicService, getCurrentSongPosition())
         }
 
 
@@ -270,17 +270,17 @@ class NowPlayingViewModel @Inject constructor(
                                 // else reset the player and start music
                                 if (it.isNotPlaying()) {
                                         if (it.isNotPaused()) {
-                                                it.startMedia(repository.getCurrentSong().value?.path)
+                                                it.startMedia(getCurrentSong().value?.path)
                                         } else {
-                                                if (!it.isNotAlreadyPlaying(repository.getCurrentSong().value?.path)) {
+                                                if (!it.isNotAlreadyPlaying(getCurrentSong().value?.path)) {
                                                         it.resume()
                                                 } else {
                                                         it.reset()
-                                                        it.startMedia(repository.getCurrentSong().value?.path)
+                                                        it.startMedia(getCurrentSong().value?.path)
                                                 }
                                         }
-                                } else if (it.isNotAlreadyPlaying(repository.getCurrentSong().value?.path)) {
-                                        it.changeDataSource(repository.getCurrentSong().value?.path)
+                                } else if (it.isNotAlreadyPlaying(getCurrentSong().value?.path)) {
+                                        it.changeDataSource(getCurrentSong().value?.path)
                                 }
                         }
         }
@@ -291,10 +291,15 @@ class NowPlayingViewModel @Inject constructor(
 
         suspend fun addToLiked() {
                 getCurrentSong().value?.let {
-                        it.isLiked  = !(it.isLiked)
+                        it.isLiked = !(it.isLiked)
                         repository.updateSong(it)
                         postCurrentSong(it)
                 }
+        }
+
+        fun getCurrentSongPosition(): Int = repository.getCurrentSongPosition()
+        fun setCurrentSongPosition(int : Int) {
+                repository.setCurrentSongPosition(int)
         }
 
         private fun playNextOrPrevSong(musicService: MusicService, currentPosition: Int) {
@@ -303,10 +308,10 @@ class NowPlayingViewModel @Inject constructor(
                 isShuffle = sharedPreferences.getBoolean("isShuffle", false)
                 if (isRepeat == false)
                         if (isShuffle == true)
-                                this.currentPosition = Random().nextInt(currentSongListSize)
+                               setCurrentSongPosition(Random().nextInt(currentSongListSize))
                         else
-                                this.currentPosition = currentPosition
-                repository.setCurrentSong(repository.getCurrentSongLIst()[this.currentPosition])
+                               setCurrentSongPosition(currentPosition)
+                repository.setCurrentSong(repository.getCurrentSongLIst()[getCurrentSongPosition()])
                 musicService.changeDataSource(repository.getCurrentSong().value?.path)
         }
 }

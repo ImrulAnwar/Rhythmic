@@ -39,8 +39,8 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 setContentView(binding.root)
                 supportActionBar?.hide()
                 setButtonActions()
-                nowPlayingViewModel.currentPosition = intent.getIntExtra("position", 0)
-                nowPlayingViewModel.setCurrentSong(nowPlayingViewModel.getSong(nowPlayingViewModel.currentPosition))
+                nowPlayingViewModel.setCurrentSongPosition( intent.getIntExtra("position", nowPlayingViewModel.getCurrentSongPosition()))
+                nowPlayingViewModel.setCurrentSong(nowPlayingViewModel.getSong(nowPlayingViewModel.getCurrentSongPosition()))
                 nowPlayingViewModel.setIsPlaying(true)
                 nowPlayingViewModel.isShuffle = sharedPreferences.getBoolean("isShuffle", false)
                 nowPlayingViewModel.isRepeat = sharedPreferences.getBoolean("isRepeat", false)
@@ -114,7 +114,6 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
                 binding.ivIsLikedNP.setOnClickListener {
                         lifecycleScope.launch(Dispatchers.IO) {
-
                                 nowPlayingViewModel.addToLiked()
                         }
                 }

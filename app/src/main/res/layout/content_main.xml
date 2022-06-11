@@ -18,7 +18,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:defaultNavHost="true"
             app:navGraph="@navigation/mobile_navigation"
-            app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+            app:layout_constraintBottom_toTopOf="@+id/clBtmTbr"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +31,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             android:background="@drawable/bottom_music_control_bar_background"
-            android:id="@+id/constraintLayout"
+            android:id="@+id/clBtmTbr"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout">
 
         <androidx.cardview.widget.CardView

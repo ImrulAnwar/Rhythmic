@@ -12,6 +12,8 @@ interface Repository {
         fun getCurrentSong(): LiveData<Song>
         fun setCurrentSong(song: Song)
         fun postCurrentSong(song: Song)
+        fun getCurrentSongPosition(): Int
+        fun setCurrentSongPosition(int: Int)
         fun setIsPlaying(boolean: Boolean)
         fun isPlaying(): LiveData<Boolean>
         suspend fun insertSong(song: Song)
