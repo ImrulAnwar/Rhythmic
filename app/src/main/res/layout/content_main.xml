@@ -103,7 +103,9 @@
                 android:id="@+id/ibBtmTbrLike"
                 android:background="@android:color/transparent"
                 app:layout_constraintEnd_toStartOf="@+id/ibBtmTbrPlayPause"
-                android:layout_marginEnd="16dp" />
+                android:layout_marginEnd="16dp"
+                android:tint="@color/white"
+                tools:ignore="SpeakableTextPresentCheck" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout

@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity() {
 
                 bottomNavigationView.setupWithNavController(navController)
                 navView.setupWithNavController(navController)
-//                nowPlayingViewModel = ViewModelProvider(this)[NowPlayingViewModel::class.java]
                 uiFunctions.setActionBarLogo(activity = this as AppCompatActivity)
                 mainActivityViewModel.getRuntimePermission(this)
                 mainActivityViewModel.getCurrentSong().observe(this) {
@@ -66,22 +65,36 @@ class MainActivity : AppCompatActivity() {
                         Glide.with(this).load(it.imagePath)
                                 .placeholder(R.mipmap.ic_launcher).centerCrop()
                                 .into(ivBtmTbrAlbumArt)
+                        val playPauseButton: Int =
+                                if (mainActivityViewModel.isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
+                        val likeButton: Int =
+                                if (it.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+
+                        ibBtmTbrLike.setImageResource(likeButton)
+
+                        mainActivityViewModel.getBitmapAndShowNotification(
+                                it,
+                                this,
+                                intent,
+                                playPauseButton = playPauseButton,
+                                likeButton = likeButton
+                        )
                 }
 
-                mainActivityViewModel.getCurrentSong().observe(this) {
-
-                        val playPauseButton: Int = if (mainActivityViewModel.isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
-                        val likeButton: Int = if (it.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-
-                        mainActivityViewModel.getBitmapAndShowNotification(it, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
-                }
-
-                mainActivityViewModel.isPlaying().observe(this){
-                        val playPauseButton: Int = if (mainActivityViewModel.isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
+                mainActivityViewModel.isPlaying().observe(this) {
+                        val playPauseButton: Int =
+                                if (mainActivityViewModel.isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
                         ibBtmTbrPlayPause.setImageResource(playPauseButton)
                         mainActivityViewModel.getCurrentSong().value?.let {
-                                val likeButton: Int = if (it.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-                                mainActivityViewModel.getBitmapAndShowNotification(it, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                                val likeButton: Int =
+                                        if (it.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                                mainActivityViewModel.getBitmapAndShowNotification(
+                                        it,
+                                        this,
+                                        intent,
+                                        playPauseButton = playPauseButton,
+                                        likeButton = likeButton
+                                )
                         }
                 }
 

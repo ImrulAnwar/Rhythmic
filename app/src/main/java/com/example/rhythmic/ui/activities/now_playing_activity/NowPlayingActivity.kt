@@ -65,25 +65,14 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 binding.ivIsLikedNP.setColorFilter(resources.getColor(R.color.text_color_2))
                         }
                         binding.sbProgressNP.max = it.duration?.toInt() ?: 0
+                        showNotification()
                 }
 
                 nowPlayingViewModel.isPlaying().observe(this) {
                         if (it) binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         else binding.ibPlayOrPause.setImageResource(R.drawable.ic_play)
                         //could be more organized
-                        val playPauseButton: Int =
-                                if (nowPlayingViewModel.isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
-                        nowPlayingViewModel.getCurrentSong().value?.let { song ->
-                                val likeButton: Int =
-                                        if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-                                nowPlayingViewModel.getBitmapAndShowNotification(
-                                        song,
-                                        this,
-                                        intent,
-                                        playPauseButton = playPauseButton,
-                                        likeButton = likeButton
-                                )
-                        }
+                        showNotification()
                 }
 
                 nowPlayingViewModel.seekPosition.observe(this) {
@@ -92,6 +81,22 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 nowPlayingViewModel.convertTime(it.toLong())
                 }
 
+        }
+
+        private fun showNotification() {
+                val playPauseButton: Int =
+                        if (nowPlayingViewModel.isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
+                nowPlayingViewModel.getCurrentSong().value?.let { song ->
+                        val likeButton: Int =
+                                if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                        nowPlayingViewModel.getBitmapAndShowNotification(
+                                song,
+                                this,
+                                intent,
+                                playPauseButton = playPauseButton,
+                                likeButton = likeButton
+                        )
+                }
         }
 
         private fun setImageResource() {
