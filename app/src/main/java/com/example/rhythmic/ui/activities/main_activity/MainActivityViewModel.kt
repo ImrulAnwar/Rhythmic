@@ -166,12 +166,32 @@ class MainActivityViewModel @Inject constructor(
                 currentSong: Song, context: Context, intent: Intent, playPauseButton: Int,
                 likeButton: Int
         ) {
+                Glide.with(context)
+                        .asBitmap()
+                        .load(R.drawable.ic_love)
+                        .into(object : CustomTarget<Bitmap>() {
+                                override fun onResourceReady(
+                                        resource: Bitmap,
+                                        transition: Transition<in Bitmap>?
+                                ) {
+                                        showNotification(
+                                                currentSong,
+                                                resource,
+                                                context,
+                                                intent,
+                                                playPauseButton = playPauseButton,
+                                                likeButton = likeButton
+                                        )
+                                }
 
-                //there is a bug, image path could be null
+                                override fun onLoadCleared(placeholder: Drawable?) {
+                                }
+
+                        })
+
                 Glide.with(context)
                         .asBitmap()
                         .load(currentSong.imagePath)
-                        .placeholder(R.mipmap.ic_launcher)
                         .into(object : CustomTarget<Bitmap>() {
                                 override fun onResourceReady(
                                         resource: Bitmap,

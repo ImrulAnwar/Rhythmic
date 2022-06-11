@@ -1,20 +1,15 @@
 package com.example.rhythmic.services
 
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
-import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
-import com.example.rhythmic.ACTION_LIKE
-import com.example.rhythmic.ACTION_NEXT
-import com.example.rhythmic.ACTION_PLAY
-import com.example.rhythmic.ACTION_PREV
+import com.example.rhythmic.*
 import com.example.rhythmic.ui.activities.now_playing_activity.NowPlayingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -48,19 +43,33 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                                 ACTION_PLAY -> {
                                         if (isPlaying()) pause()
                                         else resume()
+                                        showNotification(intent)
                                 }
                                 ACTION_NEXT -> {
                                         nowPlayingViewModel.playNextSong(this)
+                                        showNotification(intent)
                                 }
                                 ACTION_PREV -> {
                                         nowPlayingViewModel.playPrevSong(this)
+                                        showNotification(intent)
                                 }
-                                ACTION_LIKE -> Toast.makeText(this, "like", Toast.LENGTH_SHORT)
-                                        .show()
+                                ACTION_LIKE -> {
+                                        Toast.makeText(this, "like", Toast.LENGTH_SHORT)
+                                                .show()
+                                        showNotification(intent)
+                                }
                                 else -> {}
                         }
                 }
                 return START_NOT_STICKY
+        }
+
+        fun showNotification(intent: Intent) {
+                val playPauseButton: Int = if (nowPlayingViewModel.isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
+                nowPlayingViewModel.getCurrentSong().value?.let {song->
+                        val likeButton: Int = if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                        nowPlayingViewModel.getBitmapAndShowNotification(song, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                }
         }
 
         fun seekTo(progress: Int) {
