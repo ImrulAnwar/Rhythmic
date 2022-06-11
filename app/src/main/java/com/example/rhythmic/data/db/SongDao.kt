@@ -19,6 +19,9 @@ interface SongDao {
         @Insert(onConflict = OnConflictStrategy.ABORT)
         suspend fun insertSong(song: Song)
 
+        @Insert(onConflict = OnConflictStrategy.REPLACE)
+        fun updateSong(song: Song)
+
         @Delete
         suspend fun deleteSong(song: Song)
 
@@ -27,7 +30,6 @@ interface SongDao {
 
         @Query("SELECT * FROM songs_table GROUP BY album")
         fun getAllAlbums(): LiveData<List<Song>>
-
         @Query("SELECT * FROM songs_table GROUP BY artist")
         fun getAllArtists(): LiveData<List<Song>>
 }

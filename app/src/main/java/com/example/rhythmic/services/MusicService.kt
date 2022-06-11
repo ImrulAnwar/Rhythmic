@@ -64,7 +64,7 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                 return START_NOT_STICKY
         }
 
-        fun showNotification(intent: Intent) {
+        private fun showNotification(intent: Intent) {
                 val playPauseButton: Int = if (nowPlayingViewModel.isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
                 nowPlayingViewModel.getCurrentSong().value?.let {song->
                         val likeButton: Int = if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love

@@ -7,11 +7,14 @@ import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.rhythmic.*
 import com.example.rhythmic.databinding.ActivityNowPlayingBinding
 import com.example.rhythmic.services.MusicService
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 private const val TAG = "NowPlayingActivity"
@@ -53,27 +56,40 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         binding.tvTotalDurationNP.text = duration
                         binding.tvSongTitleNP.text = it.title
                         binding.tvArtistNameNP.text = it.artist
-                        if(it.isLiked) binding.ivIsLikedNP.setImageResource(R.drawable.ic_loved)
-                        else binding.ivIsLikedNP.setImageResource(R.drawable.ic_love)
-                        musicService?.getDuration()?.let { duration ->
-                                binding.sbProgressNP.max = duration
+                        if (it.isLiked) {
+                                binding.ivIsLikedNP.setImageResource(R.drawable.ic_loved)
+                                binding.ivIsLikedNP.setColorFilter(resources.getColor(R.color.black))
                         }
+                        else {
+                                binding.ivIsLikedNP.setImageResource(R.drawable.ic_love)
+                                binding.ivIsLikedNP.setColorFilter(resources.getColor(R.color.text_color_2))
+                        }
+                        binding.sbProgressNP.max = it.duration?.toInt() ?: 0
                 }
 
                 nowPlayingViewModel.isPlaying().observe(this) {
                         if (it) binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
                         else binding.ibPlayOrPause.setImageResource(R.drawable.ic_play)
                         //could be more organized
-                        val playPauseButton: Int = if (nowPlayingViewModel.isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
-                        nowPlayingViewModel.getCurrentSong().value?.let {song->
-                                val likeButton: Int = if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-                                nowPlayingViewModel.getBitmapAndShowNotification(song, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                        val playPauseButton: Int =
+                                if (nowPlayingViewModel.isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
+                        nowPlayingViewModel.getCurrentSong().value?.let { song ->
+                                val likeButton: Int =
+                                        if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                                nowPlayingViewModel.getBitmapAndShowNotification(
+                                        song,
+                                        this,
+                                        intent,
+                                        playPauseButton = playPauseButton,
+                                        likeButton = likeButton
+                                )
                         }
                 }
 
-                nowPlayingViewModel.seekPosition.observe(this){
+                nowPlayingViewModel.seekPosition.observe(this) {
                         binding.sbProgressNP.progress = it
-                        binding.tvCurrentPositionNP.text = nowPlayingViewModel.convertTime(it.toLong())
+                        binding.tvCurrentPositionNP.text =
+                                nowPlayingViewModel.convertTime(it.toLong())
                 }
 
         }
@@ -90,6 +106,13 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         }
 
         private fun setButtonActions() {
+
+                binding.ivIsLikedNP.setOnClickListener {
+                        lifecycleScope.launch(Dispatchers.IO) {
+
+                                nowPlayingViewModel.addToLiked()
+                        }
+                }
                 binding.ibPlayOrPause.setOnClickListener {
                         var isPlaying: Boolean
                         binding.ibPlayOrPause.apply {
@@ -173,12 +196,19 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
 
                 binding.sbProgressNP.apply {
-                        setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
-                                override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {
+                        setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                                override fun onProgressChanged(
+                                        p0: SeekBar?,
+                                        progress: Int,
+                                        fromUser: Boolean
+                                ) {
                                         musicService?.let {
-                                                if (fromUser && progress<it.getDuration()) {
+                                                if (fromUser && progress < nowPlayingViewModel.getCurrentSong().value?.duration?.toInt() ?: 0) {
                                                         it.seekTo(binding.sbProgressNP.progress)
-                                                        binding.tvCurrentPositionNP.text=nowPlayingViewModel.convertTime(progress.toLong())
+                                                        binding.tvCurrentPositionNP.text =
+                                                                nowPlayingViewModel.convertTime(
+                                                                        progress.toLong()
+                                                                )
                                                 }
                                         }
                                 }

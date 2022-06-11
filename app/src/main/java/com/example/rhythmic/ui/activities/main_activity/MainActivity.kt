@@ -84,6 +84,10 @@ class MainActivity : AppCompatActivity() {
                                 mainActivityViewModel.getBitmapAndShowNotification(it, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
                         }
                 }
+
+                ibBtmTbrPlayPause.setOnClickListener {
+
+                }
         }
 
         override fun onCreateOptionsMenu(menu: Menu): Boolean {

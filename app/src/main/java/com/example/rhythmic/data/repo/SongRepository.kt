@@ -26,7 +26,7 @@ class SongRepository(private val dao: SongDao) : Repository {
 
         override fun getCurrentSong(): LiveData<Song> = currentSong
         override fun setCurrentSong(song: Song) {
-                currentSong.value = song
+                currentSong.postValue(song)
         }
 
         override fun getCurrentSongLIst(): List<Song> = currentSongList
@@ -42,6 +42,7 @@ class SongRepository(private val dao: SongDao) : Repository {
         override fun getAllArtists(): LiveData<List<Song>> = dao.getAllArtists()
 
         override suspend fun insertSong(song: Song) = dao.insertSong(song)
+        override suspend fun updateSong(song: Song) = dao.updateSong(song)
 
         override suspend fun deleteSong(song: Song) = dao.deleteSong(song)
 

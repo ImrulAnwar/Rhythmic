@@ -285,6 +285,14 @@ class NowPlayingViewModel @Inject constructor(
                         }
         }
 
+        suspend fun addToLiked() {
+                getCurrentSong().value?.let {
+                        it.isLiked  = !(it.isLiked)
+                        repository.updateSong(it)
+                        setCurrentSong(it)
+                }
+        }
+
         private fun playNextOrPrevSong(musicService: MusicService, currentPosition: Int) {
                 setProgress(0)
                 isRepeat = sharedPreferences.getBoolean("isRepeat", false)

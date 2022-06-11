@@ -81,6 +81,18 @@ class MainActivityViewModel @Inject constructor(
                 }
         }
 
+        suspend fun addToLiked() {
+                getCurrentSong().value?.let {
+                        it.isLiked  = !(it.isLiked)
+                        repository.updateSong(it)
+                        setCurrentSong(it)
+                }
+        }
+
+        fun setCurrentSong(song: Song) {
+                repository.setCurrentSong(song)
+        }
+
         private fun showNotification(
                 currentSong: Song,
                 bitmap: Bitmap,

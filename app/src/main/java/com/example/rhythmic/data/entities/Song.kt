@@ -14,6 +14,6 @@ data class Song(
         val duration: String? = null,
         val path: String? = null,
         val imagePath: String? = null,
-        val isRecent: Boolean = false,
-        val isLiked: Boolean = false
+        var isRecent: Boolean = false,
+        var isLiked: Boolean = false
 ):Serializable
