@@ -85,12 +85,16 @@ class MainActivityViewModel @Inject constructor(
                 getCurrentSong().value?.let {
                         it.isLiked  = !(it.isLiked)
                         repository.updateSong(it)
-                        setCurrentSong(it)
+                        postCurrentSong(it)
                 }
         }
 
         fun setCurrentSong(song: Song) {
                 repository.setCurrentSong(song)
+        }
+
+        fun postCurrentSong(song: Song) {
+                repository.postCurrentSong(song)
         }
 
         private fun showNotification(

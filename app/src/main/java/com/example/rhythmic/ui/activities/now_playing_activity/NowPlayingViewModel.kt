@@ -285,11 +285,15 @@ class NowPlayingViewModel @Inject constructor(
                         }
         }
 
+        fun postCurrentSong(song: Song) {
+                repository.postCurrentSong(song)
+        }
+
         suspend fun addToLiked() {
                 getCurrentSong().value?.let {
                         it.isLiked  = !(it.isLiked)
                         repository.updateSong(it)
-                        setCurrentSong(it)
+                        postCurrentSong(it)
                 }
         }
 
