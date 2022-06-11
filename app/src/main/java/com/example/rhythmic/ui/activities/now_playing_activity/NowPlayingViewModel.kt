@@ -4,6 +4,7 @@ import android.app.*
 import android.content.*
 import android.content.Context.NOTIFICATION_SERVICE
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.support.v4.media.session.MediaSessionCompat
 import android.util.Log
@@ -11,6 +12,7 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
@@ -20,8 +22,13 @@ import com.example.rhythmic.domain.repo.Repository
 import com.example.rhythmic.receivers.NotificationReceiver
 import com.example.rhythmic.services.MusicService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
+
 
 private const val TAG = "NowPlayingActivityVM"
 
@@ -38,7 +45,7 @@ class NowPlayingViewModel @Inject constructor(
         var _seekPosition = MutableLiveData(0)
         val seekPosition: LiveData<Int> = _seekPosition
         fun getCurrentSong() = repository.getCurrentSong()
-        fun setCurrentSong(song: Song){
+        fun setCurrentSong(song: Song) {
                 repository.setCurrentSong(song)
         }
 
@@ -46,8 +53,18 @@ class NowPlayingViewModel @Inject constructor(
                 _seekPosition.value = int
         }
 
-        fun isPlaying(): LiveData<Boolean> = repository.isPlaying()
+        fun setSeekBarProgress() {
+                viewModelScope.launch(Dispatchers.IO) {
+                        var int: Int? = _seekPosition.value
+                        int?.let {
+                                int++
+                        }
+                        setProgress(int ?: 0)
+                        delay(1000)
+                }
+        }
 
+        fun isPlaying(): LiveData<Boolean> = repository.isPlaying()
         private val sharedPreferences: SharedPreferences by lazy {
                 application.applicationContext.getSharedPreferences(
                         "sharedPref",
@@ -55,6 +72,7 @@ class NowPlayingViewModel @Inject constructor(
                 )
         }
         var isRepeat: Boolean? = null
+
         var isShuffle: Boolean? = null
 
         fun setIsPlaying(boolean: Boolean) {
@@ -93,13 +111,32 @@ class NowPlayingViewModel @Inject constructor(
                 currentSong: Song, context: Context, intent: Intent, playPauseButton: Int,
                 likeButton: Int
         ) {
+                Glide.with(context)
+                        .asBitmap()
+                        .load(R.drawable.ic_love)
+                        .into(object : CustomTarget<Bitmap>() {
+                                override fun onResourceReady(
+                                        resource: Bitmap,
+                                        transition: Transition<in Bitmap>?
+                                ) {
+                                        showNotification(
+                                                currentSong,
+                                                resource,
+                                                context,
+                                                intent,
+                                                playPauseButton = playPauseButton,
+                                                likeButton = likeButton
+                                        )
+                                }
 
-                //there is a bug, image path could be null
-                Log.d(TAG, "showNotification: problem")
+                                override fun onLoadCleared(placeholder: Drawable?) {
+                                }
+
+                        })
+
                 Glide.with(context)
                         .asBitmap()
                         .load(currentSong.imagePath)
-                        .placeholder(R.mipmap.ic_launcher)
                         .into(object : CustomTarget<Bitmap>() {
                                 override fun onResourceReady(
                                         resource: Bitmap,
@@ -249,6 +286,7 @@ class NowPlayingViewModel @Inject constructor(
         }
 
         private fun playNextOrPrevSong(musicService: MusicService, currentPosition: Int) {
+                setProgress(0)
                 isRepeat = sharedPreferences.getBoolean("isRepeat", false)
                 isShuffle = sharedPreferences.getBoolean("isShuffle", false)
                 if (isRepeat == false)

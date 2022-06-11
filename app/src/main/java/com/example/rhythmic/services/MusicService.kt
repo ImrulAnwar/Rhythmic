@@ -63,11 +63,16 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                 return START_NOT_STICKY
         }
 
+        fun seekTo(progress: Int) {
+                mediaPlayer.seekTo(progress)
+        }
+
+        fun getDuration()= mediaPlayer.duration
+
         inner class MusicBinder : Binder() {
                 fun getService(): MusicService {
                         return this@MusicService
                 }
-
         }
 
         fun startMedia(path: String?) {

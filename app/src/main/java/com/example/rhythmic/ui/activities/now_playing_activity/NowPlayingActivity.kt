@@ -3,6 +3,7 @@ package com.example.rhythmic.ui.activities.now_playing_activity
 import android.content.*
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -44,7 +45,6 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
 
                 nowPlayingViewModel.getCurrentSong().observe(this) {
-
                         Glide.with(this).load(it.imagePath)
                                 .placeholder(R.mipmap.ic_launcher).centerCrop()
                                 .into(binding.ivAlbumArtNP)
@@ -55,6 +55,9 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         binding.tvArtistNameNP.text = it.artist
                         if(it.isLiked) binding.ivIsLikedNP.setImageResource(R.drawable.ic_loved)
                         else binding.ivIsLikedNP.setImageResource(R.drawable.ic_love)
+                        musicService?.getDuration()?.let { duration ->
+                                binding.sbProgressNP.max = duration
+                        }
                 }
 
                 nowPlayingViewModel.isPlaying().observe(this) {
@@ -66,6 +69,11 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 val likeButton: Int = if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
                                 nowPlayingViewModel.getBitmapAndShowNotification(song, this, intent, playPauseButton= playPauseButton, likeButton = likeButton)
                         }
+                }
+
+                nowPlayingViewModel.seekPosition.observe(this){
+                        binding.sbProgressNP.progress = it
+                        binding.tvCurrentPositionNP.text = nowPlayingViewModel.convertTime(it.toLong())
                 }
 
         }
@@ -137,6 +145,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                 Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT)
                                         .show()
                 }
+
         }
 
         override fun onResume() {
@@ -159,6 +168,29 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 musicService?.let {
                         it.setViewModel(this)
                         nowPlayingViewModel.startMedia(it)
+                }
+
+
+
+                binding.sbProgressNP.apply {
+                        setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener{
+                                override fun onProgressChanged(p0: SeekBar?, progress: Int, fromUser: Boolean) {
+                                        musicService?.let {
+                                                if (fromUser && progress<it.getDuration()) {
+                                                        it.seekTo(binding.sbProgressNP.progress)
+                                                        binding.tvCurrentPositionNP.text=nowPlayingViewModel.convertTime(progress.toLong())
+                                                }
+                                        }
+                                }
+
+                                override fun onStartTrackingTouch(p0: SeekBar?) {
+
+                                }
+
+                                override fun onStopTrackingTouch(p0: SeekBar?) {
+                                        musicService?.seekTo(binding.sbProgressNP.progress)
+                                }
+                        })
                 }
         }
 

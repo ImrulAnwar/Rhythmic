@@ -13,12 +13,12 @@
                 android:id="@+id/nav_search"
                 android:icon="@drawable/ic_search" />
         <item
-                android:title="@string/library"
-                android:id="@+id/nav_library"
-                android:icon="@drawable/ic_library" />
-        <item
                 android:title="@string/download"
                 android:id="@+id/nav_download"
                 android:icon="@drawable/ic_download" />
+        <item
+                android:title="@string/library"
+                android:id="@+id/nav_library"
+                android:icon="@drawable/ic_library" />
     </group>
 </menu>
