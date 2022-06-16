@@ -47,39 +47,10 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
 
 
-                nowPlayingViewModel.getCurrentSong().observe(this) {
-                        Glide.with(this).load(it.imagePath)
-                                .placeholder(R.mipmap.ic_launcher).centerCrop()
-                                .into(binding.ivAlbumArtNP)
 
-                        val duration = nowPlayingViewModel.convertTime(it.duration?.toLong() ?: 0)
-                        binding.tvTotalDurationNP.text = duration
-                        binding.tvSongTitleNP.text = it.title
-                        binding.tvArtistNameNP.text = it.artist
-                        if (it.isLiked) {
-                                binding.ivIsLikedNP.setImageResource(R.drawable.ic_loved)
-                        }
-                        else {
-                                binding.ivIsLikedNP.setImageResource(R.drawable.ic_love)
-                        }
-                        binding.sbProgressNP.max = it.duration?.toInt() ?: 0
-                        showNotification()
-                }
-
-                nowPlayingViewModel.isPlaying().observe(this) {
-                        if (it) binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
-                        else binding.ibPlayOrPause.setImageResource(R.drawable.ic_play)
-                        //could be more organized
-                        showNotification()
-                }
-
-                nowPlayingViewModel.seekPosition.observe(this) {
-                        binding.sbProgressNP.progress = it
-                        binding.tvCurrentPositionNP.text =
-                                nowPlayingViewModel.convertTime(it.toLong())
-                }
 
         }
+
 
         private fun showNotification() {
                 val playPauseButton: Int =
@@ -96,6 +67,21 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         )
                 }
         }
+//        private fun showNotificationWithoutIntent() {
+//                val playPauseButton: Int =
+//                        if (nowPlayingViewModel.isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
+//                nowPlayingViewModel.getCurrentSong().value?.let { song ->
+//                        val likeButton: Int =
+//                                if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+//                        nowPlayingViewModel.getBitmapAndShowNotification(
+//                                song,
+//                                this,
+//                                intent,
+//                                playPauseButton = playPauseButton,
+//                                likeButton = likeButton
+//                        )
+//                }
+//        }
 
         private fun setImageResource() {
                 if (nowPlayingViewModel.isShuffle == true)
@@ -164,6 +150,8 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         if (nowPlayingViewModel.isRepeat == true)
                                 Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT)
                                         .show()
+
+                        showNotification()
                 }
                 binding.ibPrev.setOnClickListener {
                         musicService?.let {
@@ -174,6 +162,8 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         if (nowPlayingViewModel.isRepeat == true)
                                 Toast.makeText(this, "Player is on Repeat mode", Toast.LENGTH_SHORT)
                                         .show()
+
+                        showNotification()
                 }
 
         }
@@ -181,6 +171,37 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         override fun onResume() {
                 Intent(this, MusicService::class.java).also {
                         bindService(it, this, BIND_AUTO_CREATE)
+                }
+                nowPlayingViewModel.getCurrentSong().observe(this) {
+                        Glide.with(this).load(it.imagePath)
+                                .placeholder(R.mipmap.ic_launcher).centerCrop()
+                                .into(binding.ivAlbumArtNP)
+
+                        val duration = nowPlayingViewModel.convertTime(it.duration?.toLong() ?: 0)
+                        binding.tvTotalDurationNP.text = duration
+                        binding.tvSongTitleNP.text = it.title
+                        binding.tvArtistNameNP.text = it.artist
+                        if (it.isLiked) {
+                                binding.ivIsLikedNP.setImageResource(R.drawable.ic_loved)
+                        }
+                        else {
+                                binding.ivIsLikedNP.setImageResource(R.drawable.ic_love)
+                        }
+                        binding.sbProgressNP.max = it.duration?.toInt() ?: 0
+                        showNotification()
+                }
+
+                nowPlayingViewModel.isPlaying().observe(this) {
+                        if (it) binding.ibPlayOrPause.setImageResource(R.drawable.ic_pause)
+                        else binding.ibPlayOrPause.setImageResource(R.drawable.ic_play)
+                        //could be more organized
+                        showNotification()
+                }
+
+                nowPlayingViewModel.seekPosition.observe(this) {
+                        binding.sbProgressNP.progress = it
+                        binding.tvCurrentPositionNP.text =
+                                nowPlayingViewModel.convertTime(it.toLong())
                 }
                 setImageResource()
                 super.onResume()

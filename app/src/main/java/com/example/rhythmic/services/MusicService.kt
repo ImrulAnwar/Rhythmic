@@ -6,6 +6,7 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Binder
 import android.os.IBinder
+import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import com.example.rhythmic.*
@@ -22,6 +23,8 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                 private lateinit var nowPlayingViewModel: NowPlayingViewModel
         }
 
+        private var intent: Intent? = null
+
         @Inject lateinit var mediaPlayer: MediaPlayer
 
         private val binder: IBinder by lazy { MusicBinder() }
@@ -37,6 +40,7 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
 
         override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
                 val actionName: String = intent?.getStringExtra("actionName")!!
+                this.intent = intent
                 actionName.let {
                         when (it) {
                                 ACTION_PLAY -> {
@@ -115,6 +119,9 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
         fun isNotPaused(): Boolean = !(!mediaPlayer.isPlaying && mediaPlayer.currentPosition > 1)
         override fun onCompletion(p0: MediaPlayer?) {
                 nowPlayingViewModel.playNextSong(this@MusicService)
+                Log.d(TAG, "onCompletion: notifications changed")
+                nowPlayingViewModel.changeNotificationIconsWithoutIntent(this)
+
         }
 
 
