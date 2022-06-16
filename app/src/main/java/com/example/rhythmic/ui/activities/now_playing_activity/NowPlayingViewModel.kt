@@ -19,6 +19,7 @@ import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.domain.repo.Repository
 import com.example.rhythmic.receivers.NotificationReceiver
 import com.example.rhythmic.services.MusicService
+import com.example.rhythmic.ui.activities.main_activity.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import java.util.*
@@ -104,7 +105,7 @@ class NowPlayingViewModel @Inject constructor(
         fun getSong(position: Int): Song = repository.getCurrentSongLIst()[position]
 
         fun getBitmapAndShowNotification(
-                currentSong: Song, context: Context, intent: Intent, playPauseButton: Int,
+                currentSong: Song, context: Context, playPauseButton: Int,
                 likeButton: Int
         ) {
                 Glide.with(context)
@@ -119,7 +120,6 @@ class NowPlayingViewModel @Inject constructor(
                                                 currentSong,
                                                 resource,
                                                 context,
-                                                intent,
                                                 playPauseButton = playPauseButton,
                                                 likeButton = likeButton
                                         )
@@ -142,7 +142,6 @@ class NowPlayingViewModel @Inject constructor(
                                                 currentSong,
                                                 resource,
                                                 context,
-                                                intent,
                                                 playPauseButton = playPauseButton,
                                                 likeButton = likeButton
                                         )
@@ -153,54 +152,7 @@ class NowPlayingViewModel @Inject constructor(
 
                         })
         }
-        fun getBitmapAndShowNotificationWithoutIntent(
-                currentSong: Song, context: Context,playPauseButton: Int,
-                likeButton: Int
-        ) {
-                Glide.with(context)
-                        .asBitmap()
-                        .load(R.drawable.ic_love)
-                        .into(object : CustomTarget<Bitmap>() {
-                                override fun onResourceReady(
-                                        resource: Bitmap,
-                                        transition: Transition<in Bitmap>?
-                                ) {
-                                        showNotificationWithoutIntent(
-                                                currentSong,
-                                                resource,
-                                                context,
-                                                playPauseButton = playPauseButton,
-                                                likeButton = likeButton
-                                        )
-                                }
 
-                                override fun onLoadCleared(placeholder: Drawable?) {
-                                }
-
-                        })
-
-                Glide.with(context)
-                        .asBitmap()
-                        .load(currentSong.imagePath)
-                        .into(object : CustomTarget<Bitmap>() {
-                                override fun onResourceReady(
-                                        resource: Bitmap,
-                                        transition: Transition<in Bitmap>?
-                                ) {
-                                        showNotificationWithoutIntent(
-                                                currentSong,
-                                                resource,
-                                                context,
-                                                playPauseButton = playPauseButton,
-                                                likeButton = likeButton
-                                        )
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {
-                                }
-
-                        })
-        }
 
         private fun setPosition() {
                 if (getCurrentSongPosition() >= currentSongListSize) {
@@ -229,14 +181,19 @@ class NowPlayingViewModel @Inject constructor(
                 currentSong: Song,
                 bitmap: Bitmap,
                 context: Context,
-                intent: Intent,
                 playPauseButton: Int,
                 likeButton: Int
         ) {
 
-//                val intent: Intent = Intent(context, NowPlayingActivity::class.java)
+                val intent: Intent = Intent(context, MainActivity::class.java)
+                val pendingIntent: PendingIntent = PendingIntent.getActivity(
+                        context,
+                        0,
+                        intent,
+                        0
+                )
 
-                val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+
                 val prevIntent = Intent(context, NotificationReceiver::class.java)
                         .setAction(ACTION_PREV)
                 val prevPendingIntent: PendingIntent =
@@ -270,16 +227,7 @@ class NowPlayingViewModel @Inject constructor(
                         )
 
 
-
                 mediaSessionCompat = MediaSessionCompat(context, "Currently Playing")
-
-//                var resource: Bitmap = bitmap
-//                if (bitmap == null) {
-//                        resource = BitmapFactory.decodeResource(
-//                                context.getResources(),
-//                                R.drawable.ic_repeat
-//                        );
-//                }
 
                 val notification: Notification = NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(R.mipmap.ic_launcher)
@@ -299,92 +247,11 @@ class NowPlayingViewModel @Inject constructor(
                         )
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .build()
+                notification.flags = Notification.FLAG_AUTO_CANCEL
 
 
                 val notificationManager =
                         context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//                        NotificationManagerCompat.from(context.applicationContext)
-                notificationManager.notify(1, notification)
-
-        }
-        private fun showNotificationWithoutIntent(
-                currentSong: Song,
-                bitmap: Bitmap,
-                context: Context,
-                playPauseButton: Int,
-                likeButton: Int
-        ) {
-
-                val intent = Intent(context, NowPlayingActivity::class.java)
-
-                val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
-                val prevIntent = Intent(context, NotificationReceiver::class.java)
-                        .setAction(ACTION_PREV)
-                val prevPendingIntent: PendingIntent =
-                        PendingIntent.getBroadcast(
-                                context, 0, prevIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        )
-
-                val nextIntent = Intent(context, NotificationReceiver::class.java)
-                        .setAction(ACTION_NEXT)
-                val nextPendingIntent: PendingIntent =
-                        PendingIntent.getBroadcast(
-                                context, 0, nextIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        )
-
-                val pauseIntent = Intent(context, NotificationReceiver::class.java)
-                        .setAction(ACTION_PLAY)
-                val pausePendingIntent: PendingIntent =
-                        PendingIntent.getBroadcast(
-                                context, 0, pauseIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        )
-
-                val likeIntent = Intent(context, NotificationReceiver::class.java)
-                        .setAction(ACTION_LIKE)
-                val likePendingIntent: PendingIntent =
-                        PendingIntent.getBroadcast(
-                                context, 0, likeIntent,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        )
-
-
-
-                mediaSessionCompat = MediaSessionCompat(context, "Currently Playing")
-
-//                var resource: Bitmap = bitmap
-//                if (bitmap == null) {
-//                        resource = BitmapFactory.decodeResource(
-//                                context.getResources(),
-//                                R.drawable.ic_repeat
-//                        );
-//                }
-
-                val notification: Notification = NotificationCompat.Builder(context, CHANNEL_ID)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setLargeIcon(bitmap)
-                        .setContentTitle(currentSong.title)
-                        .setContentText(currentSong.artist)
-                        .setContentIntent(pendingIntent)
-                        .addAction(R.drawable.ic_prev, "Previous", prevPendingIntent)
-                        .addAction(playPauseButton, "Pause", pausePendingIntent)
-                        .addAction(R.drawable.ic_next, "Next", nextPendingIntent)
-                        .addAction(likeButton, "Like", likePendingIntent)
-                        .setOnlyAlertOnce(true)
-                        .setOngoing(true)
-                        .setStyle(
-                                androidx.media.app.NotificationCompat.MediaStyle()
-                                        .setMediaSession(mediaSessionCompat.sessionToken)
-                        )
-                        .setPriority(NotificationCompat.PRIORITY_MAX)
-                        .build()
-
-
-                val notificationManager =
-                        context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-//                        NotificationManagerCompat.from(context.applicationContext)
                 notificationManager.notify(1, notification)
 
         }
@@ -418,7 +285,7 @@ class NowPlayingViewModel @Inject constructor(
 
         @OptIn(DelicateCoroutinesApi::class)
         fun addToLiked() {
-                GlobalScope.launch(Dispatchers.IO){
+                GlobalScope.launch(Dispatchers.IO) {
                         getCurrentSong().value?.let {
                                 it.isLiked = !(it.isLiked)
                                 repository.updateSong(it)
@@ -429,34 +296,49 @@ class NowPlayingViewModel @Inject constructor(
 
         @DelicateCoroutinesApi
         fun addToLikedAndChangeNotificationIcon(context: Context, intent: Intent) {
-                GlobalScope.launch(Dispatchers.IO){
+                GlobalScope.launch(Dispatchers.IO) {
                         getCurrentSong().value?.let {
                                 it.isLiked = !(it.isLiked)
                                 repository.updateSong(it)
                                 postCurrentSong(it)
                         }
-                        changeNotificationIcons(context,intent)
+                        changeNotificationIcons(context, intent)
                 }
         }
 
         fun changeNotificationIcons(context: Context, intent: Intent) {
-                val playPauseButton: Int = if (isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
-                getCurrentSong().value?.let { song->
-                        val likeButton: Int = if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-                        getBitmapAndShowNotification(song, context, intent, playPauseButton= playPauseButton, likeButton = likeButton)
+                val playPauseButton: Int =
+                        if (isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
+                getCurrentSong().value?.let { song ->
+                        val likeButton: Int =
+                                if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                        getBitmapAndShowNotification(
+                                song,
+                                context,
+                                playPauseButton = playPauseButton,
+                                likeButton = likeButton
+                        )
                 }
         }
+
         fun changeNotificationIconsWithoutIntent(context: Context) {
-                val playPauseButton: Int = if (isPlaying().value ==true) R.drawable.ic_pause else R.drawable.ic_play
-                getCurrentSong().value?.let { song->
-                        val likeButton: Int = if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-                        getBitmapAndShowNotificationWithoutIntent(song, context, playPauseButton= playPauseButton, likeButton = likeButton)
+                val playPauseButton: Int =
+                        if (isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
+                getCurrentSong().value?.let { song ->
+                        val likeButton: Int =
+                                if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
+                        getBitmapAndShowNotification(
+                                song,
+                                context,
+                                playPauseButton = playPauseButton,
+                                likeButton = likeButton
+                        )
                 }
         }
 
 
         fun getCurrentSongPosition(): Int = repository.getCurrentSongPosition()
-        fun setCurrentSongPosition(int : Int) {
+        fun setCurrentSongPosition(int: Int) {
                 repository.setCurrentSongPosition(int)
         }
 
@@ -466,9 +348,9 @@ class NowPlayingViewModel @Inject constructor(
                 isShuffle = sharedPreferences.getBoolean("isShuffle", false)
                 if (isRepeat == false)
                         if (isShuffle == true)
-                               setCurrentSongPosition(Random().nextInt(currentSongListSize))
+                                setCurrentSongPosition(Random().nextInt(currentSongListSize))
                         else
-                               setCurrentSongPosition(currentPosition)
+                                setCurrentSongPosition(currentPosition)
                 repository.setCurrentSong(repository.getCurrentSongLIst()[getCurrentSongPosition()])
                 musicService.changeDataSource(repository.getCurrentSong().value?.path)
         }

@@ -53,8 +53,6 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 nowPlayingViewModel.isShuffle = sharedPreferences.getBoolean("isShuffle", false)
                 nowPlayingViewModel.isRepeat = sharedPreferences.getBoolean("isRepeat", false)
 
-//                nowPlayingViewModel.setSeekBarProgress()
-
         }
 
 
@@ -67,27 +65,11 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         nowPlayingViewModel.getBitmapAndShowNotification(
                                 song,
                                 this,
-                                intent,
                                 playPauseButton = playPauseButton,
                                 likeButton = likeButton
                         )
                 }
         }
-//        private fun showNotificationWithoutIntent() {
-//                val playPauseButton: Int =
-//                        if (nowPlayingViewModel.isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
-//                nowPlayingViewModel.getCurrentSong().value?.let { song ->
-//                        val likeButton: Int =
-//                                if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-//                        nowPlayingViewModel.getBitmapAndShowNotification(
-//                                song,
-//                                this,
-//                                intent,
-//                                playPauseButton = playPauseButton,
-//                                likeButton = likeButton
-//                        )
-//                }
-//        }
 
         private fun setImageResource() {
                 if (nowPlayingViewModel.isShuffle == true)
@@ -268,10 +250,10 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         var currentPosition = 0
                         try {
                                         while (currentPosition < (musicService!!.mediaPlayer.duration)) {
-                                                delay(1000)
-                                                currentPosition = musicService!!.mediaPlayer.currentPosition
-                                                currentPosition += 1000
                                                 nowPlayingViewModel.setProgress(currentPosition.toLong())
+                                                currentPosition = musicService!!.mediaPlayer.currentPosition
+                                                delay(1000)
+                                                currentPosition += 1000
                                         }
                         } catch (e: Exception) {
 
