@@ -59,8 +59,8 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                                 }
                                 ACTION_LIKE -> {
                                         nowPlayingViewModel.addToLiked()
-//                                        if (isPlaying()) pause()
-//                                        else resume()
+                                        if (isPlaying()) pause()
+                                        else resume()
                                         nowPlayingViewModel.changeNotificationIcons(this)
                                 }
                                 else -> {}
