@@ -249,7 +249,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
         private fun updateSeekBar() {
                 lifecycleScope.launch(Dispatchers.Main) {
-                        var currentPosition = 0
+                        var currentPosition = musicService?.mediaPlayer?.currentPosition?:0
                         try {
                                         while (currentPosition < (musicService!!.mediaPlayer.duration)) {
                                                 nowPlayingViewModel.setProgress(currentPosition.toLong())
