@@ -56,7 +56,6 @@ class MainActivityViewModel @Inject constructor(
         fun setIsPlaying(boolean: Boolean) {
                 repository.setIsPlaying(boolean)
         }
-        fun isPlaying(): LiveData<Boolean> = repository.isPlaying()
 
         private fun isPermissionDenied() = ContextCompat.checkSelfPermission(
                 getApplication<Application>().applicationContext,
@@ -229,6 +228,8 @@ class MainActivityViewModel @Inject constructor(
 
                         })
         }
+        fun isPlaying(): LiveData<Boolean> = repository.isPlaying()
+
 
         private suspend fun insertAllSongs(context: Context) {
                 val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI

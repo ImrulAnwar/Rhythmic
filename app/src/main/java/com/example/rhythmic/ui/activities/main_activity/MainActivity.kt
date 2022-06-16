@@ -34,13 +34,14 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ServiceConnection {
 
         @Inject
         lateinit var uiFunctions: UIFunctions
         private lateinit var appBarConfiguration: AppBarConfiguration
         private val mainActivityViewModel: MainActivityViewModel by viewModels()
         private lateinit var binding: ActivityMainBinding
+        private var musicService: MusicService? = null
 
 
         override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +109,20 @@ class MainActivity : AppCompatActivity() {
 //                        }
                 }
 
+                ibBtmTbrPlayPause.setOnClickListener {
+                        var isPlaying: Boolean
+                        ibBtmTbrPlayPause.apply {
+                                isPlaying = if (mainActivityViewModel.isPlaying().value == true) {
+                                        musicService?.pause()
+                                        false
+                                } else {
+                                        musicService?.resume()
+                                        true
+                                }
+                        }
+                        mainActivityViewModel.setIsPlaying(isPlaying)
+                }
+
                 clBtmTbr.setOnClickListener{
                         Intent(this, NowPlayingActivity::class.java).also {
                                 startActivity(it)
@@ -119,6 +134,18 @@ class MainActivity : AppCompatActivity() {
                 // Inflate the menu; this adds items to the action bar if it is present.
                 menuInflater.inflate(R.menu.main, menu)
                 return true
+        }
+
+        override fun onResume() {
+                Intent(this, MusicService::class.java).also {
+                        bindService(it, this, BIND_AUTO_CREATE)
+                }
+                super.onResume()
+        }
+
+        override fun onPause() {
+                unbindService(this)
+                super.onPause()
         }
 
         override fun onSupportNavigateUp(): Boolean {
@@ -137,6 +164,14 @@ class MainActivity : AppCompatActivity() {
                         grantResult = grantResults[0],
                         this
                 )
+        }
+
+        override fun onServiceConnected(p0: ComponentName?, iBinder: IBinder?) {
+                val binder: MusicService.MusicBinder = iBinder as MusicService.MusicBinder
+                musicService = binder.getService()
+        }
+
+        override fun onServiceDisconnected(p0: ComponentName?) {
         }
 
 }
