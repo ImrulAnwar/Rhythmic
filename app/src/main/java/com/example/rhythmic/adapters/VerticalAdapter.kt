@@ -31,7 +31,6 @@ class VerticalAdapter @Inject constructor(
         val from: String
 ) :
         RecyclerView.Adapter<VerticalAdapter.VerticalViewHolder>() {
-        private lateinit var nowPlayingViewModel: NowPlayingViewModel
         private var songList = emptyList<Song>()
         private val utilitiesEntryPoint =
                 EntryPointAccessors.fromApplication(
@@ -56,7 +55,6 @@ class VerticalAdapter @Inject constructor(
                 val currentSong =songList[position]
                 holder.binding.tvSongTitle.text = currentSong.title
                 holder.binding.tvDuration.text = currentSong.artist
-
                 AnimationUtils.loadAnimation(
                         holder.itemView.context,
                         android.R.anim.fade_in
@@ -71,7 +69,6 @@ class VerticalAdapter @Inject constructor(
                 holder.itemView.setOnClickListener {
                         repository.setCurrentSongList(songList)
                         Intent(context, NowPlayingActivity::class.java).also {
-//                                for (i in songList.indices)
                                         it.putExtra("position", position)
                                 context.startActivity(
                                         it

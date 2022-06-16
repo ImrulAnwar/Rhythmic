@@ -1,12 +1,10 @@
 package com.example.rhythmic.ui.activities.now_playing_activity
 
-import android.R.attr.data
 import android.app.*
 import android.content.*
 import android.content.Context.NOTIFICATION_SERVICE
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
 import android.support.v4.media.session.MediaSessionCompat
@@ -14,10 +12,6 @@ import androidx.core.app.NotificationCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.example.rhythmic.*
 import com.example.rhythmic.data.entities.Song
 import com.example.rhythmic.domain.repo.Repository
@@ -38,8 +32,7 @@ class NowPlayingViewModel @Inject constructor(
         private val repository: Repository,
         application: Application
 ) : AndroidViewModel(application) {
-        //        var currentSong = MutableLiveData<Song>()
-//        var currentPosition: Int = 0
+
         val currentSongListSize by lazy { repository.getCurrentSongLIst().size }
         private lateinit var mediaSessionCompat: MediaSessionCompat
 
@@ -54,17 +47,6 @@ class NowPlayingViewModel @Inject constructor(
         }
 
         fun getProgress(): LiveData<Long> = seekPosition
-
-        fun setSeekBarProgress() {
-                viewModelScope.launch(Dispatchers.IO) {
-                        var long: Long? = seekPosition.value
-                        long?.let {
-                                long++
-                        }
-                        setProgress(long ?: 0)
-                        delay(1000)
-                }
-        }
 
         fun isPlaying(): LiveData<Boolean> = repository.isPlaying()
         private val sharedPreferences: SharedPreferences by lazy {
@@ -82,27 +64,27 @@ class NowPlayingViewModel @Inject constructor(
         }
 
         fun convertTime(timeInt: Long): String {
-                var timeInt = timeInt / 1000
-                val totalTime = timeInt
+                var timeInInt = timeInt / 1000
+                val totalTime = timeInInt
                 val time = StringBuilder()
-                if (timeInt >= 3600) {
-                        val x = timeInt / 3600
+                if (timeInInt >= 3600) {
+                        val x = timeInInt / 3600
                         if (x.toString().length == 1) time.append("0")
                         time.append(x).append(":")
-                        timeInt %= 3600
+                        timeInInt %= 3600
                 }
-                if (timeInt >= 60) {
-                        val x = timeInt / 60
+                if (timeInInt >= 60) {
+                        val x = timeInInt / 60
                         if (x.toString().length == 1) time.append("0").append(x)
                                 .append(":") else time.append(x).append(":")
-                        timeInt %= 60
+                        timeInInt %= 60
                 }
                 if (totalTime < 60) {
-                        if (timeInt.toString().length == 1) time.append("00" + ":" + "0")
-                                .append(timeInt) else time.append("00" + ":").append(timeInt)
+                        if (timeInInt.toString().length == 1) time.append("00" + ":" + "0")
+                                .append(timeInInt) else time.append("00" + ":").append(timeInInt)
                 } else {
-                        if (timeInt.toString().length == 1) time.append("0")
-                                .append(timeInt) else time.append(timeInt)
+                        if (timeInInt.toString().length == 1) time.append("0")
+                                .append(timeInInt) else time.append(timeInInt)
                 }
                 return time.toString()
         }

@@ -33,8 +33,6 @@ class HomeFragment : Fragment() {
         private lateinit var homeViewModel: HomeViewModel
         private lateinit var allSongs: LiveData<List<Song>>
         private val adapter: VerticalAdapter by lazy { VerticalAdapter(requireActivity(), TAG) }
-//        @Inject lateinit var artistFragment: ArtistFragment
-//        @Inject lateinit var albumFragment: AlbumFragment
         private var clicked: Boolean= false
         private val rotateClockwise: Animation by lazy{ AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_clockwise)}
         private val rotateCounterClockwise: Animation by lazy{ AnimationUtils.loadAnimation(requireContext(), R.anim.rotate_counter_clockwise)}

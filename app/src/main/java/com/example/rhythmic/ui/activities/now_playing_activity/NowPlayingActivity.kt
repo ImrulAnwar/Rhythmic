@@ -44,10 +44,11 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 supportActionBar?.hide()
                 setButtonActions()
                 nowPlayingViewModel.setCurrentSongPosition(
-                        intent.getIntExtra(
-                                "position",
-                                nowPlayingViewModel.getCurrentSongPosition()
-                        )
+//                        intent.getIntExtra(
+//                                "position",
+//                                nowPlayingViewModel.getCurrentSongPosition()
+//                        )
+                        nowPlayingViewModel.getCurrentSongPosition()
                 )
                 nowPlayingViewModel.setCurrentSong(nowPlayingViewModel.getSong(nowPlayingViewModel.getCurrentSongPosition()))
                 nowPlayingViewModel.setIsPlaying(true)
