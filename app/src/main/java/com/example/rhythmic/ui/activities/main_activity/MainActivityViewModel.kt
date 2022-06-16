@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.provider.MediaStore
@@ -28,6 +29,7 @@ import com.example.rhythmic.receivers.NotificationReceiver
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 private const val TAG= "MainActivityViewModel"
@@ -101,12 +103,19 @@ class MainActivityViewModel @Inject constructor(
                 currentSong: Song,
                 bitmap: Bitmap,
                 context: Context,
-                intent: Intent,
                 playPauseButton: Int,
                 likeButton: Int
         ) {
 
-                val pendingIntent: PendingIntent = PendingIntent.getActivity(context, 0, intent, 0)
+                val intent: Intent = Intent(context, MainActivity::class.java)
+                val pendingIntent: PendingIntent = PendingIntent.getActivity(
+                        context,
+                        0,
+                        intent,
+                        0
+                )
+
+
                 val prevIntent = Intent(context, NotificationReceiver::class.java)
                         .setAction(ACTION_PREV)
                 val prevPendingIntent: PendingIntent =
@@ -140,16 +149,7 @@ class MainActivityViewModel @Inject constructor(
                         )
 
 
-
                 mediaSessionCompat = MediaSessionCompat(context, "Currently Playing")
-
-//                var resource: Bitmap = bitmap
-//                if (bitmap == null) {
-//                        resource = BitmapFactory.decodeResource(
-//                                context.getResources(),
-//                                R.drawable.ic_repeat
-//                        );
-//                }
 
                 val notification: Notification = NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(R.mipmap.ic_launcher)
@@ -173,60 +173,31 @@ class MainActivityViewModel @Inject constructor(
 
                 val notificationManager =
                         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-//                        NotificationManagerCompat.from(context.applicationContext)
                 notificationManager.notify(1, notification)
 
         }
 
         fun getBitmapAndShowNotification(
-                currentSong: Song, context: Context, intent: Intent, playPauseButton: Int,
+                currentSong: Song, context: Context, playPauseButton: Int,
                 likeButton: Int
         ) {
-                Glide.with(context)
-                        .asBitmap()
-                        .load(R.drawable.ic_love)
-                        .into(object : CustomTarget<Bitmap>() {
-                                override fun onResourceReady(
-                                        resource: Bitmap,
-                                        transition: Transition<in Bitmap>?
-                                ) {
-                                        showNotification(
-                                                currentSong,
-                                                resource,
-                                                context,
-                                                intent,
-                                                playPauseButton = playPauseButton,
-                                                likeButton = likeButton
-                                        )
-                                }
+                var bitmap: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.logo_png)
 
-                                override fun onLoadCleared(placeholder: Drawable?) {
-                                }
+                try {
+                        val imageUri: Uri = Uri.parse(getCurrentSong().value?.imagePath)
+                        bitmap =
+                                MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
 
-                        })
+                } catch (e: Exception) {
+                }
 
-                Glide.with(context)
-                        .asBitmap()
-                        .load(currentSong.imagePath)
-                        .into(object : CustomTarget<Bitmap>() {
-                                override fun onResourceReady(
-                                        resource: Bitmap,
-                                        transition: Transition<in Bitmap>?
-                                ) {
-                                        showNotification(
-                                                currentSong,
-                                                resource,
-                                                context,
-                                                intent,
-                                                playPauseButton = playPauseButton,
-                                                likeButton = likeButton
-                                        )
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {
-                                }
-
-                        })
+                showNotification(
+                        currentSong,
+                        bitmap,
+                        context,
+                        playPauseButton = playPauseButton,
+                        likeButton = likeButton
+                )
         }
         fun isPlaying(): LiveData<Boolean> = repository.isPlaying()
 

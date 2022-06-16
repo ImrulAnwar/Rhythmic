@@ -1,10 +1,14 @@
 package com.example.rhythmic.ui.activities.now_playing_activity
 
+import android.R.attr.data
 import android.app.*
 import android.content.*
 import android.content.Context.NOTIFICATION_SERVICE
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.provider.MediaStore
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.AndroidViewModel
@@ -22,6 +26,7 @@ import com.example.rhythmic.services.MusicService
 import com.example.rhythmic.ui.activities.main_activity.MainActivity
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
+import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
 
@@ -108,49 +113,23 @@ class NowPlayingViewModel @Inject constructor(
                 currentSong: Song, context: Context, playPauseButton: Int,
                 likeButton: Int
         ) {
-                Glide.with(context)
-                        .asBitmap()
-                        .load(R.drawable.ic_love)
-                        .into(object : CustomTarget<Bitmap>() {
-                                override fun onResourceReady(
-                                        resource: Bitmap,
-                                        transition: Transition<in Bitmap>?
-                                ) {
-                                        showNotification(
-                                                currentSong,
-                                                resource,
-                                                context,
-                                                playPauseButton = playPauseButton,
-                                                likeButton = likeButton
-                                        )
-                                }
+                var bitmap: Bitmap =
+                        BitmapFactory.decodeResource(context.resources, R.drawable.logo_png)
+                try {
+                        val imageUri: Uri = Uri.parse(getCurrentSong().value?.imagePath)
+                        bitmap =
+                                MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
 
-                                override fun onLoadCleared(placeholder: Drawable?) {
-                                }
+                } catch (e: Exception) {
+                }
 
-                        })
-
-                Glide.with(context)
-                        .asBitmap()
-                        .load(currentSong.imagePath)
-                        .into(object : CustomTarget<Bitmap>() {
-                                override fun onResourceReady(
-                                        resource: Bitmap,
-                                        transition: Transition<in Bitmap>?
-                                ) {
-                                        showNotification(
-                                                currentSong,
-                                                resource,
-                                                context,
-                                                playPauseButton = playPauseButton,
-                                                likeButton = likeButton
-                                        )
-                                }
-
-                                override fun onLoadCleared(placeholder: Drawable?) {
-                                }
-
-                        })
+                showNotification(
+                        currentSong,
+                        bitmap,
+                        context,
+                        playPauseButton = playPauseButton,
+                        likeButton = likeButton
+                )
         }
 
 
@@ -247,7 +226,6 @@ class NowPlayingViewModel @Inject constructor(
                         )
                         .setPriority(NotificationCompat.PRIORITY_MAX)
                         .build()
-                notification.flags = Notification.FLAG_AUTO_CANCEL
 
 
                 val notificationManager =
@@ -302,11 +280,11 @@ class NowPlayingViewModel @Inject constructor(
                                 repository.updateSong(it)
                                 postCurrentSong(it)
                         }
-                        changeNotificationIcons(context, intent)
+                        changeNotificationIcons(context)
                 }
         }
 
-        fun changeNotificationIcons(context: Context, intent: Intent) {
+        fun changeNotificationIcons(context: Context) {
                 val playPauseButton: Int =
                         if (isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
                 getCurrentSong().value?.let { song ->
@@ -320,22 +298,6 @@ class NowPlayingViewModel @Inject constructor(
                         )
                 }
         }
-
-        fun changeNotificationIconsWithoutIntent(context: Context) {
-                val playPauseButton: Int =
-                        if (isPlaying().value == true) R.drawable.ic_pause else R.drawable.ic_play
-                getCurrentSong().value?.let { song ->
-                        val likeButton: Int =
-                                if (song.isLiked) R.drawable.ic_loved else R.drawable.ic_love
-                        getBitmapAndShowNotification(
-                                song,
-                                context,
-                                playPauseButton = playPauseButton,
-                                likeButton = likeButton
-                        )
-                }
-        }
-
 
         fun getCurrentSongPosition(): Int = repository.getCurrentSongPosition()
         fun setCurrentSongPosition(int: Int) {

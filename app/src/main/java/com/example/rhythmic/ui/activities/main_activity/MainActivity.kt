@@ -80,7 +80,6 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                         mainActivityViewModel.getBitmapAndShowNotification(
                                 it,
                                 this,
-                                intent,
                                 playPauseButton = playPauseButton,
                                 likeButton = likeButton
                         )
@@ -96,7 +95,6 @@ class MainActivity : AppCompatActivity(), ServiceConnection {
                                 mainActivityViewModel.getBitmapAndShowNotification(
                                         it,
                                         this,
-                                        intent,
                                         playPauseButton = playPauseButton,
                                         likeButton = likeButton
                                 )

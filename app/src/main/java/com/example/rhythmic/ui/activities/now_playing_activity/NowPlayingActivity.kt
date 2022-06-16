@@ -3,6 +3,7 @@ package com.example.rhythmic.ui.activities.now_playing_activity
 import android.content.*
 import android.os.Bundle
 import android.os.IBinder
+import android.util.Log
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -178,6 +179,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         showNotification()
                         nowPlayingViewModel.setProgress(0)
                         updateSeekBar()
+                        Log.d(TAG, "onResume: song uri is ${it.imagePath}")
                 }
 
                 nowPlayingViewModel.isPlaying().observe(this) {

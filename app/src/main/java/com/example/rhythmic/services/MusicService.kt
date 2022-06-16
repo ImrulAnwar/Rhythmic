@@ -47,21 +47,21 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                                 ACTION_PLAY -> {
                                         if (isPlaying()) pause()
                                         else resume()
-                                        nowPlayingViewModel.changeNotificationIcons(this,intent)
+                                        nowPlayingViewModel.changeNotificationIcons(this)
                                 }
                                 ACTION_NEXT -> {
                                         nowPlayingViewModel.playNextSong(this)
-                                        nowPlayingViewModel.changeNotificationIcons(this,intent)
+                                        nowPlayingViewModel.changeNotificationIcons(this)
                                 }
                                 ACTION_PREV -> {
                                         nowPlayingViewModel.playPrevSong(this)
-                                        nowPlayingViewModel.changeNotificationIcons(this,intent)
+                                        nowPlayingViewModel.changeNotificationIcons(this)
                                 }
                                 ACTION_LIKE -> {
                                         nowPlayingViewModel.addToLiked()
-                                        if (isPlaying()) pause()
-                                        else resume()
-                                        nowPlayingViewModel.changeNotificationIcons(this,intent)
+//                                        if (isPlaying()) pause()
+//                                        else resume()
+                                        nowPlayingViewModel.changeNotificationIcons(this)
                                 }
                                 else -> {}
                         }
@@ -121,7 +121,7 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
         override fun onCompletion(p0: MediaPlayer?) {
                 nowPlayingViewModel.playNextSong(this@MusicService)
                 Log.d(TAG, "onCompletion: notifications changed")
-                nowPlayingViewModel.changeNotificationIconsWithoutIntent(this)
+                nowPlayingViewModel.changeNotificationIcons(this)
         }
 
 
