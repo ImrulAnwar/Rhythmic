@@ -29,6 +29,7 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
 
         private val binder: IBinder by lazy { MusicBinder() }
 
+        fun getCurrentMPPosition(): Int = mediaPlayer.currentPosition
 
         fun setViewModel( context: ViewModelStoreOwner) {
                 nowPlayingViewModel = ViewModelProvider(context)[NowPlayingViewModel::class.java]
@@ -121,7 +122,6 @@ class MusicService : Service(), MediaPlayer.OnCompletionListener {
                 nowPlayingViewModel.playNextSong(this@MusicService)
                 Log.d(TAG, "onCompletion: notifications changed")
                 nowPlayingViewModel.changeNotificationIconsWithoutIntent(this)
-
         }
 
 

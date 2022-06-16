@@ -4,10 +4,8 @@ import android.app.*
 import android.content.*
 import android.content.Context.NOTIFICATION_SERVICE
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.support.v4.media.session.MediaSessionCompat
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
@@ -23,7 +21,6 @@ import com.example.rhythmic.receivers.NotificationReceiver
 import com.example.rhythmic.services.MusicService
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
-import java.lang.Exception
 import java.util.*
 import javax.inject.Inject
 
@@ -40,24 +37,25 @@ class NowPlayingViewModel @Inject constructor(
         val currentSongListSize by lazy { repository.getCurrentSongLIst().size }
         private lateinit var mediaSessionCompat: MediaSessionCompat
 
-        var _seekPosition = MutableLiveData(0)
-        val seekPosition: LiveData<Int> = _seekPosition
+        var seekPosition = MutableLiveData(0.toLong())
         fun getCurrentSong() = repository.getCurrentSong()
         fun setCurrentSong(song: Song) {
                 repository.setCurrentSong(song)
         }
 
-        fun setProgress(int: Int) {
-                _seekPosition.value = int
+        fun setProgress(int: Long) {
+                seekPosition.value = int
         }
+
+        fun getProgress(): LiveData<Long> = seekPosition
 
         fun setSeekBarProgress() {
                 viewModelScope.launch(Dispatchers.IO) {
-                        var int: Int? = _seekPosition.value
-                        int?.let {
-                                int++
+                        var long: Long? = seekPosition.value
+                        long?.let {
+                                long++
                         }
-                        setProgress(int ?: 0)
+                        setProgress(long ?: 0)
                         delay(1000)
                 }
         }

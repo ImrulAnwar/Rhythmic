@@ -14,7 +14,10 @@ import com.example.rhythmic.databinding.ActivityNowPlayingBinding
 import com.example.rhythmic.services.MusicService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.lang.Exception
 
 
 private const val TAG = "NowPlayingActivity"
@@ -39,15 +42,18 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                 setContentView(binding.root)
                 supportActionBar?.hide()
                 setButtonActions()
-                nowPlayingViewModel.setCurrentSongPosition( intent.getIntExtra("position", nowPlayingViewModel.getCurrentSongPosition()))
+                nowPlayingViewModel.setCurrentSongPosition(
+                        intent.getIntExtra(
+                                "position",
+                                nowPlayingViewModel.getCurrentSongPosition()
+                        )
+                )
                 nowPlayingViewModel.setCurrentSong(nowPlayingViewModel.getSong(nowPlayingViewModel.getCurrentSongPosition()))
                 nowPlayingViewModel.setIsPlaying(true)
                 nowPlayingViewModel.isShuffle = sharedPreferences.getBoolean("isShuffle", false)
                 nowPlayingViewModel.isRepeat = sharedPreferences.getBoolean("isRepeat", false)
 
-
-
-
+//                nowPlayingViewModel.setSeekBarProgress()
 
         }
 
@@ -98,7 +104,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
                 binding.ivIsLikedNP.setOnClickListener {
 //                        lifecycleScope.launch(Dispatchers.IO) {
-                                nowPlayingViewModel.addToLiked()
+                        nowPlayingViewModel.addToLiked()
 //                        }
                 }
 
@@ -183,12 +189,13 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         binding.tvArtistNameNP.text = it.artist
                         if (it.isLiked) {
                                 binding.ivIsLikedNP.setImageResource(R.drawable.ic_loved)
-                        }
-                        else {
+                        } else {
                                 binding.ivIsLikedNP.setImageResource(R.drawable.ic_love)
                         }
                         binding.sbProgressNP.max = it.duration?.toInt() ?: 0
                         showNotification()
+                        nowPlayingViewModel.setProgress(0)
+                        updateSeekBar()
                 }
 
                 nowPlayingViewModel.isPlaying().observe(this) {
@@ -196,10 +203,11 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         else binding.ibPlayOrPause.setImageResource(R.drawable.ic_play)
                         //could be more organized
                         showNotification()
+
                 }
 
-                nowPlayingViewModel.seekPosition.observe(this) {
-                        binding.sbProgressNP.progress = it
+                nowPlayingViewModel.getProgress().observe(this) {
+                        binding.sbProgressNP.progress = it.toInt()
                         binding.tvCurrentPositionNP.text =
                                 nowPlayingViewModel.convertTime(it.toLong())
                 }
@@ -213,6 +221,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
         }
 
 
+
         override fun onServiceConnected(componentName: ComponentName?, iBinder: IBinder?) {
                 val binder: MusicService.MusicBinder = iBinder as MusicService.MusicBinder
                 musicService = binder.getService()
@@ -220,7 +229,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                         it.setViewModel(this)
                         nowPlayingViewModel.startMedia(it)
                 }
-
+                updateSeekBar()
 
 
                 binding.sbProgressNP.apply {
@@ -233,6 +242,7 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
                                         musicService?.let {
                                                 if (fromUser && progress < nowPlayingViewModel.getCurrentSong().value?.duration?.toInt() ?: 0) {
                                                         it.seekTo(binding.sbProgressNP.progress)
+                                                        nowPlayingViewModel.setProgress(binding.sbProgressNP.progress.toLong())
                                                         binding.tvCurrentPositionNP.text =
                                                                 nowPlayingViewModel.convertTime(
                                                                         progress.toLong()
@@ -247,8 +257,25 @@ class NowPlayingActivity : AppCompatActivity(), ServiceConnection {
 
                                 override fun onStopTrackingTouch(p0: SeekBar?) {
                                         musicService?.seekTo(binding.sbProgressNP.progress)
+                                        nowPlayingViewModel.setProgress(binding.sbProgressNP.progress.toLong())
                                 }
                         })
+                }
+        }
+
+        private fun updateSeekBar() {
+                lifecycleScope.launch(Dispatchers.Main) {
+                        var currentPosition = 0
+                        try {
+                                        while (currentPosition < (musicService!!.mediaPlayer.duration)) {
+                                                delay(1000)
+                                                currentPosition = musicService!!.mediaPlayer.currentPosition
+                                                currentPosition += 1000
+                                                nowPlayingViewModel.setProgress(currentPosition.toLong())
+                                        }
+                        } catch (e: Exception) {
+
+                        }
                 }
         }
 
