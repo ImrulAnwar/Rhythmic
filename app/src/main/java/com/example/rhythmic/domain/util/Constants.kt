@@ -1,7 +1,5 @@
 package com.example.rhythmic.domain.util
 
-class Constants {
-        companion object{
+object Constants {
 
-        }
 }
