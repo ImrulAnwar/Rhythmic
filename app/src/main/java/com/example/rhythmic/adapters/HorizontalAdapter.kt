@@ -24,6 +24,7 @@ class HorizontalAdapter(val context: Context, val from: String) :
                         LayoutInflater.from(parent.context),
                         parent,
                         false
+
                 )
                 return HorizontalViewHolder(view)
 
