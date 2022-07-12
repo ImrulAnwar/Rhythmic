@@ -32,6 +32,7 @@ class HorizontalAdapter(val context: Context, val from: String) :
 
         override fun onBindViewHolder(holder: HorizontalAdapter.HorizontalViewHolder , position: Int) {
 
+
                 val currentSong = songList[position]
                 if (from == "AlbumFragment")
                         holder.binding.tvAlbumName.text = currentSong.album
