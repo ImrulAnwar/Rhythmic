@@ -28,6 +28,7 @@ class HorizontalAdapter(val context: Context, val from: String) :
                 return HorizontalViewHolder(view)
 
 
+
         }
 
         override fun onBindViewHolder(holder: HorizontalAdapter.HorizontalViewHolder , position: Int) {
