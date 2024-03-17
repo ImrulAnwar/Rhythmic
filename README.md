@@ -2,20 +2,20 @@
 
 ![Untitled design](https://user-images.githubusercontent.com/88951453/178433241-225f434c-9635-4788-a38c-61bdb48eb947.png)
 
-<p>Rhythmic is designed to enhance your music listening experience on your phone. With a range of features, it aims to make managing and enjoying your music collection easier and more convenient.</p>
+<p>Rhythmic is designed to enhance your music listening experience on your phone. With a range of features, it aims to make managing & enjoying your music collection easier & more convenient.</p>
 
 <h2><strong>Features</strong></h2>
 
 <ul>
 <li><strong>Music Library Integration</strong>: The app seamlessly fetches all the music stored on your phone, ensuring you have easy access to your entire music collection.</li>
 
-<li><strong>Play and Control Music</strong>: You can play, pause, skip tracks, and control volume directly from within the app.</li>
-
-<li><strong>Favourites</strong>: Easily mark your favorite tracks and create a personalized collection for quick access to your most-loved songs.</li>
-
 <li><strong>Background Playback</strong>: Enjoy uninterrupted music playback while using other apps or when your device screen is off. The app continues playing your chosen tracks in the background.</li>
 
 <li><strong>Notification Controls</strong>: Control playback directly from the notification bar, allowing you to manage your music without needing to open the app.</li>
+
+<li><strong>Favourites</strong>: Easily mark your favorite tracks and create a personalized collection for quick access to your most-loved songs.</li>
+
+<li><strong>Albums and Artists Categorization</strong>: Songs can be categorized by albums and artists, making it convenient to browse and explore your music collection.</li>
 </ul>
 
 <h2><strong>Installation</strong></h2>
