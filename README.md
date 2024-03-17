@@ -1,6 +1,8 @@
 <h1><strong>Rhythmic</strong></h1>
+
 ![Untitled design](https://user-images.githubusercontent.com/88951453/178433241-225f434c-9635-4788-a38c-61bdb48eb947.png)
-<p>Welcome to the Music Player App readme! This music player application is designed to enhance your music listening experience on your phone. With a range of features, it aims to make managing and enjoying your music collection easier and more convenient.</p>
+
+<p>Rhythmic is designed to enhance your music listening experience on your phone. With a range of features, it aims to make managing and enjoying your music collection easier and more convenient.</p>
 
 <h2><strong>Features</strong></h2>
 
