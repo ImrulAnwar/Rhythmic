@@ -26,18 +26,6 @@
 
 <p>Once installed, launch the app, and it will automatically scan your device for music files. You can then start playing your music right away. Use the navigation menu to access different sections of the app, such as your music library, favorites, and settings.</p>
 
-<h2><strong>Usage</strong></h2>
-
-<ul>
-<li><strong>Playing Music</strong>: Tap on a song from your library to start playing it. Use the playback controls at the bottom of the screen to pause, skip, or adjust the volume.</li>
-
-<li><strong>Adding to Favorites</strong>: To add a song to your favorites, simply long-press on the track, and select the "Add to Favorites" option from the menu.</li>
-
-<li><strong>Background Playback</strong>: Press the home button or switch to another app while listening to music to enable background playback. You can still control playback from the notification bar.</li>
-
-<li><strong>Notification Controls</strong>: Access playback controls directly from the notification bar. This allows you to manage your music without interrupting whatever else you're doing on your device.</li>
-</ul>
-
 <h2><strong>Support</strong></h2>
 
 <p>If you encounter any issues or have any feedback or suggestions for the Application, please don't hesitate to contact us at <a href="mailto:imrulanwar836@gmail.com">imrulanwar836@gmail.com</a>.</p>
